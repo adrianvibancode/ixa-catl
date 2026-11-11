@@ -1,20 +1,17 @@
-# IXA & ÁCATL · Acto I
+# IXA & ÁCATL · Capítulo 1
 
-Versión con sprite mejorado, fondo costero y plataforma gráfica.
+Versión 3 para GitHub Pages.
 
-## Archivos obligatorios
-- `index.html`
-- `ixa-sprites-v2.png`
-- `fondo-costero-v2.png`
-- `plataforma-costera.png`
+## Incluye
+- Trayecto extendido de 7,600 unidades hasta el faro.
+- Seis momentos narrativos activados por posición.
+- Puntos azules coleccionables: +10.
+- Puntos rojos: -7.
+- Cada elemento se procesa una sola vez.
+- Pantalla final y acceso preparado para el capítulo 2.
 
-Conserva los cuatro archivos juntos en la raíz del repositorio.
+## Archivos
+Mantén juntos en la raíz: `index.html`, `ixa-sprites-v3.png`, `fondo-atardecer.png` y `plataforma-costera.png`.
 
 ## GitHub Pages
-1. Sube los archivos a la rama `main`.
-2. Abre **Settings > Pages**.
-3. Selecciona **Deploy from a branch**.
-4. Elige `main` y `/ (root)`.
-
-## Controles
-A/D o flechas para caminar. W, flecha arriba o Espacio para saltar. En pantallas táctiles se muestran botones.
+Settings > Pages > Deploy from a branch > main > /(root).
