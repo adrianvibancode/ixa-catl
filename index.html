@@ -2,55 +2,1185 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="theme-color" content="#17152b">
-  <title>Ixa: Mar y Desierto</title>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+  >
+
+  <title>IXA & ÁCATL · Capítulo 1</title>
+
   <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#17152b;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-    body{display:grid;place-items:center;padding:18px}.wrap{width:min(1100px,100%)}
-    header{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}h1{margin:0;font-size:clamp(1.6rem,5vw,3rem)}
-    p{margin:.35rem 0;color:#cbd5e1}.game{position:relative;border:1px solid #ffffff22;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 26px 70px #0008}
-    canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;image-rendering:pixelated}.hud{display:flex;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
-    .pill{background:#ffffff0d;border:1px solid #ffffff14;border-radius:14px;padding:10px 14px;color:#dbeafe}.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer;background:#fbbf24;color:#241b35}
-    .touch{position:absolute;inset:auto 12px 12px;display:none;justify-content:space-between;pointer-events:none}.touch div{display:flex;gap:8px}.touch button{pointer-events:auto;width:58px;height:58px;border:1px solid #fff5;border-radius:50%;background:#17152bbd;color:#fff;font-size:24px;font-weight:900}
-    @media (pointer:coarse){.touch{display:flex}}@media(max-width:650px){body{padding:6px}header p{display:none}}
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #091426;
+      color: #fff;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 10px;
+    }
+
+    .app {
+      width: min(1200px, 100%);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    h1,
+    p {
+      margin: 0.2rem 0;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      letter-spacing: 0.04em;
+    }
+
+    .muted {
+      color: #b9d2e6;
+    }
+
+    .game {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ffffff35;
+      border-radius: 18px;
+      background: #111;
+      box-shadow: 0 24px 70px #000a;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      image-rendering: pixelated;
+    }
+
+    .modal {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: #061225dc;
+    }
+
+    .modal.hide {
+      display: none;
+    }
+
+    .card {
+      width: min(690px, 100%);
+      max-height: 92%;
+      overflow-y: auto;
+      padding: 22px;
+      border: 1px solid #ffffff30;
+      border-radius: 18px;
+      background: #10233bed;
+      box-shadow: 0 20px 60px #000a;
+    }
+
+    .card small {
+      color: #9ddff0;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .card h2 {
+      margin: 0.3rem 0;
+      color: #ffd067;
+    }
+
+    .card p {
+      line-height: 1.55;
+      color: #e5edf5;
+    }
+
+    .card blockquote {
+      margin: 16px 0;
+      padding: 10px 0 10px 14px;
+      border-left: 3px solid #59d3ee;
+      line-height: 1.55;
+      color: #fff;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 16px;
+      background: #f5c44f;
+      color: #162039;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .btn.secondary {
+      background: #d9e8f4;
+    }
+
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .pill {
+      padding: 9px 13px;
+      border-radius: 12px;
+      background: #ffffff0d;
+      border: 1px solid #ffffff12;
+    }
+
+    .story {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      z-index: 6;
+      transform: translateX(-50%) translateY(12px);
+      width: min(780px, 92%);
+      padding: 16px 19px;
+      border: 1px solid #77d9ef66;
+      border-radius: 16px;
+      background: #07162bee;
+      box-shadow: 0 12px 35px #0009;
+      line-height: 1.5;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    .story.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .story strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #ffd067;
+      font-size: 1.05rem;
+    }
+
+    .story .voice {
+      color: #8bdcf0;
+      font-size: 0.77rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .touch {
+      position: absolute;
+      inset: auto 12px 12px;
+      display: none;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .touch span {
+      display: flex;
+      gap: 8px;
+    }
+
+    .touch button {
+      width: 58px;
+      height: 58px;
+      border: 1px solid #fff7;
+      border-radius: 50%;
+      background: #10243bca;
+      color: #fff;
+      font-size: 23px;
+      font-weight: 900;
+      pointer-events: auto;
+      touch-action: none;
+    }
+
+    @media (pointer: coarse) {
+      .touch {
+        display: flex;
+      }
+
+      .story {
+        bottom: 82px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      body {
+        padding: 3px;
+      }
+
+      header .muted {
+        display: none;
+      }
+
+      .card {
+        padding: 17px;
+      }
+
+      .story {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
+
 <body>
-<div class="wrap">
-<header><div><p>Videojuego HTML5</p><h1>Ixa: Mar y Desierto</h1><p>Recorre la costa desértica y llega al faro.</p></div><button class="btn" id="restart">Reiniciar</button></header>
-<div class="game"><canvas id="game" width="960" height="540" aria-label="Videojuego de plataformas de Ixa"></canvas>
-<div class="touch"><div><button data-key="left">◀</button><button data-key="right">▶</button></div><div><button data-key="jump">▲</button></div></div></div>
-<div class="hud"><div class="pill" id="status">A/D o flechas para caminar. W, ↑ o Espacio para saltar.</div><div class="pill">Meta: alcanza el faro</div></div>
-</div>
-<script>
-const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d'),statusEl=document.querySelector('#status');
-const W=960,H=540,worldWidth=3200,keys={};let raf,cameraX=0,won=false;
-const sprite=new Image();sprite.src='ixa-sprites.png';
-const platforms=[{x:0,y:466,w:650,h:74},{x:735,y:420,w:250,h:120},{x:1060,y:362,w:250,h:178},{x:1390,y:430,w:330,h:110},{x:1805,y:350,w:260,h:190},{x:2145,y:410,w:350,h:130},{x:2580,y:365,w:260,h:175},{x:2900,y:320,w:300,h:220}];
-const goal={x:3070,y:227,w:24,h:93};
-const player={x:100,y:350,w:72,h:78,vx:0,vy:0,grounded:false,facing:1,frame:0,tick:0,jumpLock:false};
-function reset(msg='Nivel reiniciado.'){Object.assign(player,{x:100,y:350,vx:0,vy:0,grounded:false,frame:0,tick:0});cameraX=0;won=false;statusEl.textContent=msg}
-function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
-function down(e){const k=e.key.toLowerCase();keys[k]=true;if(['arrowleft','arrowright','arrowup',' '].includes(k))e.preventDefault()}
-function up(e){keys[e.key.toLowerCase()]=false;if(['w','arrowup',' '].includes(e.key.toLowerCase()))player.jumpLock=false}
-addEventListener('keydown',down,{passive:false});addEventListener('keyup',up);document.querySelector('#restart').onclick=()=>reset();
-document.querySelectorAll('[data-key]').forEach(b=>{const k=b.dataset.key;const set=v=>{if(k==='left')keys.arrowleft=v;if(k==='right')keys.arrowright=v;if(k==='jump'){keys.arrowup=v;if(!v)player.jumpLock=false}};b.onpointerdown=e=>{e.preventDefault();set(true)};b.onpointerup=b.onpointercancel=b.onpointerleave=()=>set(false)});
-function update(){if(won)return;const left=keys.arrowleft||keys.a,right=keys.arrowright||keys.d,jump=keys.arrowup||keys.w||keys[' '];
- player.vx+=(left?-0.82:right?0.82:0);player.vx*=left||right?.88:.76;player.vx=Math.max(-7.5,Math.min(7.5,player.vx));if(left)player.facing=-1;if(right)player.facing=1;
- if(jump&&player.grounded&&!player.jumpLock){player.vy=-14.4;player.grounded=false;player.jumpLock=true}player.vy=Math.min(18,player.vy+.72);player.x+=player.vx;player.y+=player.vy;player.grounded=false;
- for(const p of platforms)if(hit(player,p)&&player.vy>=0&&player.y+player.h-player.vy<=p.y+10){player.y=p.y-player.h;player.vy=0;player.grounded=true}
- player.x=Math.max(0,Math.min(worldWidth-player.w,player.x));if(player.y>H+100)reset('Ixa cayó al mar. Inténtalo nuevamente.');
- player.tick++;if(Math.abs(player.vx)>.7&&player.grounded&&player.tick%6===0)player.frame=(player.frame+1)%6;if(Math.abs(player.vx)<=.7)player.frame=0;
- const target=Math.max(0,Math.min(worldWidth-W,player.x-W*.38));cameraX+=(target-cameraX)*.085;
- if(hit(player,goal)){won=true;statusEl.textContent='¡Nivel completado! Ixa llegó al faro.'}}
-function sky(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#292054');g.addColorStop(.46,'#c45772');g.addColorStop(.74,'#efaa69');g.addColorStop(1,'#f7d499');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffe39bcc';ctx.beginPath();ctx.arc(780-cameraX*.018,118,48,0,Math.PI*2);ctx.fill()}
-function mountain(speed,color,base,amp,seed){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,H);for(let x=-80;x<=W+80;x+=64){const wx=x+cameraX*speed;ctx.lineTo(x,base+Math.sin(wx*.006+seed)*amp+Math.cos(wx*.012)*15)}ctx.lineTo(W,H);ctx.closePath();ctx.fill()}
-function background(){sky();mountain(.06,'#654467',300,30,0);mountain(.15,'#78505f',348,42,1);mountain(.29,'#946153',397,38,2);const sea=ctx.createLinearGradient(0,395,0,H);sea.addColorStop(0,'#3d91a5');sea.addColorStop(1,'#173d67');ctx.fillStyle=sea;ctx.fillRect(0,405,W,H-405);ctx.strokeStyle='#ffffff45';for(let y=421;y<H;y+=18){ctx.beginPath();for(let x=-25;x<W+25;x+=40){ctx.moveTo(x,y);ctx.quadraticCurveTo(x+11,y-4,x+23,y)}ctx.stroke()}}
-function drawPlatforms(){for(const p of platforms){const x=p.x-cameraX;if(x+p.w<0||x>W)continue;const g=ctx.createLinearGradient(0,p.y,0,p.y+p.h);g.addColorStop(0,'#e2a065');g.addColorStop(.18,'#b8634e');g.addColorStop(1,'#523747');ctx.fillStyle=g;ctx.fillRect(x,p.y,p.w,p.h);ctx.fillStyle='#f4b66e';ctx.fillRect(x,p.y,p.w,12);ctx.fillStyle='#432d3c66';for(let q=22;q<p.w;q+=56)ctx.fillRect(x+q,p.y+35+(q%3)*14,25,8)}}
-function drawGoal(){const x=goal.x-cameraX;ctx.fillStyle='#f7efe2';ctx.fillRect(x,goal.y,goal.w,goal.h);ctx.fillStyle='#d94c55';ctx.beginPath();ctx.moveTo(x-7,goal.y);ctx.lineTo(x+12,goal.y-20);ctx.lineTo(x+31,goal.y);ctx.fill();ctx.fillStyle='#fff18a';ctx.fillRect(x+6,goal.y+18,12,12)}
-function drawPlayer(){const x=player.x-cameraX;if(!sprite.complete||!sprite.naturalWidth)return;const fw=sprite.naturalWidth/6,fh=sprite.naturalHeight;ctx.save();ctx.imageSmoothingEnabled=false;if(player.facing<0){ctx.translate(x+player.w,0);ctx.scale(-1,1);ctx.drawImage(sprite,player.frame*fw,0,fw,fh,0,player.y,player.w,player.h)}else ctx.drawImage(sprite,player.frame*fw,0,fw,fh,x,player.y,player.w,player.h);ctx.restore()}
-function hud(){ctx.fillStyle='#17152bbd';ctx.fillRect(18,18,315,48);ctx.fillStyle='#fff';ctx.font='700 18px system-ui';ctx.fillText('IXA · Costa de Baja California',34,49)}
-function loop(){update();background();drawPlatforms();drawGoal();drawPlayer();hud();raf=requestAnimationFrame(loop)}sprite.onload=()=>{cancelAnimationFrame(raf);loop()};loop();
-</script>
-</body></html>
+  <main class="app">
+    <header>
+      <div>
+        <div class="muted">
+          ACTO I · Identidad, comunidad y territorio
+        </div>
+
+        <h1>IXA & ÁCATL</h1>
+      </div>
+
+      <button class="btn secondary" id="restart">
+        Reiniciar
+      </button>
+    </header>
+
+    <section class="game">
+      <div class="modal" id="intro">
+        <div class="card">
+          <small>
+            CAPÍTULO 1 · EL LUGAR DONDE EL AGUA ESCUCHA
+          </small>
+
+          <h2>Mi pueblo frente al mar</h2>
+
+          <blockquote>
+            “Todavía no sabía preguntarme quién era. Me bastaba
+            escuchar mi nombre en la voz de quienes me esperaban.”
+          </blockquote>
+
+          <p>
+            Camino hacia el faro mientras intento comprender por qué
+            crecer se parece tanto a despedirse. Debo recoger las
+            conchas azules, evitar los puntos rojos y escuchar los
+            recuerdos que aparecen en el trayecto.
+          </p>
+
+          <p>
+            El faro no representa el final. El faro es el límite de
+            todo lo que conozco y la entrada a una parte de mí que
+            todavía no sé nombrar.
+          </p>
+
+          <button class="btn" id="start">
+            Comenzar el recorrido
+          </button>
+        </div>
+      </div>
+
+      <div class="modal hide" id="finish">
+        <div class="card">
+          <small>CAPÍTULO 1 COMPLETADO</small>
+
+          <h2>El horizonte</h2>
+
+          <p id="summary"></p>
+
+          <blockquote>
+            “El horizonte no respondió quién era. Solo me enseñó que
+            podía seguir caminando sin conocer todavía la respuesta.”
+          </blockquote>
+
+          <button class="btn" id="chapter2">
+            Pasar al capítulo 2
+          </button>
+
+          <button class="btn secondary" id="again">
+            Repetir el capítulo
+          </button>
+        </div>
+      </div>
+
+      <canvas
+        id="game"
+        width="960"
+        height="540"
+        aria-label="Videojuego de plataformas IXA y ÁCATL"
+      ></canvas>
+
+      <div class="story" id="story"></div>
+
+      <div class="touch">
+        <span>
+          <button data-key="left" aria-label="Caminar a la izquierda">
+            ◀
+          </button>
+
+          <button data-key="right" aria-label="Caminar a la derecha">
+            ▶
+          </button>
+        </span>
+
+        <button data-key="jump" aria-label="Saltar">
+          ▲
+        </button>
+      </div>
+    </section>
+
+    <div class="bar">
+      <div class="pill" id="status">
+        A/D o flechas para caminar · W, ↑ o Espacio para saltar
+      </div>
+
+      <div class="pill">
+        Puntos:
+        <strong id="score">0</strong>
+        · Conchas:
+        <strong id="shells">0</strong>/<strong id="total">0</strong>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.querySelector("#game");
+    const ctx = canvas.getContext("2d");
+
+    const W = 960;
+    const H = 540;
+    const keys = {};
+
+    /*
+      Estos tres archivos deben estar junto a index.html.
+      Si tus imágenes tienen nombres diferentes, cambia solo estas rutas.
+    */
+    const backgroundImage = new Image();
+    const spriteImage = new Image();
+    const platformImage = new Image();
+
+    backgroundImage.src = "fondo-costero-intimo.png";
+    spriteImage.src = "ixa-sprites-v4.png";
+    platformImage.src = "plataforma-costera.png";
+
+    const worldWidth = 7600;
+
+    const player = {
+      x: 90,
+      y: 350,
+      w: 70,
+      h: 80,
+      vx: 0,
+      vy: 0,
+      grounded: false,
+      facing: 1,
+      frame: 0,
+      animationTime: 0
+    };
+
+    let cameraX = 0;
+    let started = false;
+    let finished = false;
+    let lastTime = 0;
+    let score = 0;
+    let shellCount = 0;
+    let jumpConsumed = false;
+    let storyTimer = 0;
+
+    /*
+      Seis momentos narrativos.
+      Todos corresponden a pensamientos de Ixa en primera persona.
+    */
+    const stories = [
+      {
+        x: 700,
+        title: "1. Mi nombre en otras voces",
+        text:
+          "Cuando era más pequeño creía que mi nombre era mío. " +
+          "Ahora entiendo que también vive en la voz de Naiyá, " +
+          "en quienes me corrigen y en quienes todavía esperan " +
+          "que regrese antes de que oscurezca."
+      },
+      {
+        x: 1650,
+        title: "2. Las manos que me hicieron un lugar",
+        text:
+          "A veces quiero demostrar que ya puedo hacerlo todo solo. " +
+          "Después recuerdo que comí antes de saber pescar y que " +
+          "dormí bajo un techo levantado por manos cuyos nombres " +
+          "no conozco. Tal vez crecer no sea dejar de necesitarlas, " +
+          "sino aprender a sostener a otros como alguien me sostuvo."
+      },
+      {
+        x: 2800,
+        title: "3. Lo que una huella no dice",
+        text:
+          "Naiyá me enseñó a mirar el barro sin obligarlo a contarme " +
+          "la historia que yo quería escuchar. Una huella demuestra " +
+          "que alguien estuvo allí, pero no explica sus razones. " +
+          "Desde entonces temo menos a no saber, aunque todavía me " +
+          "avergüenza decirlo en voz alta."
+      },
+      {
+        x: 4050,
+        title: "4. El agua de quienes aún no nacen",
+        text:
+          "No entendía cómo podía cuidarse el agua para personas que " +
+          "todavía no existen. Yo quería saber quién era su dueño. " +
+          "Ahora comienzo a pensar que algunas cosas no nos pertenecen: " +
+          "solo pasan por nuestras manos y esperan que no las destruyamos."
+      },
+      {
+        x: 5350,
+        title: "5. Hablar y ser escuchado",
+        text:
+          "Yo creía que todos éramos iguales porque todos podíamos " +
+          "hablar durante el consejo. Aquel día descubrí que algunas " +
+          "palabras pesan más que otras, incluso cuando la verdad habla " +
+          "con una voz pequeña. Me pregunté cuánto tendría que crecer " +
+          "antes de que mi voz dejara de parecer la voz de un niño."
+      },
+      {
+        x: 6500,
+        title: "6. La parte de mí que mira lejos",
+        text:
+          "Quiero a mi pueblo. Lo quiero tanto que a veces mirar el " +
+          "horizonte me parece una traición. Pero una parte de mí " +
+          "necesita saber qué existe después de todo lo conocido. " +
+          "Me asusta partir y convertirme en alguien que ya no reconozcan. " +
+          "También me asusta quedarme solamente por miedo."
+      }
+    ].map((story) => ({
+      ...story,
+      seen: false
+    }));
+
+    /*
+      Plataformas del trayecto extendido.
+    */
+    const platforms = [];
+
+    for (let x = 0, index = 0; x < worldWidth;) {
+      const gap = index % 5 === 4 ? 100 : 45;
+      const width = 520 + (index % 4) * 110;
+      const yValues = [458, 430, 395, 445, 365, 420];
+      const y = yValues[index % yValues.length];
+
+      platforms.push({
+        x,
+        y,
+        w: width,
+        h: H - y
+      });
+
+      x += width + gap;
+      index++;
+    }
+
+    platforms.push({
+      x: worldWidth - 520,
+      y: 330,
+      w: 520,
+      h: 210
+    });
+
+    /*
+      Objetos provisionales:
+      azul = concha, +10
+      rojo = peligro, -7
+    */
+    const items = [];
+
+    for (let x = 470, index = 0; x < worldWidth - 450; x += 310, index++) {
+      items.push({
+        x,
+        y: 325 + (index % 3) * 35,
+        type: index % 6 === 4 ? "bad" : "good",
+        taken: false,
+        radius: 11
+      });
+    }
+
+    const totalShells = items.filter(
+      (item) => item.type === "good"
+    ).length;
+
+    document.querySelector("#total").textContent = totalShells;
+
+    function intersects(a, b) {
+      return (
+        a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y < b.y + b.h &&
+        a.y + a.h > b.y
+      );
+    }
+
+    function distance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function updateHud() {
+      document.querySelector("#score").textContent = score;
+      document.querySelector("#shells").textContent = shellCount;
+    }
+
+    function showStory(story) {
+      const storyBox = document.querySelector("#story");
+
+      storyBox.innerHTML = `
+        <span class="voice">PENSAMIENTO DE IXA</span>
+        <strong>${story.title}</strong>
+        <span>${story.text}</span>
+      `;
+
+      storyBox.classList.add("show");
+      storyTimer = 7500;
+    }
+
+    function resetGame(message = "El recorrido ha comenzado de nuevo.") {
+      Object.assign(player, {
+        x: 90,
+        y: 350,
+        vx: 0,
+        vy: 0,
+        grounded: false,
+        facing: 1,
+        frame: 0,
+        animationTime: 0
+      });
+
+      cameraX = 0;
+      score = 0;
+      shellCount = 0;
+      finished = false;
+      jumpConsumed = false;
+      storyTimer = 0;
+
+      items.forEach((item) => {
+        item.taken = false;
+      });
+
+      stories.forEach((story) => {
+        story.seen = false;
+      });
+
+      document.querySelector("#story").classList.remove("show");
+      document.querySelector("#finish").classList.add("hide");
+      document.querySelector("#status").textContent = message;
+
+      updateHud();
+    }
+
+    function handleKeyDown(event) {
+      const key = event.key.toLowerCase();
+      keys[key] = true;
+
+      if (
+        ["arrowleft", "arrowright", "arrowup", " "].includes(key)
+      ) {
+        event.preventDefault();
+      }
+    }
+
+    function handleKeyUp(event) {
+      const key = event.key.toLowerCase();
+      keys[key] = false;
+
+      if (["arrowup", "w", " "].includes(key)) {
+        jumpConsumed = false;
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown, {
+      passive: false
+    });
+
+    window.addEventListener("keyup", handleKeyUp);
+
+    document.querySelector("#start").addEventListener("click", () => {
+      document.querySelector("#intro").classList.add("hide");
+      started = true;
+
+      document.querySelector("#status").textContent =
+        "Camino hacia el faro mientras escucho lo que todavía no sé decir.";
+    });
+
+    document.querySelector("#restart").addEventListener("click", () => {
+      started = true;
+      resetGame();
+    });
+
+    document.querySelector("#again").addEventListener("click", () => {
+      started = true;
+      resetGame("Vuelvo a recorrer la orilla desde el principio.");
+    });
+
+    document.querySelector("#chapter2").addEventListener("click", () => {
+      document.querySelector("#finish").classList.add("hide");
+
+      const intro = document.querySelector("#intro");
+      const card = intro.querySelector(".card");
+
+      card.innerHTML = `
+        <small>CAPÍTULO 2 · EN PREPARACIÓN</small>
+
+        <h2>El siguiente territorio</h2>
+
+        <blockquote>
+          “Creí que cruzar el faro significaba abandonar mi hogar.
+          Después comprendí que también podía llevarlo conmigo.”
+        </blockquote>
+
+        <p>
+          El acceso al segundo capítulo ya está preparado.
+          Aquí se incorporarán el nuevo fondo, actividades distintas,
+          personajes adicionales y plataformas más elaboradas.
+        </p>
+
+        <button class="btn" onclick="location.reload()">
+          Volver al capítulo 1
+        </button>
+      `;
+
+      intro.classList.remove("hide");
+    });
+
+    document.querySelectorAll("[data-key]").forEach((button) => {
+      const code =
+        button.dataset.key === "left"
+          ? "arrowleft"
+          : button.dataset.key === "right"
+            ? "arrowright"
+            : "arrowup";
+
+      button.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        keys[code] = true;
+      });
+
+      function releaseButton() {
+        keys[code] = false;
+
+        if (code === "arrowup") {
+          jumpConsumed = false;
+        }
+      }
+
+      button.addEventListener("pointerup", releaseButton);
+      button.addEventListener("pointercancel", releaseButton);
+      button.addEventListener("pointerleave", releaseButton);
+    });
+
+    function update(deltaTime) {
+      if (!started || finished) {
+        return;
+      }
+
+      const movingLeft = keys.arrowleft || keys.a;
+      const movingRight = keys.arrowright || keys.d;
+      const jumping = keys.arrowup || keys.w || keys[" "];
+
+      const acceleration = 0.052 * deltaTime;
+
+      player.vx += movingLeft
+        ? -acceleration
+        : movingRight
+          ? acceleration
+          : 0;
+
+      player.vx *= movingLeft || movingRight
+        ? Math.pow(0.89, deltaTime / 16.67)
+        : Math.pow(0.74, deltaTime / 16.67);
+
+      player.vx = Math.max(-7.3, Math.min(7.3, player.vx));
+
+      if (movingLeft) {
+        player.facing = -1;
+      }
+
+      if (movingRight) {
+        player.facing = 1;
+      }
+
+      if (jumping && player.grounded && !jumpConsumed) {
+        player.vy = -14.3;
+        player.grounded = false;
+        jumpConsumed = true;
+      }
+
+      player.vy = Math.min(
+        18,
+        player.vy + 0.043 * deltaTime
+      );
+
+      const previousBottom = player.y + player.h;
+
+      player.x += player.vx * deltaTime / 16.67;
+      player.y += player.vy * deltaTime / 16.67;
+      player.grounded = false;
+
+      for (const platform of platforms) {
+        if (
+          intersects(player, platform) &&
+          player.vy >= 0 &&
+          previousBottom <= platform.y + 12
+        ) {
+          player.y = platform.y - player.h;
+          player.vy = 0;
+          player.grounded = true;
+        }
+      }
+
+      if (player.y > H + 110) {
+        player.x = Math.max(70, player.x - 250);
+        player.y = 250;
+        player.vx = 0;
+        player.vy = 0;
+
+        score = Math.max(0, score - 5);
+        updateHud();
+
+        document.querySelector("#status").textContent =
+          "La corriente me hizo retroceder. Perdí 5 puntos.";
+      }
+
+      player.x = Math.max(
+        0,
+        Math.min(worldWidth - player.w, player.x)
+      );
+
+      /*
+        Animación del sprite.
+        Se asume una tira horizontal de seis cuadros.
+      */
+      player.animationTime += deltaTime;
+
+      if (
+        player.grounded &&
+        Math.abs(player.vx) > 0.5 &&
+        player.animationTime >
+          Math.max(72, 145 - Math.abs(player.vx) * 8)
+      ) {
+        player.frame = (player.frame + 1) % 6;
+        player.animationTime = 0;
+      } else if (!player.grounded) {
+        player.frame = 3;
+      } else if (Math.abs(player.vx) <= 0.5) {
+        player.frame = 0;
+      }
+
+      /*
+        Recolección de objetos.
+        Cada punto solo se procesa una vez.
+      */
+      for (const item of items) {
+        if (
+          !item.taken &&
+          distance(
+            {
+              x: player.x + player.w / 2,
+              y: player.y + player.h / 2
+            },
+            item
+          ) < 42
+        ) {
+          item.taken = true;
+
+          if (item.type === "good") {
+            score += 10;
+            shellCount++;
+
+            document.querySelector("#status").textContent =
+              "Encontré una concha. Algunas cosas pequeñas también conservan una historia.";
+          } else {
+            score = Math.max(0, score - 7);
+
+            document.querySelector("#status").textContent =
+              "Algo en el camino me hizo perder 7 puntos.";
+          }
+
+          updateHud();
+        }
+      }
+
+      /*
+        Activación de los seis pensamientos.
+        Cada pensamiento aparece una sola vez.
+      */
+      for (const story of stories) {
+        if (!story.seen && player.x >= story.x) {
+          story.seen = true;
+          showStory(story);
+        }
+      }
+
+      if (storyTimer > 0) {
+        storyTimer -= deltaTime;
+
+        if (storyTimer <= 0) {
+          document.querySelector("#story").classList.remove("show");
+        }
+      }
+
+      /*
+        Cámara lateral suavizada.
+      */
+      const cameraTarget = Math.max(
+        0,
+        Math.min(
+          worldWidth - W,
+          player.x - W * 0.35
+        )
+      );
+
+      cameraX +=
+        (cameraTarget - cameraX) *
+        Math.min(1, 0.008 * deltaTime);
+
+      /*
+        Final del capítulo.
+      */
+      if (player.x > worldWidth - 260) {
+        finished = true;
+
+        document.querySelector("#summary").textContent =
+          `Llegué al faro con ${score} puntos y ${shellCount} ` +
+          `conchas. Pensé que al acercarme sabría quién debía ser. ` +
+          `Solo comprendí que mi origen puede explicarme de dónde ` +
+          `vengo, pero no puede decidir por mí hacia dónde caminar.`;
+
+        document.querySelector("#finish").classList.remove("hide");
+      }
+    }
+
+    function drawBackground() {
+      if (
+        backgroundImage.complete &&
+        backgroundImage.naturalWidth
+      ) {
+        const scale = Math.max(
+          W / backgroundImage.width,
+          H / backgroundImage.height
+        );
+
+        const drawWidth = backgroundImage.width * scale;
+        const drawHeight = backgroundImage.height * scale;
+
+        /*
+          El desplazamiento lento genera el parallax.
+        */
+        const parallaxOffset =
+          (cameraX * 0.043) % Math.max(1, drawWidth * 0.55);
+
+        ctx.drawImage(
+          backgroundImage,
+          -parallaxOffset,
+          H - drawHeight,
+          drawWidth,
+          drawHeight
+        );
+
+        if (-parallaxOffset + drawWidth < W) {
+          ctx.drawImage(
+            backgroundImage,
+            -parallaxOffset + drawWidth,
+            H - drawHeight,
+            drawWidth,
+            drawHeight
+          );
+        }
+      } else {
+        const gradient = ctx.createLinearGradient(0, 0, 0, H);
+
+        gradient.addColorStop(0, "#3b306f");
+        gradient.addColorStop(0.5, "#e1685a");
+        gradient.addColorStop(1, "#f3b65c");
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    function drawPlatforms() {
+      for (const platform of platforms) {
+        const screenX = platform.x - cameraX;
+
+        if (
+          screenX + platform.w < 0 ||
+          screenX > W
+        ) {
+          continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(
+          screenX,
+          platform.y,
+          platform.w,
+          platform.h
+        );
+        ctx.clip();
+
+        if (
+          platformImage.complete &&
+          platformImage.naturalWidth
+        ) {
+          const scale = Math.max(
+            1,
+            platform.h / platformImage.height
+          );
+
+          const tileWidth = platformImage.width * scale;
+          const tileHeight = platformImage.height * scale;
+
+          for (
+            let tileX = screenX;
+            tileX < screenX + platform.w;
+            tileX += tileWidth
+          ) {
+            ctx.drawImage(
+              platformImage,
+              tileX,
+              platform.y,
+              tileWidth,
+              tileHeight
+            );
+          }
+        } else {
+          const groundGradient = ctx.createLinearGradient(
+            0,
+            platform.y,
+            0,
+            platform.y + platform.h
+          );
+
+          groundGradient.addColorStop(0, "#c17b3e");
+          groundGradient.addColorStop(0.15, "#7f482f");
+          groundGradient.addColorStop(1, "#33253a");
+
+          ctx.fillStyle = groundGradient;
+          ctx.fillRect(
+            screenX,
+            platform.y,
+            platform.w,
+            platform.h
+          );
+
+          ctx.fillStyle = "#507e31";
+          ctx.fillRect(
+            screenX,
+            platform.y,
+            platform.w,
+            10
+          );
+        }
+
+        ctx.restore();
+      }
+    }
+
+    function drawItems() {
+      for (const item of items) {
+        if (item.taken) {
+          continue;
+        }
+
+        const screenX = item.x - cameraX;
+
+        if (screenX < -20 || screenX > W + 20) {
+          continue;
+        }
+
+        const pulse =
+          10 +
+          Math.sin(
+            performance.now() / 180 + item.x
+          ) * 2;
+
+        ctx.beginPath();
+        ctx.arc(
+          screenX,
+          item.y,
+          pulse,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fillStyle =
+          item.type === "good"
+            ? "#24c7ff"
+            : "#ff3958";
+
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 13;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = "#ffffffaa";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
+    function drawPlayer() {
+      if (
+        !spriteImage.complete ||
+        !spriteImage.naturalWidth
+      ) {
+        return;
+      }
+
+      const frameWidth = spriteImage.width / 6;
+      const frameHeight = spriteImage.height;
+      const screenX = player.x - cameraX;
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+
+      if (player.facing < 0) {
+        ctx.translate(screenX + player.w, 0);
+        ctx.scale(-1, 1);
+
+        ctx.drawImage(
+          spriteImage,
+          player.frame * frameWidth,
+          0,
+          frameWidth,
+          frameHeight,
+          0,
+          player.y,
+          player.w,
+          player.h
+        );
+      } else {
+        ctx.drawImage(
+          spriteImage,
+          player.frame * frameWidth,
+          0,
+          frameWidth,
+          frameHeight,
+          screenX,
+          player.y,
+          player.w,
+          player.h
+        );
+      }
+
+      ctx.restore();
+    }
+
+    function drawLighthouse() {
+      const screenX = worldWidth - 180 - cameraX;
+
+      /*
+        Cuerpo del faro.
+      */
+      ctx.fillStyle = "#f5eee2";
+      ctx.fillRect(screenX, 225, 30, 105);
+
+      /*
+        Franjas.
+      */
+      ctx.fillStyle = "#d84f55";
+      ctx.fillRect(screenX, 250, 30, 12);
+      ctx.fillRect(screenX, 286, 30, 12);
+
+      /*
+        Techo.
+      */
+      ctx.beginPath();
+      ctx.moveTo(screenX - 8, 225);
+      ctx.lineTo(screenX + 15, 202);
+      ctx.lineTo(screenX + 38, 225);
+      ctx.closePath();
+      ctx.fill();
+
+      /*
+        Luz.
+      */
+      ctx.fillStyle = "#fff49a";
+      ctx.shadowColor = "#ffe36b";
+      ctx.shadowBlur = 18;
+      ctx.fillRect(screenX + 8, 232, 14, 14);
+      ctx.shadowBlur = 0;
+
+      /*
+        Haz de luz.
+      */
+      ctx.fillStyle = "#fff49a20";
+      ctx.beginPath();
+      ctx.moveTo(screenX + 15, 239);
+      ctx.lineTo(screenX - 130, 205);
+      ctx.lineTo(screenX - 130, 275);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawHud() {
+      ctx.fillStyle = "#07162bd0";
+      ctx.fillRect(14, 14, 395, 46);
+
+      ctx.fillStyle = "#fff";
+      ctx.font = "700 17px system-ui";
+      ctx.fillText(
+        "CAPÍTULO 1 · MI PUEBLO FRENTE AL MAR",
+        29,
+        43
+      );
+
+      ctx.fillStyle = "#65dfff";
+      ctx.fillRect(430, 29, 12, 12);
+
+      ctx.fillStyle = "#fff";
+      ctx.fillText("+10", 449, 42);
+
+      ctx.fillStyle = "#ff405d";
+      ctx.fillRect(500, 29, 12, 12);
+
+      ctx.fillStyle = "#fff";
+      ctx.fillText("−7", 519, 42);
+    }
+
+    function gameLoop(currentTime) {
+      const deltaTime = Math.min(
+        34,
+        currentTime - lastTime || 16.67
+      );
+
+      lastTime = currentTime;
+
+      update(deltaTime);
+      drawBackground();
+      drawPlatforms();
+      drawItems();
+      drawLighthouse();
+      drawPlayer();
+      drawHud();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    updateHud();
+    requestAnimationFrame(gameLoop);
+  </script>
+</body>
+</html>
