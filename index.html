@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#17152b">
+  <title>Ixa: Mar y Desierto</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#17152b;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+    body{display:grid;place-items:center;padding:18px}.wrap{width:min(1100px,100%)}
+    header{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}h1{margin:0;font-size:clamp(1.6rem,5vw,3rem)}
+    p{margin:.35rem 0;color:#cbd5e1}.game{position:relative;border:1px solid #ffffff22;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 26px 70px #0008}
+    canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;image-rendering:pixelated}.hud{display:flex;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+    .pill{background:#ffffff0d;border:1px solid #ffffff14;border-radius:14px;padding:10px 14px;color:#dbeafe}.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer;background:#fbbf24;color:#241b35}
+    .touch{position:absolute;inset:auto 12px 12px;display:none;justify-content:space-between;pointer-events:none}.touch div{display:flex;gap:8px}.touch button{pointer-events:auto;width:58px;height:58px;border:1px solid #fff5;border-radius:50%;background:#17152bbd;color:#fff;font-size:24px;font-weight:900}
+    @media (pointer:coarse){.touch{display:flex}}@media(max-width:650px){body{padding:6px}header p{display:none}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+<header><div><p>Videojuego HTML5</p><h1>Ixa: Mar y Desierto</h1><p>Recorre la costa desértica y llega al faro.</p></div><button class="btn" id="restart">Reiniciar</button></header>
+<div class="game"><canvas id="game" width="960" height="540" aria-label="Videojuego de plataformas de Ixa"></canvas>
+<div class="touch"><div><button data-key="left">◀</button><button data-key="right">▶</button></div><div><button data-key="jump">▲</button></div></div></div>
+<div class="hud"><div class="pill" id="status">A/D o flechas para caminar. W, ↑ o Espacio para saltar.</div><div class="pill">Meta: alcanza el faro</div></div>
+</div>
+<script>
+const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d'),statusEl=document.querySelector('#status');
+const W=960,H=540,worldWidth=3200,keys={};let raf,cameraX=0,won=false;
+const sprite=new Image();sprite.src='ixa-sprites.png';
+const platforms=[{x:0,y:466,w:650,h:74},{x:735,y:420,w:250,h:120},{x:1060,y:362,w:250,h:178},{x:1390,y:430,w:330,h:110},{x:1805,y:350,w:260,h:190},{x:2145,y:410,w:350,h:130},{x:2580,y:365,w:260,h:175},{x:2900,y:320,w:300,h:220}];
+const goal={x:3070,y:227,w:24,h:93};
+const player={x:100,y:350,w:72,h:78,vx:0,vy:0,grounded:false,facing:1,frame:0,tick:0,jumpLock:false};
+function reset(msg='Nivel reiniciado.'){Object.assign(player,{x:100,y:350,vx:0,vy:0,grounded:false,frame:0,tick:0});cameraX=0;won=false;statusEl.textContent=msg}
+function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+function down(e){const k=e.key.toLowerCase();keys[k]=true;if(['arrowleft','arrowright','arrowup',' '].includes(k))e.preventDefault()}
+function up(e){keys[e.key.toLowerCase()]=false;if(['w','arrowup',' '].includes(e.key.toLowerCase()))player.jumpLock=false}
+addEventListener('keydown',down,{passive:false});addEventListener('keyup',up);document.querySelector('#restart').onclick=()=>reset();
+document.querySelectorAll('[data-key]').forEach(b=>{const k=b.dataset.key;const set=v=>{if(k==='left')keys.arrowleft=v;if(k==='right')keys.arrowright=v;if(k==='jump'){keys.arrowup=v;if(!v)player.jumpLock=false}};b.onpointerdown=e=>{e.preventDefault();set(true)};b.onpointerup=b.onpointercancel=b.onpointerleave=()=>set(false)});
+function update(){if(won)return;const left=keys.arrowleft||keys.a,right=keys.arrowright||keys.d,jump=keys.arrowup||keys.w||keys[' '];
+ player.vx+=(left?-0.82:right?0.82:0);player.vx*=left||right?.88:.76;player.vx=Math.max(-7.5,Math.min(7.5,player.vx));if(left)player.facing=-1;if(right)player.facing=1;
+ if(jump&&player.grounded&&!player.jumpLock){player.vy=-14.4;player.grounded=false;player.jumpLock=true}player.vy=Math.min(18,player.vy+.72);player.x+=player.vx;player.y+=player.vy;player.grounded=false;
+ for(const p of platforms)if(hit(player,p)&&player.vy>=0&&player.y+player.h-player.vy<=p.y+10){player.y=p.y-player.h;player.vy=0;player.grounded=true}
+ player.x=Math.max(0,Math.min(worldWidth-player.w,player.x));if(player.y>H+100)reset('Ixa cayó al mar. Inténtalo nuevamente.');
+ player.tick++;if(Math.abs(player.vx)>.7&&player.grounded&&player.tick%6===0)player.frame=(player.frame+1)%6;if(Math.abs(player.vx)<=.7)player.frame=0;
+ const target=Math.max(0,Math.min(worldWidth-W,player.x-W*.38));cameraX+=(target-cameraX)*.085;
+ if(hit(player,goal)){won=true;statusEl.textContent='¡Nivel completado! Ixa llegó al faro.'}}
+function sky(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#292054');g.addColorStop(.46,'#c45772');g.addColorStop(.74,'#efaa69');g.addColorStop(1,'#f7d499');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffe39bcc';ctx.beginPath();ctx.arc(780-cameraX*.018,118,48,0,Math.PI*2);ctx.fill()}
+function mountain(speed,color,base,amp,seed){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,H);for(let x=-80;x<=W+80;x+=64){const wx=x+cameraX*speed;ctx.lineTo(x,base+Math.sin(wx*.006+seed)*amp+Math.cos(wx*.012)*15)}ctx.lineTo(W,H);ctx.closePath();ctx.fill()}
+function background(){sky();mountain(.06,'#654467',300,30,0);mountain(.15,'#78505f',348,42,1);mountain(.29,'#946153',397,38,2);const sea=ctx.createLinearGradient(0,395,0,H);sea.addColorStop(0,'#3d91a5');sea.addColorStop(1,'#173d67');ctx.fillStyle=sea;ctx.fillRect(0,405,W,H-405);ctx.strokeStyle='#ffffff45';for(let y=421;y<H;y+=18){ctx.beginPath();for(let x=-25;x<W+25;x+=40){ctx.moveTo(x,y);ctx.quadraticCurveTo(x+11,y-4,x+23,y)}ctx.stroke()}}
+function drawPlatforms(){for(const p of platforms){const x=p.x-cameraX;if(x+p.w<0||x>W)continue;const g=ctx.createLinearGradient(0,p.y,0,p.y+p.h);g.addColorStop(0,'#e2a065');g.addColorStop(.18,'#b8634e');g.addColorStop(1,'#523747');ctx.fillStyle=g;ctx.fillRect(x,p.y,p.w,p.h);ctx.fillStyle='#f4b66e';ctx.fillRect(x,p.y,p.w,12);ctx.fillStyle='#432d3c66';for(let q=22;q<p.w;q+=56)ctx.fillRect(x+q,p.y+35+(q%3)*14,25,8)}}
+function drawGoal(){const x=goal.x-cameraX;ctx.fillStyle='#f7efe2';ctx.fillRect(x,goal.y,goal.w,goal.h);ctx.fillStyle='#d94c55';ctx.beginPath();ctx.moveTo(x-7,goal.y);ctx.lineTo(x+12,goal.y-20);ctx.lineTo(x+31,goal.y);ctx.fill();ctx.fillStyle='#fff18a';ctx.fillRect(x+6,goal.y+18,12,12)}
+function drawPlayer(){const x=player.x-cameraX;if(!sprite.complete||!sprite.naturalWidth)return;const fw=sprite.naturalWidth/6,fh=sprite.naturalHeight;ctx.save();ctx.imageSmoothingEnabled=false;if(player.facing<0){ctx.translate(x+player.w,0);ctx.scale(-1,1);ctx.drawImage(sprite,player.frame*fw,0,fw,fh,0,player.y,player.w,player.h)}else ctx.drawImage(sprite,player.frame*fw,0,fw,fh,x,player.y,player.w,player.h);ctx.restore()}
+function hud(){ctx.fillStyle='#17152bbd';ctx.fillRect(18,18,315,48);ctx.fillStyle='#fff';ctx.font='700 18px system-ui';ctx.fillText('IXA · Costa de Baja California',34,49)}
+function loop(){update();background();drawPlatforms();drawGoal();drawPlayer();hud();raf=requestAnimationFrame(loop)}sprite.onload=()=>{cancelAnimationFrame(raf);loop()};loop();
+</script>
+</body></html>
