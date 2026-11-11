@@ -1,5 +1,20 @@
 # IXA & ÁCATL · Acto I
 
-Sube `index.html`, `ixa-sprites.png` y `fondo-costero.png` juntos a la raíz del repositorio. En GitHub abre Settings > Pages, selecciona Deploy from a branch, `main` y `/ (root)`.
+Versión con sprite mejorado, fondo costero y plataforma gráfica.
 
-Controles: A/D o flechas para caminar; W, flecha arriba o Espacio para saltar.
+## Archivos obligatorios
+- `index.html`
+- `ixa-sprites-v2.png`
+- `fondo-costero-v2.png`
+- `plataforma-costera.png`
+
+Conserva los cuatro archivos juntos en la raíz del repositorio.
+
+## GitHub Pages
+1. Sube los archivos a la rama `main`.
+2. Abre **Settings > Pages**.
+3. Selecciona **Deploy from a branch**.
+4. Elige `main` y `/ (root)`.
+
+## Controles
+A/D o flechas para caminar. W, flecha arriba o Espacio para saltar. En pantallas táctiles se muestran botones.
