@@ -12,9 +12,9 @@ El fondo ilustrado del capítulo 1 está desactivado temporalmente. El nivel con
 
 ## Premisa
 
-Desde niño, Ixa observa un lucero de comportamiento extraño: aparece en momentos determinados, cambia de posición, parece venir de direcciones contradictorias y a veces habla en sueños con la voz de su abuelo. Ixa lo llama primero **la Piedrita del Cielo** y después **el lucero errante**. Cree que seguirlo le permitirá encontrar la isla de sus antepasados y comprender su identidad. La estrella ofrece orientación, pero la interpretación obsesiva de sus señales puede convertir el deseo de Ixa en obediencia.
+Desde niño, Ixa observa el cielo a veces habla en sueños con un lucero que le habla con la voz de su abuelo. Ixa Cree que seguirlo le permitirá encontrar la isla de sus antepasados y comprender su identidad. La estrella ofrece orientación, pero la interpretación obsesiva de sus señales puede convertir el deseo de Ixa en obediencia.
 
-La voz narrativa cambia a medida que Ixa vive: la sensorialidad del niño da paso a la fragmentación del sobreviviente, a la apertura del amigo, a la reflexión del muerto y, finalmente, a la perspectiva del resucitado. Ixa no llega a ser omnisciente: cada comprensión se obtiene a partir de pérdidas, relaciones y decisiones.
+La voz narrativa cambia a medida que Ixa vive: la sensorialidad del niño da paso a la fragmentación del sobreviviente, a la apertura del amigo, a la lucha a traves de la muerte y, finalmente, a la perspectiva de la transformacion del resucitado. Ixa no llega a ser omnisciente: cada comprensión se obtiene a partir de pérdidas, relaciones y decisiones.
 
 ## El título y sus protagonistas
 
@@ -33,10 +33,10 @@ El signo no presenta a los protagonistas como mitades incompletas ni como una so
 ## Personajes centrales
 
 - **Naiyá, la protectora:** matriarca y navegante que rescató y crió a Ixa. Sabe que otras personas siguieron el lucero y desaparecieron. Su cuidado prepara a Ixa para elegir, en vez de retenerlo. En Sinaloa, Ixa decide rescatar a una comunidad atrapada por la inundación de un estero; Naiyá sostiene el paso para que las familias escapen y muere. La pérdida es consecuencia de una elección moralmente defendible, no de una traición deliberada.
-- **Yaax, la mujer del lucero:** astrónoma e intérprete inteligente, afectuosa y ambiciosa. Ama a Ácatl, pero confunde el amor con conservarlo y controlar el futuro. Tiene dos hijos con él. Bajo presiones políticas y el temor de perder a su familia, asesina a Balam Ek y manipula las pruebas para culpar a Ixa; posteriormente usa la culpa y el peligro para mantener a Ácatl bajo su influencia.
-- **Balam Ek, el Sabio de los Umbrales:** observador del cielo, especialista ritual y guía espiritual. Enseña que una visión puede ser cierta y engañosa a la vez, y que conviene comparar relatos y desconfiar de nombres falsos. Conoce tradiciones distintas sobre los mundos de los muertos y cuenta a Ixa relatos de Xbalanqué como inspiración, no como una equivalencia literal con el Mictlán. Yaax lo asesina antes de que pueda revelar todo lo que sabe.
-- **Xochiyáotl, la Jaguar:** guerrera de linaje ficticio asociado a relatos de Tollan y a la tradición militar jaguar; no se presenta como procedente literalmente del antiguo Estado tolteca. Instructora, aliada y conciencia crítica, confronta a Ácatl con la verdad. En la batalla puede salvar su cuerpo mientras Ixa intenta rescatar su voluntad.
-- **Azarel, el Soberano de las Mil Máscaras:** antagonista conocido por un nombre que usa en su encuentro con Ixa, no necesariamente por su nombre verdadero. También recibe títulos como el Otro Lucero, el Abuelo Falso, el Consejero de los Imperios y el Adversario. Imita símbolos y voces, agranda heridas existentes y presenta el miedo, la ambición y la expansión política como destino. No crea el mal ni controla por completo la voluntad humana: se aprovecha de conflictos y decisiones ya presentes.
+- **Yaax, la mujer:** astrónoma e intérprete inteligente, afectuosa y ambiciosa. Ama a Ácatl, pero confunde el amor con conservarlo y controlar el futuro. Bajo presiones políticas y el temor de ser descubierta, asesina a Balam Ek y manipula las pruebas para culpar a Ixa y poner en conflicto con Acatl; posteriormente usa la culpa y el peligro para mantener a Ácatl bajo su influencia.
+- **Balam Ek, el Sabio:** observador del cielo, especialista ritual y guía espiritual. Enseña que una visión puede ser cierta y engañosa a la vez, y que conviene comparar relatos y desconfiar de nombres falsos. Conoce tradiciones distintas sobre los mundos de los muertos y cuenta a Ixa relatos de Xbalanqué como inspiración, no como una equivalencia literal con el Mictlán. Yaax lo asesina antes de que pueda revelar todo lo que sabe.
+- **Xochiyáotl, la Jaguar:** guerrera de linaje ficticio asociado a relatos de Tollan y a la tradición militar jaguar; no se presenta como procedente literalmente del antiguo Estado tolteca. Instructora, aliada y conciencia crítica, confronta a Ácatl con la verdad. En la batalla puede salvar su cuerpo mientras Ixa intenta sanar se vuelve una amiga, confidente y le otorga apoyo a Ixa con su comunidad, juntos son lideres y en comunidad llegan a confrontar a los hombres de acero rescata a Acatl.
+- **Azarel, el Soberano de las Mil Máscaras:** antagonista conocido por un nombre que usa en su encuentro con Ixa, no necesariamente por su nombre verdadero. También recibe títulos como el Lucero, el Consejero de los Imperios y el Adversario. Imita símbolos y voces, agranda heridas existentes y presenta el miedo, la ambición y la expansión política como destino. No crea el mal ni controla por completo la voluntad humana: se aprovecha de conflictos y decisiones ya presentes.
 
 ## Historia completa
 
@@ -44,7 +44,7 @@ La estructura narrativa planeada comprende un prólogo, dieciséis actos y un ep
 
 ### Prólogo: la voz en el cielo
 
-Desde un momento posterior a su regreso de la muerte, Ixa recuerda los luceros de su infancia, la Piedrita del Cielo, su movimiento imposible y la voz de su abuelo en sueños. El mandato «sígueme» inicia su obsesión. El Abuelo de Luz funciona como primer encuentro onírico: no se derrota; el jugador puede acercarse, huir, preguntar o callar.
+Desde un momento posterior a su regreso de la muerte, Ixa recuerda los luceros de su infancia y la voz de su abuelo en sueños. El mandato «sígueme» inicia su obsesión. El Abuelo de Luz funciona como primer encuentro onírico: no se derrota; el jugador puede acercarse, huir, preguntar o callar.
 
 ### Acto I — El lugar donde yo tenía un nombre (capítulos 1–10)
 
