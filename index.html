@@ -74,6 +74,9 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       image-rendering: pixelated;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /*
@@ -267,6 +270,9 @@
       display: none;
       justify-content: space-between;
       pointer-events: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .touch span {
@@ -285,11 +291,22 @@
       font-weight: 900;
       pointer-events: auto;
       touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .touch button:active {
       background: #275478e8;
       transform: scale(0.96);
+    }
+
+    .touch .fire-control {
+      display: none;
+    }
+
+    .touch.chapter-two .fire-control {
+      display: block;
     }
 
     @media (pointer: coarse) {
@@ -452,12 +469,22 @@
           </button>
         </span>
 
-        <button
-          data-key="jump"
-          aria-label="Saltar"
-        >
-          ▲
-        </button>
+        <span>
+          <button
+            data-key="jump"
+            aria-label="Saltar"
+          >
+            ▲
+          </button>
+
+          <button
+            class="fire-control"
+            data-key="fire"
+            aria-label="Lanzar una munición"
+          >
+            ●
+          </button>
+        </span>
       </div>
     </section>
 
@@ -469,8 +496,14 @@
       <div class="pill">
         Puntos:
         <strong id="score">0</strong>
-        · Conchas:
+        · <span id="collectibleLabel">Conchas:</span>
         <strong id="shells">0</strong>/<strong id="total">0</strong>
+      </div>
+
+      <div class="pill" id="ammoPill" hidden>
+        Municiones:
+        <strong id="ammo">10</strong>/10
+        <span id="ammoReload"></span>
       </div>
     </div>
   </main>
@@ -482,6 +515,7 @@
     const W = 960;
     const H = 540;
     const keys = {};
+    const showBackgroundImage = true;
 
     /*
       Los tres archivos deben permanecer junto a index.html.
@@ -489,12 +523,21 @@
     const backgroundImage = new Image();
     const spriteImage = new Image();
     const platformImage = new Image();
+    const chapter2BackgroundImage = new Image();
+    // Asigna aquí la ruta opcional de una imagen para el capítulo 2.
+    const chapter2BackgroundImagePath = "";
 
     backgroundImage.src = "fondo-costero-intimo.png";
     spriteImage.src = "ixa-sprites-v4.png";
     platformImage.src = "plataforma-costera.png";
 
-    const worldWidth = 7600;
+    if (chapter2BackgroundImagePath) {
+      chapter2BackgroundImage.src =
+        chapter2BackgroundImagePath;
+    }
+
+    const chapter1WorldWidth = 7600;
+    let worldWidth = chapter1WorldWidth;
 
     const player = {
       x: 90,
@@ -517,16 +560,24 @@
     let shellCount = 0;
     let jumpConsumed = false;
     let dialogueTimer = 0;
+    let chapterNumber = 1;
+    let obstacles = [];
+    const projectiles = [];
+    const maxAmmo = 10;
+    let ammo = maxAmmo;
+    let ammoReloadTimer = 0;
+    let ammoHudTimer = 0;
+    let fireCooldown = 0;
 
     /*
       Seis diálogos íntimos en primera persona.
     */
-    const dialogues = [
+    const chapter1Dialogues = [
       {
         x: 700,
         title: "Mi nombre en otras voces",
         text:
-          "Cuando era más pequeño creía que mi nombre era mío. " +
+          "Cuando era más pequeño creía que mi nombre me pertenecia. " +
           "Ahora entiendo que también vive en la voz de Naiyá, " +
           "en quienes me corrigen y en quienes esperan que regrese."
       },
@@ -559,7 +610,7 @@
         title: "Hablar y ser escuchado",
         text:
           "Yo creía que todos éramos iguales porque todos podíamos hablar. " +
-          "Después descubrí que algunas palabras pesan más que otras, " +
+          "En nuestra comunidad algunas palabras pesan más que otras, " +
           "incluso cuando la verdad habla con una voz pequeña."
       },
       {
@@ -578,15 +629,15 @@
     /*
       Creación del trayecto largo.
     */
-    const platforms = [];
+    const chapter1Platforms = [];
 
-    for (let x = 0, index = 0; x < worldWidth;) {
+    for (let x = 0, index = 0; x < chapter1WorldWidth;) {
       const gap = index % 5 === 4 ? 100 : 45;
       const width = 520 + (index % 4) * 110;
       const heights = [458, 430, 395, 445, 365, 420];
       const y = heights[index % heights.length];
 
-      platforms.push({
+      chapter1Platforms.push({
         x,
         y,
         w: width,
@@ -600,8 +651,8 @@
     /*
       Plataforma final frente al faro.
     */
-    platforms.push({
-      x: worldWidth - 520,
+    chapter1Platforms.push({
+      x: chapter1WorldWidth - 520,
       y: 330,
       w: 520,
       h: 210
@@ -616,14 +667,14 @@
       Rojo:
       resta 7 puntos.
     */
-    const items = [];
+    const chapter1Items = [];
 
     for (
       let x = 470, index = 0;
-      x < worldWidth - 450;
+      x < chapter1WorldWidth - 450;
       x += 310, index++
     ) {
-      items.push({
+      chapter1Items.push({
         x,
         y: 325 + (index % 3) * 35,
         type: index % 6 === 4 ? "bad" : "good",
@@ -631,11 +682,168 @@
       });
     }
 
-    const totalShells = items.filter(
-      (item) => item.type === "good"
-    ).length;
+    const chapter2WorldWidth = 7600;
+    const chapter2Platforms = [];
 
-    document.querySelector("#total").textContent = totalShells;
+    for (let x = 0, index = 0; x < chapter2WorldWidth;) {
+      const width = 650 + (index % 3) * 90;
+      const gap = 55 + (index % 3) * 12;
+      const heights = [448, 430, 455, 420, 440];
+      const y = heights[index % heights.length];
+
+      chapter2Platforms.push({
+        x,
+        y,
+        w: width,
+        h: H - y,
+        kind: "ground"
+      });
+
+      x += width + gap;
+      index++;
+    }
+
+    chapter2Platforms.push({
+      x: chapter2WorldWidth - 520,
+      y: 420,
+      w: 520,
+      h: 120,
+      kind: "ground"
+    });
+
+    const chapter2UpperPlatforms = [];
+
+    for (
+      let x = 340, index = 0;
+      x < chapter2WorldWidth - 420;
+      x += 480, index++
+    ) {
+      const ground = chapter2Platforms.find(
+        (platform) =>
+          platform.kind === "ground" &&
+          x >= platform.x &&
+          x < platform.x + platform.w
+      );
+
+      if (!ground) {
+        continue;
+      }
+
+      const platform = {
+        x,
+        y: ground.y - 115 - (index % 2) * 22,
+        w: 180 + (index % 3) * 22,
+        h: 10,
+        kind: "upper"
+      };
+
+      chapter2UpperPlatforms.push(platform);
+      chapter2Platforms.push(platform);
+    }
+
+    const chapter2Items = chapter2UpperPlatforms.map(
+      (platform, index) => {
+        const initialY = platform.y - 20;
+        const initialVy = index % 2 === 0 ? -1.8 : -2.4;
+
+        return {
+          x: platform.x + platform.w / 2,
+          y: initialY,
+          initialY,
+          platformY: platform.y,
+          vy: initialVy,
+          initialVy,
+          type: index % 6 === 4 ? "bad" : "good",
+          taken: false
+        };
+      }
+    );
+
+    const chapter2Obstacles = [
+      1050, 2180, 3370, 4560, 5730, 6860
+    ].map((x, index) => {
+      const ground = chapter2Platforms.find(
+        (platform) =>
+          platform.kind === "ground" &&
+          x >= platform.x &&
+          x < platform.x + platform.w
+      );
+
+      return {
+        x,
+        y: ground.y - (112 + (index % 3) * 12),
+        w: 54 + (index % 2) * 8,
+        h: 112 + (index % 3) * 12
+      };
+    });
+
+    const chapter2Dialogues = [
+      {
+        x: 700,
+        title: "Reconciliación interior",
+        text:
+          "Reconciliar lo planeado antes de que vibre. " +
+          "Sólido en mis huesos, olvidaré hasta quedar insólito el recuerdo, " +
+          "dejando que el tiempo desvanezca lo que una vez creí inmóvil."
+      },
+      {
+        x: 1650,
+        title: "El alma que me vio crear",
+        text:
+          "Vuelo alto, contemplo el instante, " +
+          "siendo el sustento de aquella alma de bondad pura " +
+          "que un día me vio crear. Soñar me cura."
+      },
+      {
+        x: 2800,
+        title: "Ante la adversidad",
+        text:
+          "Para sentirme como tú, para enfrentarme como tú " +
+          "ante toda la inmensa adversidad, " +
+          "debo aprender a adaptarme al espíritu del tiempo."
+      },
+      {
+        x: 4050,
+        title: "El vaivén de las olas",
+        text:
+          "Creo que para poder soltar hay que entregarse al mar y a sus olas, " +
+          "dejar que la corriente se lleve lo que ya no puede sostenerse " +
+          "en las manos abiertas."
+      },
+      {
+        x: 5350,
+        title: "La bola de luz",
+        text:
+          "Por esa bola de luz en el cielo que deslumbra " +
+          "y que se dicta danzando al compás secreto de la vida, " +
+          "me distrae la honda cavidad del cielo."
+      },
+      {
+        x: 6500,
+        title: "Intensa gratitud",
+        text:
+          "Siento una intensa gratitud inerte y te lo digo a ti, " +
+          "en este susurro al vacío: " +
+          "por fin me he soltado un poco."
+      }
+    ].map((dialogue) => ({
+      ...dialogue,
+      seen: false
+    }));
+
+    let platforms = chapter1Platforms;
+    let items = chapter1Items;
+    let dialogues = chapter1Dialogues;
+
+    const chapter2Stars = Array.from(
+      { length: 130 },
+      (_, index) => ({
+        x: (index * 197 + 41) % chapter2WorldWidth,
+        y: (index * 73 + 29) % 310,
+        radius: 0.7 + (index % 3) * 0.45,
+        alpha: 0.35 + (index % 5) * 0.12
+      })
+    );
 
     function intersects(a, b) {
       return (
@@ -656,6 +864,94 @@
     function updateHud() {
       document.querySelector("#score").textContent = score;
       document.querySelector("#shells").textContent = shellCount;
+      document.querySelector("#total").textContent =
+        items.filter((item) => item.type === "good").length;
+      document.querySelector("#collectibleLabel").textContent =
+        chapterNumber === 2 ? "Orbes:" : "Conchas:";
+      document.querySelector("#ammoPill").hidden =
+        chapterNumber !== 2;
+      document.querySelector("#ammo").textContent = ammo;
+      document.querySelector("#ammoReload").textContent =
+        ammo < maxAmmo
+          ? ` · Recarga en ${Math.ceil(
+              Math.max(0, 5000 - ammoReloadTimer) / 1000
+            )} s`
+          : "";
+    }
+
+    function configureChapter(number) {
+      chapterNumber = number;
+      const isChapter2 = chapterNumber === 2;
+
+      document.title = isChapter2
+        ? "IXA & ÁCATL · Capítulo 2"
+        : "IXA & ÁCATL · Capítulo 1";
+      worldWidth = isChapter2
+        ? chapter2WorldWidth
+        : chapter1WorldWidth;
+      platforms = isChapter2
+        ? chapter2Platforms
+        : chapter1Platforms;
+      items = isChapter2
+        ? chapter2Items
+        : chapter1Items;
+      dialogues = isChapter2
+        ? chapter2Dialogues
+        : chapter1Dialogues;
+      obstacles = isChapter2
+        ? chapter2Obstacles
+        : [];
+
+      document
+        .querySelector(".touch")
+        .classList.toggle("chapter-two", isChapter2);
+
+      document.querySelector("#chapter2").textContent =
+        isChapter2
+          ? "Volver al capítulo 1"
+          : "Pasar al capítulo 2";
+
+      document.querySelector("#finish small").textContent =
+        isChapter2
+          ? "CAPÍTULO 2 COMPLETADO"
+          : "CAPÍTULO 1 COMPLETADO";
+
+      document.querySelector("#finish h2").textContent =
+        isChapter2
+          ? "El ritmo de las olas del tiempo"
+          : "El horizonte";
+
+      updateHud();
+    }
+
+    function fireProjectile() {
+      if (
+        chapterNumber !== 2 ||
+        !started ||
+        finished ||
+        ammo <= 0 ||
+        fireCooldown > 0
+      ) {
+        return;
+      }
+
+      ammo--;
+      ammoReloadTimer = 0;
+      fireCooldown = 220;
+
+      projectiles.push({
+        x: player.facing > 0
+          ? player.x + player.w
+          : player.x,
+        y: player.y + player.h * 0.48,
+        vx: player.facing * 8.5,
+        vy: -2.2,
+        radius: 8,
+        bounces: 0,
+        age: 0
+      });
+
+      updateHud();
     }
 
     /*
@@ -697,9 +993,18 @@
     function resetGame(
       message = "El recorrido ha comenzado de nuevo."
     ) {
+      const spawnPlatform = platforms.find(
+        (platform) =>
+          platform.kind !== "upper" &&
+          platform.x <= 90 &&
+          platform.x + platform.w >= 90 + player.w
+      );
+
       Object.assign(player, {
         x: 90,
-        y: 350,
+        y: chapterNumber === 2 && spawnPlatform
+          ? spawnPlatform.y - player.h
+          : 350,
         vx: 0,
         vy: 0,
         grounded: false,
@@ -708,15 +1013,29 @@
         animationTime: 0
       });
 
+      Object.keys(keys).forEach((key) => {
+        keys[key] = false;
+      });
+
       cameraX = 0;
       score = 0;
       shellCount = 0;
       finished = false;
       jumpConsumed = false;
       dialogueTimer = 0;
+      ammo = maxAmmo;
+      ammoReloadTimer = 0;
+      ammoHudTimer = 0;
+      fireCooldown = 0;
+      projectiles.length = 0;
 
       items.forEach((item) => {
         item.taken = false;
+
+        if (chapterNumber === 2) {
+          item.y = item.initialY;
+          item.vy = item.initialVy;
+        }
       });
 
       dialogues.forEach((dialogue) => {
@@ -737,6 +1056,17 @@
 
     function handleKeyDown(event) {
       const key = event.key.toLowerCase();
+
+      if (["f", "x"].includes(key)) {
+        event.preventDefault();
+
+        if (!event.repeat) {
+          fireProjectile();
+        }
+
+        return;
+      }
+
       keys[key] = true;
 
       if (
@@ -795,7 +1125,9 @@
         started = true;
 
         resetGame(
-          "Vuelvo a recorrer la orilla desde el principio."
+          chapterNumber === 2
+            ? "Vuelvo a recorrer las olas del tiempo."
+            : "Vuelvo a recorrer la orilla desde el principio."
         );
       });
 
@@ -806,35 +1138,16 @@
           .querySelector("#finish")
           .classList.add("hide");
 
-        const intro =
-          document.querySelector("#intro");
+        const nextChapter =
+          chapterNumber === 1 ? 2 : 1;
 
-        const card =
-          intro.querySelector(".card");
-
-        card.innerHTML = `
-          <small>CAPÍTULO 2 · EN PREPARACIÓN</small>
-
-          <h2>El siguiente territorio</h2>
-
-          <blockquote>
-            “Creí que cruzar el faro significaba abandonar mi hogar.
-            Después comprendí que también podía llevarlo conmigo.”
-          </blockquote>
-
-          <p>
-            El acceso al segundo capítulo ya está preparado.
-            Aquí se incorporarán el nuevo fondo, actividades
-            distintas, personajes adicionales y plataformas
-            más elaboradas.
-          </p>
-
-          <button class="btn" onclick="location.reload()">
-            Volver al capítulo 1
-          </button>
-        `;
-
-        intro.classList.remove("hide");
+        configureChapter(nextChapter);
+        started = true;
+        resetGame(
+          nextChapter === 2
+            ? "Entro en el ritmo de las olas del tiempo."
+            : "Regreso al primer capítulo."
+        );
       });
 
     /*
@@ -843,10 +1156,12 @@
     document
       .querySelectorAll("[data-key]")
       .forEach((button) => {
-        const code =
-          button.dataset.key === "left"
+        const keyCode = button.dataset.key;
+        const code = keyCode === "fire"
+          ? null
+          : keyCode === "left"
             ? "arrowleft"
-            : button.dataset.key === "right"
+            : keyCode === "right"
               ? "arrowright"
               : "arrowup";
 
@@ -854,12 +1169,20 @@
           "pointerdown",
           (event) => {
             event.preventDefault();
+
+            if (keyCode === "fire") {
+              fireProjectile();
+              return;
+            }
+
             keys[code] = true;
           }
         );
 
         function releaseButton() {
-          keys[code] = false;
+          if (code) {
+            keys[code] = false;
+          }
 
           if (code === "arrowup") {
             jumpConsumed = false;
@@ -882,9 +1205,163 @@
         );
       });
 
+    function updateChapter2Objects(deltaTime) {
+      const timeScale = deltaTime / 16.67;
+
+      for (const item of items) {
+        if (item.taken) {
+          continue;
+        }
+
+        item.vy += 0.18 * timeScale;
+        item.y += item.vy * timeScale;
+
+        if (item.y + 10 >= item.platformY) {
+          item.y = item.platformY - 10;
+          item.vy = -Math.max(
+            1.8,
+            Math.abs(item.vy) * 0.78
+          );
+        }
+      }
+
+      for (
+        let index = projectiles.length - 1;
+        index >= 0;
+        index--
+      ) {
+        const projectile = projectiles[index];
+        const previousY = projectile.y;
+
+        projectile.age += deltaTime;
+        projectile.vy += 0.18 * timeScale;
+        projectile.x += projectile.vx * timeScale;
+        projectile.y += projectile.vy * timeScale;
+
+        let obstacleHit = false;
+
+        for (const obstacle of obstacles) {
+          if (
+            intersects(
+              {
+                x: projectile.x - projectile.radius,
+                y: projectile.y - projectile.radius,
+                w: projectile.radius * 2,
+                h: projectile.radius * 2
+              },
+              obstacle
+            )
+          ) {
+            obstacleHit = true;
+            break;
+          }
+        }
+
+        if (obstacleHit) {
+          projectiles.splice(index, 1);
+          continue;
+        }
+
+        for (const platform of platforms) {
+          if (
+            projectile.vy > 0 &&
+            previousY + projectile.radius <= platform.y &&
+            projectile.y + projectile.radius >= platform.y &&
+            projectile.x + projectile.radius > platform.x &&
+            projectile.x - projectile.radius <
+              platform.x + platform.w
+          ) {
+            projectile.y =
+              platform.y - projectile.radius;
+            projectile.vy = -Math.max(
+              3,
+              Math.abs(projectile.vy) * 0.72
+            );
+            projectile.bounces++;
+            break;
+          }
+        }
+
+        if (
+          projectile.age >= 4200 ||
+          projectile.bounces >= 4 ||
+          projectile.x < 0 ||
+          projectile.x > worldWidth
+        ) {
+          projectiles.splice(index, 1);
+        }
+      }
+    }
+
+    function handleObstacleCollisions() {
+      for (const obstacle of obstacles) {
+        if (!intersects(player, obstacle)) {
+          continue;
+        }
+
+        const approachedFromLeft =
+          player.x + player.w / 2 <
+          obstacle.x + obstacle.w / 2;
+
+        const safeX = approachedFromLeft
+          ? obstacle.x - player.w - 8
+          : obstacle.x + obstacle.w + 8;
+
+        const safePlatform = platforms.find(
+          (platform) =>
+            platform.kind === "ground" &&
+            safeX >= platform.x &&
+            safeX + player.w <=
+              platform.x + platform.w
+        );
+
+        player.x = Math.max(
+          0,
+          Math.min(worldWidth - player.w, safeX)
+        );
+        player.y = safePlatform
+          ? safePlatform.y - player.h
+          : obstacle.y - player.h;
+        player.vx = 0;
+        player.vy = 0;
+        player.grounded = Boolean(safePlatform);
+        score = Math.max(0, score - 5);
+
+        document.querySelector("#status").textContent =
+          "El monolito me hizo retroceder. Perdí 5 puntos.";
+
+        updateHud();
+        break;
+      }
+    }
+
     function update(deltaTime) {
       if (!started || finished) {
         return;
+      }
+
+      if (chapterNumber === 2) {
+        fireCooldown = Math.max(
+          0,
+          fireCooldown - deltaTime
+        );
+
+        if (ammo < maxAmmo) {
+          ammoReloadTimer += deltaTime;
+          ammoHudTimer += deltaTime;
+
+          if (ammoReloadTimer >= 5000) {
+            ammo = maxAmmo;
+            ammoReloadTimer = 0;
+            ammoHudTimer = 0;
+            updateHud();
+          } else if (ammoHudTimer >= 250) {
+            ammoHudTimer = 0;
+            updateHud();
+          }
+        }
+
+        updateChapter2Objects(deltaTime);
       }
 
       const movingLeft =
@@ -997,6 +1474,10 @@
         )
       );
 
+      if (chapterNumber === 2) {
+        handleObstacleCollisions();
+      }
+
       /*
         Animación del sprite.
         La imagen se interpreta como una tira horizontal
@@ -1047,7 +1528,9 @@
             shellCount++;
 
             document.querySelector("#status").textContent =
-              "Encontré una concha. Algunas cosas pequeñas también conservan una historia.";
+              chapterNumber === 2
+                ? "Recogí un orbe azul. La munición se recupera con el tiempo."
+                : "Encontré una concha. Algunas cosas pequeñas también conservan una historia.";
           } else {
             score = Math.max(
               0,
@@ -1112,11 +1595,15 @@
         hideDialogue();
 
         document.querySelector("#summary").textContent =
-          `Llegué al faro con ${score} puntos y ` +
-          `${shellCount} conchas. Pensé que al acercarme ` +
-          `sabría quién debía ser. Solo comprendí que mi ` +
-          `origen puede explicarme de dónde vengo, pero no ` +
-          `puede decidir por mí hacia dónde caminar.`;
+          chapterNumber === 2
+            ? `Atravesé el ritmo de las olas con ${score} puntos ` +
+              `y recogí ${shellCount} orbes. Aprendí que soltar ` +
+              `también puede ser una forma de seguir adelante.`
+            : `Llegué al faro con ${score} puntos y ` +
+              `${shellCount} conchas. Pensé que al acercarme ` +
+              `sabría quién debía ser. Solo comprendí que mi ` +
+              `origen puede explicarme de dónde vengo, pero no ` +
+              `puede decidir por mí hacia dónde caminar.`;
 
         document
           .querySelector("#finish")
@@ -1125,7 +1612,71 @@
     }
 
     function drawBackground() {
+      if (chapterNumber === 2) {
+        if (
+          chapter2BackgroundImage.complete &&
+          chapter2BackgroundImage.naturalWidth
+        ) {
+          const scale = Math.max(
+            W / chapter2BackgroundImage.width,
+            H / chapter2BackgroundImage.height
+          );
+          const drawWidth =
+            chapter2BackgroundImage.width * scale;
+          const drawHeight =
+            chapter2BackgroundImage.height * scale;
+
+          ctx.drawImage(
+            chapter2BackgroundImage,
+            (W - drawWidth) / 2,
+            (H - drawHeight) / 2,
+            drawWidth,
+            drawHeight
+          );
+          ctx.fillStyle = "#080a1b66";
+          ctx.fillRect(0, 0, W, H);
+        } else {
+          const nightGradient =
+            ctx.createLinearGradient(0, 0, 0, H);
+
+          nightGradient.addColorStop(0, "#080b20");
+          nightGradient.addColorStop(0.52, "#151b38");
+          nightGradient.addColorStop(1, "#332a46");
+
+          ctx.fillStyle = nightGradient;
+          ctx.fillRect(0, 0, W, H);
+        }
+
+        for (const star of chapter2Stars) {
+          const screenX = star.x - cameraX * 0.18;
+
+          if (screenX < 0 || screenX > W) {
+            continue;
+          }
+
+          ctx.globalAlpha =
+            star.alpha *
+            (0.78 +
+              Math.sin(performance.now() / 700 + star.x) *
+                0.22);
+          ctx.fillStyle = "#e6e9ff";
+          ctx.beginPath();
+          ctx.arc(
+            screenX,
+            star.y,
+            star.radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
+        return;
+      }
+
       if (
+        showBackgroundImage &&
         backgroundImage.complete &&
         backgroundImage.naturalWidth
       ) {
@@ -1211,6 +1762,56 @@
         }
 
         ctx.save();
+
+        if (chapterNumber === 2) {
+          if (platform.kind === "upper") {
+            ctx.shadowColor = "#77eaff";
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = "#91edff";
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              4
+            );
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#24334dbb";
+            ctx.fillRect(
+              screenX + 8,
+              platform.y + 5,
+              platform.w - 16,
+              platform.h - 5
+            );
+          } else {
+            const nightRock =
+              ctx.createLinearGradient(
+                0,
+                platform.y,
+                0,
+                platform.y + platform.h
+              );
+
+            nightRock.addColorStop(0, "#29334b");
+            nightRock.addColorStop(1, "#101527");
+            ctx.fillStyle = nightRock;
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              platform.h
+            );
+            ctx.fillStyle = "#6889a8";
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              6
+            );
+          }
+
+          ctx.restore();
+          continue;
+        }
 
         ctx.beginPath();
 
@@ -1347,6 +1948,114 @@
         ctx.strokeStyle = "#ffffffaa";
         ctx.lineWidth = 2;
         ctx.stroke();
+      }
+    }
+
+    function drawProjectiles() {
+      for (const projectile of projectiles) {
+        const screenX =
+          projectile.x - cameraX;
+
+        if (
+          screenX < -20 ||
+          screenX > W + 20
+        ) {
+          continue;
+        }
+
+        ctx.beginPath();
+        ctx.arc(
+          screenX,
+          projectile.y,
+          projectile.radius,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = "#b8fbff";
+        ctx.shadowColor = "#58eaff";
+        ctx.shadowBlur = 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
+    function drawChapter2Obstacles() {
+      for (const obstacle of obstacles) {
+        const screenX = obstacle.x - cameraX;
+
+        if (
+          screenX + obstacle.w < 0 ||
+          screenX > W
+        ) {
+          continue;
+        }
+
+        const stoneGradient =
+          ctx.createLinearGradient(
+            screenX,
+            obstacle.y,
+            screenX + obstacle.w,
+            obstacle.y + obstacle.h
+          );
+
+        stoneGradient.addColorStop(0, "#323248");
+        stoneGradient.addColorStop(0.5, "#171b30");
+        stoneGradient.addColorStop(1, "#45405b");
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(screenX + obstacle.w * 0.2, obstacle.y);
+        ctx.lineTo(screenX + obstacle.w * 0.8, obstacle.y + 8);
+        ctx.lineTo(
+          screenX + obstacle.w,
+          obstacle.y + obstacle.h * 0.82
+        );
+        ctx.lineTo(
+          screenX + obstacle.w * 0.72,
+          obstacle.y + obstacle.h
+        );
+        ctx.lineTo(
+          screenX + obstacle.w * 0.1,
+          obstacle.y + obstacle.h * 0.92
+        );
+        ctx.lineTo(screenX, obstacle.y + obstacle.h * 0.18);
+        ctx.closePath();
+        ctx.fillStyle = stoneGradient;
+        ctx.fill();
+        ctx.strokeStyle = "#9382a8";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.strokeStyle = "#d59bff88";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(
+          screenX + obstacle.w * 0.18,
+          obstacle.y + obstacle.h * 0.48
+        );
+        ctx.lineTo(
+          screenX + obstacle.w * 0.82,
+          obstacle.y + obstacle.h * 0.48
+        );
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(
+          screenX + obstacle.w / 2,
+          obstacle.y + obstacle.h * 0.33,
+          7,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = "#ff557b";
+        ctx.shadowColor = "#ff557b";
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
       }
     }
 
@@ -1507,6 +2216,28 @@
     }
 
     function drawHud() {
+      if (chapterNumber === 2) {
+        ctx.fillStyle = "#080d25d9";
+        ctx.fillRect(14, 14, 530, 62);
+        ctx.strokeStyle = "#93cfff66";
+        ctx.strokeRect(14, 14, 530, 62);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 14px system-ui";
+        ctx.fillText(
+          "CAPÍTULO 2 · EL RITMO DE LAS OLAS DEL TIEMPO",
+          28,
+          38
+        );
+        ctx.font = "12px system-ui";
+        ctx.fillStyle = "#a9eaff";
+        ctx.fillText(
+          "F / X o ●: lanzar · Azul: +10 · Rojo: −7",
+          28,
+          60
+        );
+        return;
+      }
+
       ctx.fillStyle = "#07162bd0";
 
       ctx.fillRect(
@@ -1572,7 +2303,12 @@
       drawBackground();
       drawPlatforms();
       drawItems();
-      drawLighthouse();
+      if (chapterNumber === 2) {
+        drawProjectiles();
+        drawChapter2Obstacles();
+      } else {
+        drawLighthouse();
+      }
       drawPlayer();
       drawHud();
 

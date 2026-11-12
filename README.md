@@ -4,7 +4,7 @@
 
 **IXA & ÁCATL** es una aventura narrativa histórica y mitológica contada principalmente en primera persona por Ixa. El juego sigue la transformación de una voz que comienza siendo concreta, sensorial e inocente y que, con el tiempo, será atravesada por la amistad, la pérdida, la muerte, la memoria y la responsabilidad.
 
-Esta versión jugable corresponde al **Capítulo 1: Mi pueblo frente al mar**. Ixa todavía no se pregunta directamente “¿quién soy?”. La pregunta inicial es más íntima: **“¿Qué lugar ocupo entre quienes conocen mi nombre?”**
+Esta versión jugable incluye el **Capítulo 1: Mi pueblo frente al mar** y el **Capítulo 2: El ritmo de las olas del tiempo**. Ixa todavía no se pregunta directamente “¿quién soy?”. La pregunta inicial es más íntima: **“¿Qué lugar ocupo entre quienes conocen mi nombre?”**
 
 ## Premisa
 
@@ -30,7 +30,7 @@ Protectora, navegante y figura de cuidado. Naiyá no intenta retener a Ixa, sino
 
 Fenómeno celeste, símbolo de orientación, memoria, obsesión y posibilidad. La estrella no obliga a Ixa. El peligro aparece en la interpretación: aquello que Ixa desea puede hacerle escuchar un mandato donde solo había una luz.
 
-## Mecánicas de esta versión
+## Mecánicas
 
 - Trayecto extendido hasta el faro.
 - Narración íntima de Ixa en primera persona, activada en seis lugares del recorrido.
@@ -40,11 +40,15 @@ Fenómeno celeste, símbolo de orientación, memoria, obsesión y posibilidad. L
 - Marcador de puntos y conchas.
 - Faro como transición narrativa al capítulo 2.
 - Controles de teclado y controles táctiles.
+- Capítulo 2 con fondo nocturno degradado y estrellas; se puede asignar una imagen opcional desde `chapter2BackgroundImagePath` en `index.html`.
+- Plataformas elevadas, orbes azules coleccionables, orbes rojos que restan puntos y monolitos que hacen retroceder a Ixa.
+- Hasta 10 municiones lanzables con `F` o `X`; cada proyectil rebota y desaparece, y la munición se recarga a los 5 segundos. En móvil se muestra un control táctil para lanzar.
 
 ## Controles
 
 - `A` / `D` o flechas izquierda/derecha: caminar.
 - `W`, flecha arriba o barra espaciadora: saltar.
+- `F` o `X`: lanzar una munición durante el capítulo 2.
 
 ## Archivos
 
@@ -64,6 +68,6 @@ Mantén estos archivos juntos en la raíz del repositorio:
 4. Elige `main` y `/ (root)`.
 5. Guarda los cambios.
 
-## Estado del capítulo 2
+## Capítulo 2
 
-El botón del faro abre una transición provisional. El capítulo 2 se integrará después con un segundo fondo, plataformas más elaboradas y actividades narrativas nuevas.
+El botón del final del capítulo 1 inicia el segundo nivel. Al terminar el capítulo 2, el mismo botón permite regresar al primero.
