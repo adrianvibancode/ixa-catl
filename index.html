@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -19,7 +20,7 @@
       margin: 0;
       min-height: 100%;
       background: #091426;
-      color: #fff;
+      color: #ffffff;
       font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     }
 
@@ -27,6 +28,10 @@
       display: grid;
       place-items: center;
       padding: 10px;
+    }
+
+    button {
+      font: inherit;
     }
 
     .app {
@@ -60,7 +65,7 @@
       overflow: hidden;
       border: 1px solid #ffffff35;
       border-radius: 18px;
-      background: #111;
+      background: #111827;
       box-shadow: 0 24px 70px #000a;
     }
 
@@ -71,10 +76,14 @@
       image-rendering: pixelated;
     }
 
+    /*
+      VENTANAS DE INICIO Y FINAL
+    */
+
     .modal {
       position: absolute;
       inset: 0;
-      z-index: 8;
+      z-index: 20;
       display: grid;
       place-items: center;
       padding: 18px;
@@ -92,18 +101,18 @@
       padding: 22px;
       border: 1px solid #ffffff30;
       border-radius: 18px;
-      background: #10233bed;
+      background: #10233bf2;
       box-shadow: 0 20px 60px #000a;
     }
 
     .card small {
       color: #9ddff0;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.08em;
     }
 
     .card h2 {
-      margin: 0.3rem 0;
+      margin: 0.35rem 0;
       color: #ffd067;
     }
 
@@ -117,7 +126,7 @@
       padding: 10px 0 10px 14px;
       border-left: 3px solid #59d3ee;
       line-height: 1.55;
-      color: #fff;
+      color: #ffffff;
     }
 
     .btn {
@@ -134,9 +143,103 @@
       filter: brightness(1.08);
     }
 
+    .btn:focus-visible {
+      outline: 3px solid #70dcff;
+      outline-offset: 3px;
+    }
+
     .btn.secondary {
       background: #d9e8f4;
     }
+
+    /*
+      DIÁLOGO SUPERIOR
+
+      Se coloca arriba para no cubrir a Ixa, los objetos,
+      las plataformas ni los controles táctiles.
+    */
+
+    .dialogue {
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      z-index: 10;
+      width: min(760px, calc(100% - 32px));
+      min-height: 84px;
+      padding: 13px 18px 14px;
+      transform: translateX(-50%) translateY(-12px);
+      border: 1px solid #77d9ef75;
+      border-radius: 15px;
+      background:
+        linear-gradient(
+          135deg,
+          #07162bf2,
+          #102a43ee
+        );
+      box-shadow:
+        0 12px 35px #0009,
+        inset 0 1px 0 #ffffff18;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.28s ease,
+        transform 0.28s ease;
+    }
+
+    .dialogue.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .dialogue-header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 4px;
+    }
+
+    .dialogue-name {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #ffd067;
+      color: #182137;
+      font-size: 0.78rem;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+    }
+
+    .dialogue-line {
+      width: 100%;
+      height: 1px;
+      background:
+        linear-gradient(
+          90deg,
+          #70dcff99,
+          transparent
+        );
+    }
+
+    .dialogue-title {
+      display: block;
+      margin-bottom: 3px;
+      color: #8ee7fa;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .dialogue-text {
+      color: #ffffff;
+      font-size: clamp(0.88rem, 1.55vw, 1rem);
+      line-height: 1.46;
+      text-wrap: pretty;
+    }
+
+    /*
+      INTERFAZ INFERIOR
+    */
 
     .bar {
       display: flex;
@@ -148,53 +251,19 @@
 
     .pill {
       padding: 9px 13px;
+      border: 1px solid #ffffff12;
       border-radius: 12px;
       background: #ffffff0d;
-      border: 1px solid #ffffff12;
     }
 
-    .story {
-      position: absolute;
-      left: 50%;
-      bottom: 18px;
-      z-index: 6;
-      transform: translateX(-50%) translateY(12px);
-      width: min(780px, 92%);
-      padding: 16px 19px;
-      border: 1px solid #77d9ef66;
-      border-radius: 16px;
-      background: #07162bee;
-      box-shadow: 0 12px 35px #0009;
-      line-height: 1.5;
-      opacity: 0;
-      pointer-events: none;
-      transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-    }
-
-    .story.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .story strong {
-      display: block;
-      margin-bottom: 4px;
-      color: #ffd067;
-      font-size: 1.05rem;
-    }
-
-    .story .voice {
-      color: #8bdcf0;
-      font-size: 0.77rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-    }
+    /*
+      CONTROLES TÁCTILES
+    */
 
     .touch {
       position: absolute;
       inset: auto 12px 12px;
+      z-index: 12;
       display: none;
       justify-content: space-between;
       pointer-events: none;
@@ -208,27 +277,28 @@
     .touch button {
       width: 58px;
       height: 58px;
-      border: 1px solid #fff7;
+      border: 1px solid #ffffff80;
       border-radius: 50%;
       background: #10243bca;
-      color: #fff;
+      color: #ffffff;
       font-size: 23px;
       font-weight: 900;
       pointer-events: auto;
       touch-action: none;
     }
 
+    .touch button:active {
+      background: #275478e8;
+      transform: scale(0.96);
+    }
+
     @media (pointer: coarse) {
       .touch {
         display: flex;
       }
-
-      .story {
-        bottom: 82px;
-      }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 680px) {
       body {
         padding: 3px;
       }
@@ -241,8 +311,26 @@
         padding: 17px;
       }
 
-      .story {
-        font-size: 0.9rem;
+      .dialogue {
+        top: 54px;
+        width: calc(100% - 18px);
+        min-height: 72px;
+        padding: 10px 12px 11px;
+      }
+
+      .dialogue-text {
+        font-size: 0.82rem;
+        line-height: 1.35;
+      }
+
+      .dialogue-title {
+        display: none;
+      }
+
+      .dialogue-name {
+        min-height: 20px;
+        padding: 2px 8px;
+        font-size: 0.67rem;
       }
     }
   </style>
@@ -265,6 +353,7 @@
     </header>
 
     <section class="game">
+      <!-- INTRODUCCIÓN -->
       <div class="modal" id="intro">
         <div class="card">
           <small>
@@ -281,14 +370,13 @@
           <p>
             Camino hacia el faro mientras intento comprender por qué
             crecer se parece tanto a despedirse. Debo recoger las
-            conchas azules, evitar los puntos rojos y escuchar los
-            recuerdos que aparecen en el trayecto.
+            conchas azules, evitar los puntos rojos y escuchar aquello
+            que el territorio despierta en mí.
           </p>
 
           <p>
-            El faro no representa el final. El faro es el límite de
-            todo lo que conozco y la entrada a una parte de mí que
-            todavía no sé nombrar.
+            El faro no es el final. Es el límite de todo lo que conozco
+            y la entrada a una parte de mí que todavía no sé nombrar.
           </p>
 
           <button class="btn" id="start">
@@ -297,6 +385,7 @@
         </div>
       </div>
 
+      <!-- FINAL DEL CAPÍTULO -->
       <div class="modal hide" id="finish">
         <div class="card">
           <small>CAPÍTULO 1 COMPLETADO</small>
@@ -306,8 +395,8 @@
           <p id="summary"></p>
 
           <blockquote>
-            “El horizonte no respondió quién era. Solo me enseñó que
-            podía seguir caminando sin conocer todavía la respuesta.”
+            “El horizonte no respondió quién era. Solo me enseñó
+            que podía seguir caminando sin conocer todavía la respuesta.”
           </blockquote>
 
           <button class="btn" id="chapter2">
@@ -320,6 +409,7 @@
         </div>
       </div>
 
+      <!-- ÁREA DE JUEGO -->
       <canvas
         id="game"
         width="960"
@@ -327,20 +417,45 @@
         aria-label="Videojuego de plataformas IXA y ÁCATL"
       ></canvas>
 
-      <div class="story" id="story"></div>
+      <!-- DIÁLOGO SUPERIOR -->
+      <div
+        class="dialogue"
+        id="dialogue"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="dialogue-header">
+          <span class="dialogue-name">IXA</span>
+          <span class="dialogue-line"></span>
+        </div>
 
+        <span class="dialogue-title" id="dialogueTitle"></span>
+
+        <div class="dialogue-text" id="dialogueText"></div>
+      </div>
+
+      <!-- CONTROLES PARA CELULAR -->
       <div class="touch">
         <span>
-          <button data-key="left" aria-label="Caminar a la izquierda">
+          <button
+            data-key="left"
+            aria-label="Caminar a la izquierda"
+          >
             ◀
           </button>
 
-          <button data-key="right" aria-label="Caminar a la derecha">
+          <button
+            data-key="right"
+            aria-label="Caminar a la derecha"
+          >
             ▶
           </button>
         </span>
 
-        <button data-key="jump" aria-label="Saltar">
+        <button
+          data-key="jump"
+          aria-label="Saltar"
+        >
           ▲
         </button>
       </div>
@@ -369,8 +484,7 @@
     const keys = {};
 
     /*
-      Estos tres archivos deben estar junto a index.html.
-      Si tus imágenes tienen nombres diferentes, cambia solo estas rutas.
+      Los tres archivos deben permanecer junto a index.html.
     */
     const backgroundImage = new Image();
     const spriteImage = new Image();
@@ -402,86 +516,75 @@
     let score = 0;
     let shellCount = 0;
     let jumpConsumed = false;
-    let storyTimer = 0;
+    let dialogueTimer = 0;
 
     /*
-      Seis momentos narrativos.
-      Todos corresponden a pensamientos de Ixa en primera persona.
+      Seis diálogos íntimos en primera persona.
     */
-    const stories = [
+    const dialogues = [
       {
         x: 700,
-        title: "1. Mi nombre en otras voces",
+        title: "Mi nombre en otras voces",
         text:
           "Cuando era más pequeño creía que mi nombre era mío. " +
           "Ahora entiendo que también vive en la voz de Naiyá, " +
-          "en quienes me corrigen y en quienes todavía esperan " +
-          "que regrese antes de que oscurezca."
+          "en quienes me corrigen y en quienes esperan que regrese."
       },
       {
         x: 1650,
-        title: "2. Las manos que me hicieron un lugar",
+        title: "Las manos que me hicieron un lugar",
         text:
           "A veces quiero demostrar que ya puedo hacerlo todo solo. " +
-          "Después recuerdo que comí antes de saber pescar y que " +
-          "dormí bajo un techo levantado por manos cuyos nombres " +
-          "no conozco. Tal vez crecer no sea dejar de necesitarlas, " +
-          "sino aprender a sostener a otros como alguien me sostuvo."
+          "Después recuerdo que comí antes de saber pescar y que dormí " +
+          "bajo un techo levantado por manos cuyos nombres no conozco."
       },
       {
         x: 2800,
-        title: "3. Lo que una huella no dice",
+        title: "Lo que una huella no dice",
         text:
           "Naiyá me enseñó a mirar el barro sin obligarlo a contarme " +
           "la historia que yo quería escuchar. Una huella demuestra " +
-          "que alguien estuvo allí, pero no explica sus razones. " +
-          "Desde entonces temo menos a no saber, aunque todavía me " +
-          "avergüenza decirlo en voz alta."
+          "una presencia, pero no explica por sí sola sus razones."
       },
       {
         x: 4050,
-        title: "4. El agua de quienes aún no nacen",
+        title: "El agua de quienes aún no nacen",
         text:
           "No entendía cómo podía cuidarse el agua para personas que " +
-          "todavía no existen. Yo quería saber quién era su dueño. " +
-          "Ahora comienzo a pensar que algunas cosas no nos pertenecen: " +
-          "solo pasan por nuestras manos y esperan que no las destruyamos."
+          "todavía no existen. Tal vez crecer sea comprender que el " +
+          "mundo no comenzó conmigo y que tampoco debe terminar en mis manos."
       },
       {
         x: 5350,
-        title: "5. Hablar y ser escuchado",
+        title: "Hablar y ser escuchado",
         text:
-          "Yo creía que todos éramos iguales porque todos podíamos " +
-          "hablar durante el consejo. Aquel día descubrí que algunas " +
-          "palabras pesan más que otras, incluso cuando la verdad habla " +
-          "con una voz pequeña. Me pregunté cuánto tendría que crecer " +
-          "antes de que mi voz dejara de parecer la voz de un niño."
+          "Yo creía que todos éramos iguales porque todos podíamos hablar. " +
+          "Después descubrí que algunas palabras pesan más que otras, " +
+          "incluso cuando la verdad habla con una voz pequeña."
       },
       {
         x: 6500,
-        title: "6. La parte de mí que mira lejos",
+        title: "La parte de mí que mira lejos",
         text:
-          "Quiero a mi pueblo. Lo quiero tanto que a veces mirar el " +
-          "horizonte me parece una traición. Pero una parte de mí " +
-          "necesita saber qué existe después de todo lo conocido. " +
+          "Quiero a mi pueblo, pero una parte de mí mira el horizonte. " +
           "Me asusta partir y convertirme en alguien que ya no reconozcan. " +
           "También me asusta quedarme solamente por miedo."
       }
-    ].map((story) => ({
-      ...story,
+    ].map((dialogue) => ({
+      ...dialogue,
       seen: false
     }));
 
     /*
-      Plataformas del trayecto extendido.
+      Creación del trayecto largo.
     */
     const platforms = [];
 
     for (let x = 0, index = 0; x < worldWidth;) {
       const gap = index % 5 === 4 ? 100 : 45;
       const width = 520 + (index % 4) * 110;
-      const yValues = [458, 430, 395, 445, 365, 420];
-      const y = yValues[index % yValues.length];
+      const heights = [458, 430, 395, 445, 365, 420];
+      const y = heights[index % heights.length];
 
       platforms.push({
         x,
@@ -494,6 +597,9 @@
       index++;
     }
 
+    /*
+      Plataforma final frente al faro.
+    */
     platforms.push({
       x: worldWidth - 520,
       y: 330,
@@ -502,19 +608,26 @@
     });
 
     /*
-      Objetos provisionales:
-      azul = concha, +10
-      rojo = peligro, -7
+      Objetos provisionales.
+
+      Azul:
+      suma 10 puntos y cuenta como concha.
+
+      Rojo:
+      resta 7 puntos.
     */
     const items = [];
 
-    for (let x = 470, index = 0; x < worldWidth - 450; x += 310, index++) {
+    for (
+      let x = 470, index = 0;
+      x < worldWidth - 450;
+      x += 310, index++
+    ) {
       items.push({
         x,
         y: 325 + (index % 3) * 35,
         type: index % 6 === 4 ? "bad" : "good",
-        taken: false,
-        radius: 11
+        taken: false
       });
     }
 
@@ -534,7 +647,10 @@
     }
 
     function distance(a, b) {
-      return Math.hypot(a.x - b.x, a.y - b.y);
+      return Math.hypot(
+        a.x - b.x,
+        a.y - b.y
+      );
     }
 
     function updateHud() {
@@ -542,20 +658,45 @@
       document.querySelector("#shells").textContent = shellCount;
     }
 
-    function showStory(story) {
-      const storyBox = document.querySelector("#story");
+    /*
+      Muestra el diálogo en la parte superior.
 
-      storyBox.innerHTML = `
-        <span class="voice">PENSAMIENTO DE IXA</span>
-        <strong>${story.title}</strong>
-        <span>${story.text}</span>
-      `;
+      El nombre IXA aparece dentro de la caja.
+      No se utiliza la frase "Pensamiento de Ixa".
+    */
+    function showDialogue(dialogue) {
+      const dialogueBox = document.querySelector("#dialogue");
 
-      storyBox.classList.add("show");
-      storyTimer = 7500;
+      document.querySelector("#dialogueTitle").textContent =
+        dialogue.title;
+
+      document.querySelector("#dialogueText").textContent =
+        dialogue.text;
+
+      dialogueBox.classList.add("show");
+
+      /*
+        Duración adaptada a la longitud del texto.
+        Mínimo 7 segundos y máximo 11 segundos.
+      */
+      dialogueTimer = Math.min(
+        11000,
+        Math.max(
+          7000,
+          dialogue.text.length * 45
+        )
+      );
     }
 
-    function resetGame(message = "El recorrido ha comenzado de nuevo.") {
+    function hideDialogue() {
+      document
+        .querySelector("#dialogue")
+        .classList.remove("show");
+    }
+
+    function resetGame(
+      message = "El recorrido ha comenzado de nuevo."
+    ) {
       Object.assign(player, {
         x: 90,
         y: 350,
@@ -572,19 +713,24 @@
       shellCount = 0;
       finished = false;
       jumpConsumed = false;
-      storyTimer = 0;
+      dialogueTimer = 0;
 
       items.forEach((item) => {
         item.taken = false;
       });
 
-      stories.forEach((story) => {
-        story.seen = false;
+      dialogues.forEach((dialogue) => {
+        dialogue.seen = false;
       });
 
-      document.querySelector("#story").classList.remove("show");
-      document.querySelector("#finish").classList.add("hide");
-      document.querySelector("#status").textContent = message;
+      hideDialogue();
+
+      document
+        .querySelector("#finish")
+        .classList.add("hide");
+
+      document.querySelector("#status").textContent =
+        message;
 
       updateHud();
     }
@@ -594,7 +740,8 @@
       keys[key] = true;
 
       if (
-        ["arrowleft", "arrowright", "arrowup", " "].includes(key)
+        ["arrowleft", "arrowright", "arrowup", " "]
+          .includes(key)
       ) {
         event.preventDefault();
       }
@@ -604,101 +751,153 @@
       const key = event.key.toLowerCase();
       keys[key] = false;
 
-      if (["arrowup", "w", " "].includes(key)) {
+      if (
+        ["arrowup", "w", " "].includes(key)
+      ) {
         jumpConsumed = false;
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown, {
-      passive: false
-    });
+    window.addEventListener(
+      "keydown",
+      handleKeyDown,
+      { passive: false }
+    );
 
-    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener(
+      "keyup",
+      handleKeyUp
+    );
 
-    document.querySelector("#start").addEventListener("click", () => {
-      document.querySelector("#intro").classList.add("hide");
-      started = true;
+    document
+      .querySelector("#start")
+      .addEventListener("click", () => {
+        document
+          .querySelector("#intro")
+          .classList.add("hide");
 
-      document.querySelector("#status").textContent =
-        "Camino hacia el faro mientras escucho lo que todavía no sé decir.";
-    });
+        started = true;
 
-    document.querySelector("#restart").addEventListener("click", () => {
-      started = true;
-      resetGame();
-    });
-
-    document.querySelector("#again").addEventListener("click", () => {
-      started = true;
-      resetGame("Vuelvo a recorrer la orilla desde el principio.");
-    });
-
-    document.querySelector("#chapter2").addEventListener("click", () => {
-      document.querySelector("#finish").classList.add("hide");
-
-      const intro = document.querySelector("#intro");
-      const card = intro.querySelector(".card");
-
-      card.innerHTML = `
-        <small>CAPÍTULO 2 · EN PREPARACIÓN</small>
-
-        <h2>El siguiente territorio</h2>
-
-        <blockquote>
-          “Creí que cruzar el faro significaba abandonar mi hogar.
-          Después comprendí que también podía llevarlo conmigo.”
-        </blockquote>
-
-        <p>
-          El acceso al segundo capítulo ya está preparado.
-          Aquí se incorporarán el nuevo fondo, actividades distintas,
-          personajes adicionales y plataformas más elaboradas.
-        </p>
-
-        <button class="btn" onclick="location.reload()">
-          Volver al capítulo 1
-        </button>
-      `;
-
-      intro.classList.remove("hide");
-    });
-
-    document.querySelectorAll("[data-key]").forEach((button) => {
-      const code =
-        button.dataset.key === "left"
-          ? "arrowleft"
-          : button.dataset.key === "right"
-            ? "arrowright"
-            : "arrowup";
-
-      button.addEventListener("pointerdown", (event) => {
-        event.preventDefault();
-        keys[code] = true;
+        document.querySelector("#status").textContent =
+          "Camino hacia el faro mientras escucho lo que todavía no sé decir.";
       });
 
-      function releaseButton() {
-        keys[code] = false;
+    document
+      .querySelector("#restart")
+      .addEventListener("click", () => {
+        started = true;
+        resetGame();
+      });
 
-        if (code === "arrowup") {
-          jumpConsumed = false;
+    document
+      .querySelector("#again")
+      .addEventListener("click", () => {
+        started = true;
+
+        resetGame(
+          "Vuelvo a recorrer la orilla desde el principio."
+        );
+      });
+
+    document
+      .querySelector("#chapter2")
+      .addEventListener("click", () => {
+        document
+          .querySelector("#finish")
+          .classList.add("hide");
+
+        const intro =
+          document.querySelector("#intro");
+
+        const card =
+          intro.querySelector(".card");
+
+        card.innerHTML = `
+          <small>CAPÍTULO 2 · EN PREPARACIÓN</small>
+
+          <h2>El siguiente territorio</h2>
+
+          <blockquote>
+            “Creí que cruzar el faro significaba abandonar mi hogar.
+            Después comprendí que también podía llevarlo conmigo.”
+          </blockquote>
+
+          <p>
+            El acceso al segundo capítulo ya está preparado.
+            Aquí se incorporarán el nuevo fondo, actividades
+            distintas, personajes adicionales y plataformas
+            más elaboradas.
+          </p>
+
+          <button class="btn" onclick="location.reload()">
+            Volver al capítulo 1
+          </button>
+        `;
+
+        intro.classList.remove("hide");
+      });
+
+    /*
+      Controles táctiles.
+    */
+    document
+      .querySelectorAll("[data-key]")
+      .forEach((button) => {
+        const code =
+          button.dataset.key === "left"
+            ? "arrowleft"
+            : button.dataset.key === "right"
+              ? "arrowright"
+              : "arrowup";
+
+        button.addEventListener(
+          "pointerdown",
+          (event) => {
+            event.preventDefault();
+            keys[code] = true;
+          }
+        );
+
+        function releaseButton() {
+          keys[code] = false;
+
+          if (code === "arrowup") {
+            jumpConsumed = false;
+          }
         }
-      }
 
-      button.addEventListener("pointerup", releaseButton);
-      button.addEventListener("pointercancel", releaseButton);
-      button.addEventListener("pointerleave", releaseButton);
-    });
+        button.addEventListener(
+          "pointerup",
+          releaseButton
+        );
+
+        button.addEventListener(
+          "pointercancel",
+          releaseButton
+        );
+
+        button.addEventListener(
+          "pointerleave",
+          releaseButton
+        );
+      });
 
     function update(deltaTime) {
       if (!started || finished) {
         return;
       }
 
-      const movingLeft = keys.arrowleft || keys.a;
-      const movingRight = keys.arrowright || keys.d;
-      const jumping = keys.arrowup || keys.w || keys[" "];
+      const movingLeft =
+        keys.arrowleft || keys.a;
 
-      const acceleration = 0.052 * deltaTime;
+      const movingRight =
+        keys.arrowright || keys.d;
+
+      const jumping =
+        keys.arrowup || keys.w || keys[" "];
+
+      const acceleration =
+        0.052 * deltaTime;
 
       player.vx += movingLeft
         ? -acceleration
@@ -710,7 +909,10 @@
         ? Math.pow(0.89, deltaTime / 16.67)
         : Math.pow(0.74, deltaTime / 16.67);
 
-      player.vx = Math.max(-7.3, Math.min(7.3, player.vx));
+      player.vx = Math.max(
+        -7.3,
+        Math.min(7.3, player.vx)
+      );
 
       if (movingLeft) {
         player.facing = -1;
@@ -720,7 +922,11 @@
         player.facing = 1;
       }
 
-      if (jumping && player.grounded && !jumpConsumed) {
+      if (
+        jumping &&
+        player.grounded &&
+        !jumpConsumed
+      ) {
         player.vy = -14.3;
         player.grounded = false;
         jumpConsumed = true;
@@ -731,31 +937,52 @@
         player.vy + 0.043 * deltaTime
       );
 
-      const previousBottom = player.y + player.h;
+      const previousBottom =
+        player.y + player.h;
 
-      player.x += player.vx * deltaTime / 16.67;
-      player.y += player.vy * deltaTime / 16.67;
+      player.x +=
+        player.vx * deltaTime / 16.67;
+
+      player.y +=
+        player.vy * deltaTime / 16.67;
+
       player.grounded = false;
 
+      /*
+        Colisiones con las plataformas.
+      */
       for (const platform of platforms) {
         if (
           intersects(player, platform) &&
           player.vy >= 0 &&
           previousBottom <= platform.y + 12
         ) {
-          player.y = platform.y - player.h;
+          player.y =
+            platform.y - player.h;
+
           player.vy = 0;
           player.grounded = true;
         }
       }
 
+      /*
+        Caída al agua.
+      */
       if (player.y > H + 110) {
-        player.x = Math.max(70, player.x - 250);
+        player.x = Math.max(
+          70,
+          player.x - 250
+        );
+
         player.y = 250;
         player.vx = 0;
         player.vy = 0;
 
-        score = Math.max(0, score - 5);
+        score = Math.max(
+          0,
+          score - 5
+        );
+
         updateHud();
 
         document.querySelector("#status").textContent =
@@ -764,12 +991,16 @@
 
       player.x = Math.max(
         0,
-        Math.min(worldWidth - player.w, player.x)
+        Math.min(
+          worldWidth - player.w,
+          player.x
+        )
       );
 
       /*
         Animación del sprite.
-        Se asume una tira horizontal de seis cuadros.
+        La imagen se interpreta como una tira horizontal
+        de seis fotogramas.
       */
       player.animationTime += deltaTime;
 
@@ -777,19 +1008,26 @@
         player.grounded &&
         Math.abs(player.vx) > 0.5 &&
         player.animationTime >
-          Math.max(72, 145 - Math.abs(player.vx) * 8)
+          Math.max(
+            72,
+            145 - Math.abs(player.vx) * 8
+          )
       ) {
-        player.frame = (player.frame + 1) % 6;
+        player.frame =
+          (player.frame + 1) % 6;
+
         player.animationTime = 0;
       } else if (!player.grounded) {
         player.frame = 3;
-      } else if (Math.abs(player.vx) <= 0.5) {
+      } else if (
+        Math.abs(player.vx) <= 0.5
+      ) {
         player.frame = 0;
       }
 
       /*
         Recolección de objetos.
-        Cada punto solo se procesa una vez.
+        Cada objeto se procesa una sola vez.
       */
       for (const item of items) {
         if (
@@ -811,7 +1049,10 @@
             document.querySelector("#status").textContent =
               "Encontré una concha. Algunas cosas pequeñas también conservan una historia.";
           } else {
-            score = Math.max(0, score - 7);
+            score = Math.max(
+              0,
+              score - 7
+            );
 
             document.querySelector("#status").textContent =
               "Algo en el camino me hizo perder 7 puntos.";
@@ -822,21 +1063,24 @@
       }
 
       /*
-        Activación de los seis pensamientos.
-        Cada pensamiento aparece una sola vez.
+        Activación de los seis diálogos.
+        Cada diálogo aparece una sola vez.
       */
-      for (const story of stories) {
-        if (!story.seen && player.x >= story.x) {
-          story.seen = true;
-          showStory(story);
+      for (const dialogue of dialogues) {
+        if (
+          !dialogue.seen &&
+          player.x >= dialogue.x
+        ) {
+          dialogue.seen = true;
+          showDialogue(dialogue);
         }
       }
 
-      if (storyTimer > 0) {
-        storyTimer -= deltaTime;
+      if (dialogueTimer > 0) {
+        dialogueTimer -= deltaTime;
 
-        if (storyTimer <= 0) {
-          document.querySelector("#story").classList.remove("show");
+        if (dialogueTimer <= 0) {
+          hideDialogue();
         }
       }
 
@@ -853,21 +1097,30 @@
 
       cameraX +=
         (cameraTarget - cameraX) *
-        Math.min(1, 0.008 * deltaTime);
+        Math.min(
+          1,
+          0.008 * deltaTime
+        );
 
       /*
         Final del capítulo.
       */
-      if (player.x > worldWidth - 260) {
+      if (
+        player.x > worldWidth - 260
+      ) {
         finished = true;
+        hideDialogue();
 
         document.querySelector("#summary").textContent =
-          `Llegué al faro con ${score} puntos y ${shellCount} ` +
-          `conchas. Pensé que al acercarme sabría quién debía ser. ` +
-          `Solo comprendí que mi origen puede explicarme de dónde ` +
-          `vengo, pero no puede decidir por mí hacia dónde caminar.`;
+          `Llegué al faro con ${score} puntos y ` +
+          `${shellCount} conchas. Pensé que al acercarme ` +
+          `sabría quién debía ser. Solo comprendí que mi ` +
+          `origen puede explicarme de dónde vengo, pero no ` +
+          `puede decidir por mí hacia dónde caminar.`;
 
-        document.querySelector("#finish").classList.remove("hide");
+        document
+          .querySelector("#finish")
+          .classList.remove("hide");
       }
     }
 
@@ -881,14 +1134,21 @@
           H / backgroundImage.height
         );
 
-        const drawWidth = backgroundImage.width * scale;
-        const drawHeight = backgroundImage.height * scale;
+        const drawWidth =
+          backgroundImage.width * scale;
+
+        const drawHeight =
+          backgroundImage.height * scale;
 
         /*
-          El desplazamiento lento genera el parallax.
+          Desplazamiento lento para producir parallax.
         */
         const parallaxOffset =
-          (cameraX * 0.043) % Math.max(1, drawWidth * 0.55);
+          (cameraX * 0.043) %
+          Math.max(
+            1,
+            drawWidth * 0.55
+          );
 
         ctx.drawImage(
           backgroundImage,
@@ -898,7 +1158,9 @@
           drawHeight
         );
 
-        if (-parallaxOffset + drawWidth < W) {
+        if (
+          -parallaxOffset + drawWidth < W
+        ) {
           ctx.drawImage(
             backgroundImage,
             -parallaxOffset + drawWidth,
@@ -908,11 +1170,28 @@
           );
         }
       } else {
-        const gradient = ctx.createLinearGradient(0, 0, 0, H);
+        const gradient =
+          ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            H
+          );
 
-        gradient.addColorStop(0, "#3b306f");
-        gradient.addColorStop(0.5, "#e1685a");
-        gradient.addColorStop(1, "#f3b65c");
+        gradient.addColorStop(
+          0,
+          "#3b306f"
+        );
+
+        gradient.addColorStop(
+          0.5,
+          "#e1685a"
+        );
+
+        gradient.addColorStop(
+          1,
+          "#f3b65c"
+        );
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, W, H);
@@ -921,7 +1200,8 @@
 
     function drawPlatforms() {
       for (const platform of platforms) {
-        const screenX = platform.x - cameraX;
+        const screenX =
+          platform.x - cameraX;
 
         if (
           screenX + platform.w < 0 ||
@@ -931,13 +1211,16 @@
         }
 
         ctx.save();
+
         ctx.beginPath();
+
         ctx.rect(
           screenX,
           platform.y,
           platform.w,
           platform.h
         );
+
         ctx.clip();
 
         if (
@@ -946,11 +1229,15 @@
         ) {
           const scale = Math.max(
             1,
-            platform.h / platformImage.height
+            platform.h /
+              platformImage.height
           );
 
-          const tileWidth = platformImage.width * scale;
-          const tileHeight = platformImage.height * scale;
+          const tileWidth =
+            platformImage.width * scale;
+
+          const tileHeight =
+            platformImage.height * scale;
 
           for (
             let tileX = screenX;
@@ -966,18 +1253,31 @@
             );
           }
         } else {
-          const groundGradient = ctx.createLinearGradient(
+          const gradient =
+            ctx.createLinearGradient(
+              0,
+              platform.y,
+              0,
+              platform.y + platform.h
+            );
+
+          gradient.addColorStop(
             0,
-            platform.y,
-            0,
-            platform.y + platform.h
+            "#c17b3e"
           );
 
-          groundGradient.addColorStop(0, "#c17b3e");
-          groundGradient.addColorStop(0.15, "#7f482f");
-          groundGradient.addColorStop(1, "#33253a");
+          gradient.addColorStop(
+            0.15,
+            "#7f482f"
+          );
 
-          ctx.fillStyle = groundGradient;
+          gradient.addColorStop(
+            1,
+            "#33253a"
+          );
+
+          ctx.fillStyle = gradient;
+
           ctx.fillRect(
             screenX,
             platform.y,
@@ -986,6 +1286,7 @@
           );
 
           ctx.fillStyle = "#507e31";
+
           ctx.fillRect(
             screenX,
             platform.y,
@@ -1004,19 +1305,25 @@
           continue;
         }
 
-        const screenX = item.x - cameraX;
+        const screenX =
+          item.x - cameraX;
 
-        if (screenX < -20 || screenX > W + 20) {
+        if (
+          screenX < -20 ||
+          screenX > W + 20
+        ) {
           continue;
         }
 
         const pulse =
           10 +
           Math.sin(
-            performance.now() / 180 + item.x
+            performance.now() / 180 +
+            item.x
           ) * 2;
 
         ctx.beginPath();
+
         ctx.arc(
           screenX,
           item.y,
@@ -1030,7 +1337,9 @@
             ? "#24c7ff"
             : "#ff3958";
 
-        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowColor =
+          ctx.fillStyle;
+
         ctx.shadowBlur = 13;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -1049,15 +1358,24 @@
         return;
       }
 
-      const frameWidth = spriteImage.width / 6;
-      const frameHeight = spriteImage.height;
-      const screenX = player.x - cameraX;
+      const frameWidth =
+        spriteImage.width / 6;
+
+      const frameHeight =
+        spriteImage.height;
+
+      const screenX =
+        player.x - cameraX;
 
       ctx.save();
       ctx.imageSmoothingEnabled = false;
 
       if (player.facing < 0) {
-        ctx.translate(screenX + player.w, 0);
+        ctx.translate(
+          screenX + player.w,
+          0
+        );
+
         ctx.scale(-1, 1);
 
         ctx.drawImage(
@@ -1089,28 +1407,60 @@
     }
 
     function drawLighthouse() {
-      const screenX = worldWidth - 180 - cameraX;
+      const screenX =
+        worldWidth - 180 - cameraX;
 
       /*
-        Cuerpo del faro.
+        Cuerpo.
       */
       ctx.fillStyle = "#f5eee2";
-      ctx.fillRect(screenX, 225, 30, 105);
+
+      ctx.fillRect(
+        screenX,
+        225,
+        30,
+        105
+      );
 
       /*
-        Franjas.
+        Franjas rojas.
       */
       ctx.fillStyle = "#d84f55";
-      ctx.fillRect(screenX, 250, 30, 12);
-      ctx.fillRect(screenX, 286, 30, 12);
+
+      ctx.fillRect(
+        screenX,
+        250,
+        30,
+        12
+      );
+
+      ctx.fillRect(
+        screenX,
+        286,
+        30,
+        12
+      );
 
       /*
         Techo.
       */
       ctx.beginPath();
-      ctx.moveTo(screenX - 8, 225);
-      ctx.lineTo(screenX + 15, 202);
-      ctx.lineTo(screenX + 38, 225);
+
+      ctx.moveTo(
+        screenX - 8,
+        225
+      );
+
+      ctx.lineTo(
+        screenX + 15,
+        202
+      );
+
+      ctx.lineTo(
+        screenX + 38,
+        225
+      );
+
       ctx.closePath();
       ctx.fill();
 
@@ -1120,27 +1470,55 @@
       ctx.fillStyle = "#fff49a";
       ctx.shadowColor = "#ffe36b";
       ctx.shadowBlur = 18;
-      ctx.fillRect(screenX + 8, 232, 14, 14);
+
+      ctx.fillRect(
+        screenX + 8,
+        232,
+        14,
+        14
+      );
+
       ctx.shadowBlur = 0;
 
       /*
-        Haz de luz.
+        Haz luminoso.
       */
       ctx.fillStyle = "#fff49a20";
+
       ctx.beginPath();
-      ctx.moveTo(screenX + 15, 239);
-      ctx.lineTo(screenX - 130, 205);
-      ctx.lineTo(screenX - 130, 275);
+
+      ctx.moveTo(
+        screenX + 15,
+        239
+      );
+
+      ctx.lineTo(
+        screenX - 130,
+        205
+      );
+
+      ctx.lineTo(
+        screenX - 130,
+        275
+      );
+
       ctx.closePath();
       ctx.fill();
     }
 
     function drawHud() {
       ctx.fillStyle = "#07162bd0";
-      ctx.fillRect(14, 14, 395, 46);
 
-      ctx.fillStyle = "#fff";
+      ctx.fillRect(
+        14,
+        14,
+        395,
+        46
+      );
+
+      ctx.fillStyle = "#ffffff";
       ctx.font = "700 17px system-ui";
+
       ctx.fillText(
         "CAPÍTULO 1 · MI PUEBLO FRENTE AL MAR",
         29,
@@ -1148,16 +1526,38 @@
       );
 
       ctx.fillStyle = "#65dfff";
-      ctx.fillRect(430, 29, 12, 12);
 
-      ctx.fillStyle = "#fff";
-      ctx.fillText("+10", 449, 42);
+      ctx.fillRect(
+        430,
+        29,
+        12,
+        12
+      );
+
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillText(
+        "+10",
+        449,
+        42
+      );
 
       ctx.fillStyle = "#ff405d";
-      ctx.fillRect(500, 29, 12, 12);
 
-      ctx.fillStyle = "#fff";
-      ctx.fillText("−7", 519, 42);
+      ctx.fillRect(
+        500,
+        29,
+        12,
+        12
+      );
+
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillText(
+        "−7",
+        519,
+        42
+      );
     }
 
     function gameLoop(currentTime) {
