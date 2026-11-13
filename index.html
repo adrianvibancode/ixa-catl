@@ -8,7 +8,7 @@
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
   >
 
-  <title>IXA & ÁCATL · Capítulo 1</title>
+  <title>IXA & ÁCATL · Aventuras</title>
 
   <style>
     * {
@@ -374,13 +374,13 @@
       <div class="modal" id="intro">
         <div class="card">
           <small>
-            Prologo · 
+            Prólogo· 
           </small>
 
           <h2>Mas alla del límite de todo lo que conozco </h2>
 
           <blockquote>
-            Tomaremos los orbes azules y evitaremos los rojos, cuidado con los huecos.
+            Tomaremos las perlas azules y evitaremos las rojas, cuidado con los huecos.
              
           </blockquote>
 
@@ -399,7 +399,7 @@
         <div class="card">
           <small>Finalizado.</small>
 
-          <h2>Enhorabuena!</h2>
+          <h2>¡Enhorabuena!</h2>
 
           <p id="summary"></p>
 
@@ -566,21 +566,20 @@
     const chapter1Dialogues = [
       {
         x: 700,
-        title: "Mi nombre en otras voces",
+        title: "Auka Sum/San (Hola hermano(a))",
         text:
-          "Auka Sum/San (Hola hermano(a)) , sabes... te cuento que cuando era más pequeño creía que mi nombre me pertenecia. " +
-          "Ahora entiendo que también vive en la voz de Naiyá (la matriarca de mi pueblo), " +
+          " Sabes... cuando era más pequeño creía que mi nombre me pertenecia. " +
+          "Ahora entiendo que también vive en la voz de Naiyá, " +
           "en quienes me corrigen y en quienes esperan que regrese."
       },
       {
         x: 1650,
         title: "Las manos que me hicieron un lugar",
         text:
-          "Acompañame a la salida de mi pueblo, hoy celebro mi iniciacion a mí madurez, " +
-          "en mi pueblo debemos sobrevivir en la noche, intento comprender por qué " +
-          "crecer se parece tanto a despedirse. Debo llevar energia, y aunque quiero demostrar que ya puedo hacerlo todo solo. " +
-          "Después recuerdo que comí antes de saber pescar y que dormí " +
-          "bajo un techo levantado por manos cuyos nombres no conozco."
+          "Hoy celebro mi iniciación a mí madurez, " +
+          "en mi pueblo decimos que sobrevivir a la noche es llegar a casa son tantas piedritas en nuestro costal porque asi vajanos mas comodos, intento comprender por qué " +
+          "crecer se parece tanto a despedirse." +
+          " "
       },
       {
         x: 2800,
@@ -588,7 +587,8 @@
         text:
           "Naiyá me enseñó a mirar el barro sin obligarlo a contarme " +
           "la historia que yo quería escuchar. Una huella demuestra " +
-          "una presencia, pero no explica por sí sola sus razones."
+          "una presencia, pero no explica por sí sola sus razones. Ella me recuerda que comí antes de saber pescar y que dormí " +
+          "bajo un techo levantado por manos cuyos nombres no conozco."
       },
       {
         x: 4050,
@@ -610,8 +610,8 @@
         x: 6500,
         title: "La parte de mí que mira lejos",
         text:
-          "Sabes me gustan las luces tenues a lo lejos de mi pueblo, pero una parte de mí mira el horizonte con mucha emoción y temor. " +
-          "Me asusta partir y convertirme en alguien que ya no reconozcan. " +
+          "Sabes me gusta la vista, las luces tenues a lo lejos de mi pueblo, pero una parte de mí mira el horizonte con mucha emoción y temor. " +
+          "Me asusta partir y convertirme en alguien que ya no reconozcan, " +
           "pero también me asusta quedarme solamente por miedo. ¿Es un dilema interesante verdad?"
       }
     ].map((dialogue) => ({
@@ -773,11 +773,11 @@
     const chapter2Dialogues = [
       {
         x: 700,
-        title: "Reconciliación interior",
+        title: "Hola de nuevo",
         text:
-          "Hola de nuevo, no sabía preguntarme quién era yo realmente. Me bastaba " +
+          "No sabía preguntarme quién era yo realmente. Me bastaba " +
           "escuchar mi nombre en la voz de quienes me esperaban. " +
-          "inevitablemente el tiempo desvanecerá todo lo que una creyó inmóvil."
+          "inevitablemente el tiempo desvanecerá todo lo que ahora creo inmóvil."
       },
       {
         x: 1650,
@@ -807,16 +807,16 @@
         x: 5350,
         title: "Ese lindo rincón en el cielo",
         text:
-          "Por ese objeto celeste que titila " +
+          "¿Sabre quién debo ser? Quizás lo " +
           "dicta marcando el compás secreto de la vida, " +
-          "en la cavidad del cielo."
+          "porque el origen puede explicarme de dónde vengo, pero no puede decidir por mí hacia dónde caminar."
       },
       {
         x: 6500,
         title: "Intensa gratitud",
         text:
-          "Siento una intensa gratitud y gracias por continuar conmigo, " +
-          "permitirme compartirla contigo, puedes experimentar ese susurro al vacío: " +
+          "Gracias por continuar conmigo, " +
+          "y permitirme compartir contigo todo esto, puedes experimentar ese susurro al vacío: " +
           "por fin me he soltado un poco."
       }
     ].map((dialogue) => ({
@@ -860,7 +860,7 @@
       document.querySelector("#total").textContent =
         items.filter((item) => item.type === "good").length;
       document.querySelector("#collectibleLabel").textContent =
-        chapterNumber === 2 ? "Orbes:" : "Conchas:";
+        chapterNumber === 2 ? "Perlas:" : "Perlas:";
       document.querySelector("#ammoPill").hidden =
         chapterNumber !== 2;
       document.querySelector("#ammo").textContent = ammo;
@@ -877,7 +877,7 @@
       const isChapter2 = chapterNumber === 2;
 
       document.title = isChapter2
-        ? "IXA & ÁCATL · El lugar donde el mar escucha"
+        ? "IXA & ÁCATL · Alma, Revelaciones y una Noche de Angustia"
         : "IXA & ÁCATL · Prólogo";
       worldWidth = isChapter2
         ? chapter2WorldWidth
@@ -949,9 +949,6 @@
 
     /*
       Muestra el diálogo en la parte superior.
-
-      El nombre IXA aparece dentro de la caja.
-      No se utiliza la frase "Pensamiento de Ixa".
     */
     function showDialogue(dialogue) {
       const dialogueBox = document.querySelector("#dialogue");
@@ -969,7 +966,7 @@
         Mínimo 7 segundos y máximo 11 segundos.
       */
       dialogueTimer = Math.min(
-        11000,
+        13000,
         Math.max(
           7000,
           dialogue.text.length * 45
@@ -1096,7 +1093,7 @@
         started = true;
 
         document.querySelector("#status").textContent =
-          "Mientras me adentro a la selva, escucho lo que todavía no sé decir.";
+          "Mientras me adentro mas, escucho lo que todavía no sé decir.";
       });
 
     document
@@ -1132,8 +1129,8 @@
         started = true;
         resetGame(
           nextChapter === 2
-            ? "Entro en el ritmo de las olas del tiempo."
-            : "Regreso al primer capítulo."
+            ? "Volvemos."
+            : "Comenzar otra vez desde el principio."
         );
       });
 
@@ -1429,7 +1426,7 @@
 
         updateHud();
         document.querySelector("#status").textContent =
-          "La corriente me hirió retroceder.";
+          "Dolor, retroceder.";
       }
 
       player.x = Math.max(
@@ -1493,7 +1490,7 @@
 
             document.querySelector("#status").textContent =
               chapterNumber === 2
-                ? "La munición se recupera con el tiempo."
+                ? "La munición se recargara en 5 segundos."
                 : "Algunas cosas también conservan una historia.";
           } else {
             score = Math.max(
@@ -1560,13 +1557,10 @@
         document.querySelector("#summary").textContent =
           chapterNumber === 2
             ? `Tenemos ${score} de energia ` +
-              ` de ${shellCount} orbes que encontramos en el camino. ` +
-              ` Vamos por una forma de seguir adelante.`
+              ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
+              `Mjan Mjan (Muy bien).`
             : `Llegamos con ${score} de energia y ` +
-              `${shellCount} orbes. ` +
-              `¿Sabre quién debo ser? Quiza` +
-              ` el origen puede explicarme de dónde vengo, pero no ` +
-              `puede decidir por mí hacia dónde caminar.`;
+              `${shellCount} perlas. `;
 
         document
           .querySelector("#finish")
