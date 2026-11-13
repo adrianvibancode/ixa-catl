@@ -284,3 +284,7 @@ Mantén estos archivos juntos en la raíz del repositorio:
 3. Selecciona **Deploy from a branch**.
 4. Elige la rama `main` y la carpeta `/ (root)`.
 5. Guarda los cambios.
+
+
+# Referencias
+1.- Dialecto Cochimi https://es.scribd.com/document/648492995/vocablo-cochimies#google_vignette
