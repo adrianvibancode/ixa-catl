@@ -576,9 +576,9 @@
         x: 1650,
         title: "Las manos que me hicieron un lugar",
         text:
-          "Acompañame a la salida de mi pueblo, hoy celebro mi iniciacion a mí madurez, en mi pueblo debemos sobrevivir en la noche, intento comprender por qué
-            crecer se parece tanto a despedirse. 
-            Debo llevar energia, y aunque quiero demostrar que ya puedo hacerlo todo solo. " +
+          "Acompañame a la salida de mi pueblo, hoy celebro mi iniciacion a mí madurez, " +
+          "en mi pueblo debemos sobrevivir en la noche, intento comprender por qué " +
+          "crecer se parece tanto a despedirse. Debo llevar energia, y aunque quiero demostrar que ya puedo hacerlo todo solo. " +
           "Después recuerdo que comí antes de saber pescar y que dormí " +
           "bajo un techo levantado por manos cuyos nombres no conozco."
       },
@@ -775,9 +775,9 @@
         x: 700,
         title: "Reconciliación interior",
         text:
-          "Hola de nuevo, no sabía preguntarme quién era yo realmente. Me bastaba
-            escuchar mi nombre en la voz de quienes me esperaban. " +
-          "inevitablemente el tiempo desvanecera todo lo que una creo inmóvil."
+          "Hola de nuevo, no sabía preguntarme quién era yo realmente. Me bastaba " +
+          "escuchar mi nombre en la voz de quienes me esperaban. " +
+          "inevitablemente el tiempo desvanecerá todo lo que una creyó inmóvil."
       },
       {
         x: 1650,
@@ -789,7 +789,7 @@
       },
       {
         x: 2800,
-        title: "Ante la adversidad soñar  curara las heridas.",
+        title: "Ante la adversidad soñar curará las heridas.",
         text:
           "Para sentirme como tú, para enfrentarme como tú " +
           "ante toda la inmensa adversidad, " +
@@ -1024,7 +1024,6 @@
 
       items.forEach((item) => {
         item.taken = false;
-
         if (chapterNumber === 2) {
           item.y = item.initialY;
           item.vy = item.initialVy;
@@ -1036,14 +1035,11 @@
       });
 
       hideDialogue();
-
       document
         .querySelector("#finish")
         .classList.add("hide");
-
       document.querySelector("#status").textContent =
         message;
-
       updateHud();
     }
 
@@ -1052,11 +1048,9 @@
 
       if (["f", "x"].includes(key)) {
         event.preventDefault();
-
         if (!event.repeat) {
           fireProjectile();
         }
-
         return;
       }
 
@@ -1218,11 +1212,7 @@
         }
       }
 
-      for (
-        let index = projectiles.length - 1;
-        index >= 0;
-        index--
-      ) {
+      for (let index = projectiles.length - 1; index >= 0; index--) {
         const projectile = projectiles[index];
         const previousY = projectile.y;
 
@@ -1232,7 +1222,6 @@
         projectile.y += projectile.vy * timeScale;
 
         let obstacleHit = false;
-
         for (const obstacle of obstacles) {
           if (
             intersects(
@@ -1261,11 +1250,9 @@
             previousY + projectile.radius <= platform.y &&
             projectile.y + projectile.radius >= platform.y &&
             projectile.x + projectile.radius > platform.x &&
-            projectile.x - projectile.radius <
-              platform.x + platform.w
+            projectile.x - projectile.radius < platform.x + platform.w
           ) {
-            projectile.y =
-              platform.y - projectile.radius;
+            projectile.y = platform.y - projectile.radius;
             projectile.vy = -Math.max(
               3,
               Math.abs(projectile.vy) * 0.72
@@ -1276,7 +1263,7 @@
         }
 
         if (
-          projectile.age >= 4200 ||
+          projectile.age > 4200 ||
           projectile.bounces >= 4 ||
           projectile.x < 0 ||
           projectile.x > worldWidth
@@ -1293,9 +1280,7 @@
         }
 
         const approachedFromLeft =
-          player.x + player.w / 2 <
-          obstacle.x + obstacle.w / 2;
-
+          player.x + player.w / 2 < obstacle.x + obstacle.w / 2;
         const safeX = approachedFromLeft
           ? obstacle.x - player.w - 8
           : obstacle.x + obstacle.w + 8;
@@ -1304,8 +1289,7 @@
           (platform) =>
             platform.kind === "ground" &&
             safeX >= platform.x &&
-            safeX + player.w <=
-              platform.x + platform.w
+            safeX + player.w <= platform.x + platform.w
         );
 
         player.x = Math.max(
@@ -1321,7 +1305,7 @@
         score = Math.max(0, score - 5);
 
         document.querySelector("#status").textContent =
-          "Ouch!";
+          "¡Ouch!";
 
         updateHud();
         break;
@@ -1338,11 +1322,9 @@
           0,
           fireCooldown - deltaTime
         );
-
         if (ammo < maxAmmo) {
           ammoReloadTimer += deltaTime;
           ammoHudTimer += deltaTime;
-
           if (ammoReloadTimer >= 5000) {
             ammo = maxAmmo;
             ammoReloadTimer = 0;
@@ -1353,16 +1335,13 @@
             updateHud();
           }
         }
-
         updateChapter2Objects(deltaTime);
       }
 
       const movingLeft =
         keys.arrowleft || keys.a;
-
       const movingRight =
         keys.arrowright || keys.d;
-
       const jumping =
         keys.arrowup || keys.w || keys[" "];
 
@@ -1409,13 +1388,10 @@
 
       const previousBottom =
         player.y + player.h;
-
       player.x +=
         player.vx * deltaTime / 16.67;
-
       player.y +=
         player.vy * deltaTime / 16.67;
-
       player.grounded = false;
 
       /*
@@ -1429,7 +1405,6 @@
         ) {
           player.y =
             platform.y - player.h;
-
           player.vy = 0;
           player.grounded = true;
         }
@@ -1447,16 +1422,14 @@
         player.y = 250;
         player.vx = 0;
         player.vy = 0;
-
         score = Math.max(
           0,
           score - 5
         );
 
         updateHud();
-
         document.querySelector("#status").textContent =
-          "La corriente me hizo retroceder.";
+          "La corriente me hirió retroceder.";
       }
 
       player.x = Math.max(
@@ -1481,15 +1454,13 @@
       if (
         player.grounded &&
         Math.abs(player.vx) > 0.5 &&
-        player.animationTime >
-          Math.max(
-            72,
-            145 - Math.abs(player.vx) * 8
-          )
+        player.animationTime > Math.max(
+          72,
+          145 - Math.abs(player.vx) * 8
+        )
       ) {
         player.frame =
           (player.frame + 1) % 6;
-
         player.animationTime = 0;
       } else if (!player.grounded) {
         player.frame = 3;
@@ -1500,8 +1471,8 @@
       }
 
       /*
-        Recolección de objetos.
-        Cada objeto se procesa una sola vez.
+        Recogida de objetos.
+        Cada objeto se procesa a una sola vez.
       */
       for (const item of items) {
         if (
@@ -1523,7 +1494,7 @@
             document.querySelector("#status").textContent =
               chapterNumber === 2
                 ? "La munición se recupera con el tiempo."
-                : "Algunas cosas pequeñas también conservan una historia.";
+                : "Algunas cosas también conservan una historia.";
           } else {
             score = Math.max(
               0,
@@ -1531,7 +1502,7 @@
             );
 
             document.querySelector("#status").textContent =
-              "Intentemos de nuevo.";
+              "Inténtalo de nuevo.";
           }
 
           updateHud();
@@ -1540,7 +1511,7 @@
 
       /*
         Activación de los seis diálogos.
-        Cada diálogo aparece una sola vez.
+        Cada diálogo aparece en una sola vez.
       */
       for (const dialogue of dialogues) {
         if (
@@ -1554,7 +1525,6 @@
 
       if (dialogueTimer > 0) {
         dialogueTimer -= deltaTime;
-
         if (dialogueTimer <= 0) {
           hideDialogue();
         }
@@ -1685,13 +1655,12 @@
           backgroundImage.height * scale;
 
         /*
-          Desplazamiento lento para producir parallax.
+          Desplazamiento lento para producir paralaje.
         */
         const parallaxOffset =
-          (cameraX * 0.043) %
-          Math.max(
+          (cameraX * 0.043) % Math.max(
             1,
-            drawWidth * 0.55
+            drawWidth * 0.5
           );
 
         ctx.drawImage(
@@ -1786,6 +1755,7 @@
 
             nightRock.addColorStop(0, "#29334b");
             nightRock.addColorStop(1, "#101527");
+
             ctx.fillStyle = nightRock;
             ctx.fillRect(
               screenX,
@@ -1799,51 +1769,6 @@
               platform.y,
               platform.w,
               6
-            );
-          }
-
-          ctx.restore();
-          continue;
-        }
-
-        ctx.beginPath();
-
-        ctx.rect(
-          screenX,
-          platform.y,
-          platform.w,
-          platform.h
-        );
-
-        ctx.clip();
-
-        if (
-          platformImage.complete &&
-          platformImage.naturalWidth
-        ) {
-          const scale = Math.max(
-            1,
-            platform.h /
-              platformImage.height
-          );
-
-          const tileWidth =
-            platformImage.width * scale;
-
-          const tileHeight =
-            platformImage.height * scale;
-
-          for (
-            let tileX = screenX;
-            tileX < screenX + platform.w;
-            tileX += tileWidth
-          ) {
-            ctx.drawImage(
-              platformImage,
-              tileX,
-              platform.y,
-              tileWidth,
-              tileHeight
             );
           }
         } else {
@@ -1969,7 +1894,7 @@
         ctx.shadowBlur = 14;
         ctx.fill();
         ctx.shadowBlur = 0;
-        ctx.strokeStyle = "#ffffff";
+        ctx.strokeStyle = "#dffcff";
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -2002,19 +1927,10 @@
         ctx.beginPath();
         ctx.moveTo(screenX + obstacle.w * 0.2, obstacle.y);
         ctx.lineTo(screenX + obstacle.w * 0.8, obstacle.y + 8);
-        ctx.lineTo(
-          screenX + obstacle.w,
-          obstacle.y + obstacle.h * 0.82
-        );
-        ctx.lineTo(
-          screenX + obstacle.w * 0.72,
-          obstacle.y + obstacle.h
-        );
-        ctx.lineTo(
-          screenX + obstacle.w * 0.1,
-          obstacle.y + obstacle.h * 0.92
-        );
-        ctx.lineTo(screenX, obstacle.y + obstacle.h * 0.18);
+        ctx.lineTo(screenX + obstacle.w, obstacle.y + obstacle.h * 0.82);
+        ctx.lineTo(screenX + obstacle.w * 0.72, obstacle.y + obstacle.h * 0.98);
+        ctx.lineTo(screenX + obstacle.w * 0.1, obstacle.y + obstacle.h * 0.92);
+        ctx.lineTo(screenX, obstacle.y + obstacle.h * 0.4);
         ctx.closePath();
         ctx.fillStyle = stoneGradient;
         ctx.fill();
@@ -2022,17 +1938,11 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        ctx.strokeStyle = "#d59bff88";
+        ctx.strokeStyle = "#d59bf8";
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.moveTo(
-          screenX + obstacle.w * 0.18,
-          obstacle.y + obstacle.h * 0.48
-        );
-        ctx.lineTo(
-          screenX + obstacle.w * 0.82,
-          obstacle.y + obstacle.h * 0.48
-        );
+        ctx.moveTo(screenX + obstacle.w * 0.18, obstacle.y + obstacle.h * 0.48);
+        ctx.lineTo(screenX + obstacle.w * 0.82, obstacle.y + obstacle.h * 0.48);
         ctx.stroke();
 
         ctx.beginPath();
@@ -2062,24 +1972,19 @@
 
       const frameWidth =
         spriteImage.width / 6;
-
       const frameHeight =
         spriteImage.height;
 
       const screenX =
         player.x - cameraX;
-
       ctx.save();
       ctx.imageSmoothingEnabled = false;
-
       if (player.facing < 0) {
         ctx.translate(
           screenX + player.w,
           0
         );
-
         ctx.scale(-1, 1);
-
         ctx.drawImage(
           spriteImage,
           player.frame * frameWidth,
@@ -2224,7 +2129,7 @@
         ctx.font = "12px system-ui";
         ctx.fillStyle = "#a9eaff";
         ctx.fillText(
-          "F / X o ●: lanzar · Azul: +10 · Rojo: −7",
+          "F / X o la tecla de disparo para lanzar · Orbes: " + shellCount + " · Energia: " + score,
           28,
           60
         );
@@ -2232,55 +2137,20 @@
       }
 
       ctx.fillStyle = "#07162bd0";
-
-      ctx.fillRect(
-        14,
-        14,
-        395,
-        46
-      );
-
+      ctx.fillRect(14, 14, 395, 46);
       ctx.fillStyle = "#ffffff";
-      ctx.font = "700 17px system-ui";
-
+      ctx.font = "700 14px system-ui";
       ctx.fillText(
-        "CAPÍTULO 1 · MI PUEBLO FRENTE AL MAR",
+        "CAPÍTULO 1 · MI PUEBLO Y EL FARO",
         29,
         43
       );
-
-      ctx.fillStyle = "#65dfff";
-
-      ctx.fillRect(
-        430,
-        29,
-        12,
-        12
-      );
-
-      ctx.fillStyle = "#ffffff";
-
+      ctx.fillStyle = "#d8f3ff";
+      ctx.font = "12px system-ui";
       ctx.fillText(
-        "+10",
-        449,
-        42
-      );
-
-      ctx.fillStyle = "#ff405d";
-
-      ctx.fillRect(
-        500,
+        "Conchas: " + shellCount + " · Energia: " + score,
         29,
-        12,
-        12
-      );
-
-      ctx.fillStyle = "#ffffff";
-
-      ctx.fillText(
-        "−7",
-        519,
-        42
+        56
       );
     }
 
