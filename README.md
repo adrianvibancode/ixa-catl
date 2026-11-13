@@ -10,8 +10,8 @@
 
 El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript. La versión jugable contempla:
 
-- **Capítulo 1: `tepueg (1) - k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
-- **Capítulo 2: `goguó (2) · Meyibó y majibel`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
+- **Capítulo 1: `tepueg (1) · k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
+- **Capítulo 2: `goguó (2) · Meyibó y Majibel(Ciclos)`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
 
 El resto de los actos descritos en este documento pertenece al diseño narrativo y no implica que todos los episodios estén implementados.
 
@@ -99,7 +99,7 @@ El enfrentamiento final entre Ixa y Ácatl no es una batalla física. Ácatl deb
 
 Ixa no borra el daño ni restaura la confianza de inmediato. El perdón impide que la herida determine necesariamente el siguiente acto, pero conserva la verdad, la responsabilidad y la necesidad de reparación.
 
-La Unión resiste sin convertirse en un nuevo imperio. Ixa, Ácatl y sus aliados preparan una nave. Antes de partir, Ácatl pregunta qué ocurrirá si la estrella vuelve a mentir. Ixa responde: **“Entonces no navegaré solo.”**
+La Unión resiste sin convertirse en un nuevo imperio. Ixa, Ácatl y sus aliados preparan una nave. **“Entonces no navegaré solo.”**
 
 La voz narrativa cambia con la vida de Ixa: comienza con la sensorialidad de la infancia, atraviesa la incertidumbre adolescente, se fragmenta con la supervivencia y la muerte, se abre mediante la amistad y finalmente alcanza la perspectiva incompleta del resucitado. Ixa nunca se vuelve omnisciente. Cada comprensión nace de pérdidas, relaciones y decisiones.
 
@@ -160,8 +160,8 @@ La historia planeada comprende un prólogo, dieciséis actos y un epílogo. Los 
 
 | Sección | Capítulos | Eje principal | Transformación de Ixa |
 |---|---:|---|---|
-| Prólogo | 0.1–0.7 | Voz, lucero y obsesión | Convierte una señal en mandato |
-| Acto I | 1–10 | Identidad, comunidad y territorio | Descubre que su nombre depende de relaciones |
+| Prólogo | 1–2-3-4 | Agua, Tiempo, Tierra y Mente | Ixa deberá internarse durante la noche en un territorio silvestre y regresar al amanecer |
+| Acto I | 5–10 | Identidad, comunidad y territorio | Descubre que su nombre depende de relaciones |
 | Acto II | 11–17 | Separación, miedo y supervivencia | Aprende a renunciar para sobrevivir |
 | Acto III | 18–29 | Hospitalidad, extranjería y pérdida | Actúa moralmente y pierde a Naiyá |
 | Acto IV | 30–35 | Soledad y alteridad | Su nombre cambia frente a otras miradas |
