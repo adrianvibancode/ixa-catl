@@ -380,18 +380,12 @@
           <h2>Mas alla del límite de todo lo que conozco </h2>
 
           <blockquote>
-            Auka Sum o San (Hola hermano(a) se que comprendes que te hablo a ti, aquel que escucha.
+            Tomaremos los orbes azules y evitaremos los rojos, cuidado con los huecos.
              
           </blockquote>
 
           <p>
-            Camino hacia el lucero que indica la salida de mi pueblo porque es mi transición de niño a adulto, mientras intento comprender por qué
-            crecer se parece tanto a despedirse. 
-            Debo llevar cierta energia para la noche que se acerca para lo cual tomare los orbes azules y evitar los puntos rojos, sigueme te contare unas cosas en lo que caminamos.
-          </p>
-
-          <p>
-           Conoceras la parte de mí que todavía no sé nombrar.
+            El objetivo es llegar al faro.
           </p>
 
           <button class="btn" id="start">
@@ -403,15 +397,14 @@
       <!-- FINAL DEL CAPÍTULO -->
       <div class="modal hide" id="finish">
         <div class="card">
-          <small>Woooa! Llegamos. Bien, vamos a continuar probablemente si nos alcanza con esto.</small>
+          <small>Finalizado.</small>
 
-          <h2>Se obscurece</h2>
+          <h2>Enhorabuena!</h2>
 
           <p id="summary"></p>
 
           <blockquote>
-            “Esa vez hable y nadie respondió quién era, aun asi podía seguir caminando sin conocer todavía la respuesta. No sabía preguntarme quién era yo realmente. Me bastaba
-            escuchar mi nombre en la voz de quienes me esperaban.”
+            “Esa vez hable y nadie respondió quién era, aun asi podía seguir caminando sin conocer todavía la respuesta.”
           </blockquote>
 
           <button class="btn" id="chapter2">
@@ -492,9 +485,9 @@
       </div>
 
       <div class="pill">
-        Puntos:
+        Energia:
         <strong id="score">0</strong>
-        · <span id="collectibleLabel">Conchas:</span>
+        · <span id="collectibleLabel">Orbes:</span>
         <strong id="shells">0</strong>/<strong id="total">0</strong>
       </div>
 
@@ -575,7 +568,7 @@
         x: 700,
         title: "Mi nombre en otras voces",
         text:
-          "Cuando era más pequeño creía que mi nombre me pertenecia. " +
+          "Auka Sum/San (Hola hermano(a)) , sabes... te cuento que cuando era más pequeño creía que mi nombre me pertenecia. " +
           "Ahora entiendo que también vive en la voz de Naiyá (la matriarca de mi pueblo), " +
           "en quienes me corrigen y en quienes esperan que regrese."
       },
@@ -583,7 +576,9 @@
         x: 1650,
         title: "Las manos que me hicieron un lugar",
         text:
-          "Quiero demostrar que ya puedo hacerlo todo solo. " +
+          "Acompañame a la salida de mi pueblo, hoy celebro mi iniciacion a mí madurez, en mi pueblo debemos sobrevivir en la noche, intento comprender por qué
+            crecer se parece tanto a despedirse. 
+            Debo llevar energia, y aunque quiero demostrar que ya puedo hacerlo todo solo. " +
           "Después recuerdo que comí antes de saber pescar y que dormí " +
           "bajo un techo levantado por manos cuyos nombres no conozco."
       },
@@ -615,9 +610,9 @@
         x: 6500,
         title: "La parte de mí que mira lejos",
         text:
-          "Quiero a mi pueblo, pero una parte de mí mira el horizonte. " +
+          "Sabes me gustan las luces tenues a lo lejos de mi pueblo, pero una parte de mí mira el horizonte con mucha emoción y temor. " +
           "Me asusta partir y convertirme en alguien que ya no reconozcan. " +
-          "También me asusta quedarme solamente por miedo."
+          "pero también me asusta quedarme solamente por miedo. ¿Es un dilema interesante verdad?"
       }
     ].map((dialogue) => ({
       ...dialogue,
@@ -780,21 +775,21 @@
         x: 700,
         title: "Reconciliación interior",
         text:
-          "Hola de nuevo. Pienso que puedo reconciliar mis planes antes de que sienta como vibra" +
-          "sólido en mis huesos, olvidaré hasta quedar insólito el recuerdo, " +
-          "dejando que el tiempo desvanezca lo que una vez creí inmóvil."
+          "Hola de nuevo, no sabía preguntarme quién era yo realmente. Me bastaba
+            escuchar mi nombre en la voz de quienes me esperaban. " +
+          "inevitablemente el tiempo desvanecera todo lo que una creo inmóvil."
       },
       {
         x: 1650,
-        title: "El alma que me vio crear",
+        title: "El alma inamovible",
         text:
-          "La miro a los ojos y percibo ese amor contemplo el instante, " +
-          "siendo el sustento de aquella alma de bondad pura " +
-          "que un día me vio crear. Quizás soñar me cura."
+          "La miro a los ojos y percibo ese amor instantáneo, " +
+          "soy el sustento de aquella alma de bondad pura " +
+          "que un día me vio crear. "
       },
       {
         x: 2800,
-        title: "Ante la adversidad",
+        title: "Ante la adversidad soñar  curara las heridas.",
         text:
           "Para sentirme como tú, para enfrentarme como tú " +
           "ante toda la inmensa adversidad, " +
@@ -810,9 +805,9 @@
       },
       {
         x: 5350,
-        title: "Ese lindo rincom en el cielo",
+        title: "Ese lindo rincón en el cielo",
         text:
-          "Por ese objeto celeste que titilarte" +
+          "Por ese objeto celeste que titila " +
           "dicta marcando el compás secreto de la vida, " +
           "en la cavidad del cielo."
       },
@@ -821,7 +816,7 @@
         title: "Intensa gratitud",
         text:
           "Siento una intensa gratitud y gracias por continuar conmigo, " +
-          "puedes experimentar ese susurro al vacío: " +
+          "permitirme compartirla contigo, puedes experimentar ese susurro al vacío: " +
           "por fin me he soltado un poco."
       }
     ].map((dialogue) => ({
@@ -882,8 +877,8 @@
       const isChapter2 = chapterNumber === 2;
 
       document.title = isChapter2
-        ? "IXA & ÁCATL · Capítulo 2"
-        : "IXA & ÁCATL · Capítulo 1";
+        ? "IXA & ÁCATL · El lugar donde el mar escucha"
+        : "IXA & ÁCATL · Prólogo";
       worldWidth = isChapter2
         ? chapter2WorldWidth
         : chapter1WorldWidth;
@@ -906,18 +901,18 @@
 
       document.querySelector("#chapter2").textContent =
         isChapter2
-          ? "Volver al capítulo 1"
-          : "Pasar al capítulo 2";
+          ? "Volver"
+          : "Continuar";
 
       document.querySelector("#finish small").textContent =
         isChapter2
-          ? "CAPÍTULO 2 COMPLETADO"
-          : "CAPÍTULO 1 COMPLETADO";
+          ? "COMPLETADO"
+          : "COMPLETADO";
 
       document.querySelector("#finish h2").textContent =
         isChapter2
-          ? "El ritmo de las olas del tiempo"
-          : "El horizonte";
+          ? "La noche"
+          : "La tarde";
 
       updateHud();
     }
@@ -1107,7 +1102,7 @@
         started = true;
 
         document.querySelector("#status").textContent =
-          "Camino hacia el faro mientras escucho lo que todavía no sé decir.";
+          "Mientras me adentro a la selva, escucho lo que todavía no sé decir.";
       });
 
     document
@@ -1124,8 +1119,8 @@
 
         resetGame(
           chapterNumber === 2
-            ? "Vuelvo a recorrer las olas del tiempo."
-            : "Vuelvo a recorrer la orilla desde el principio."
+            ? "Vamos de nuevo."
+            : "Volvemos a recorrer la orilla."
         );
       });
 
@@ -1326,7 +1321,7 @@
         score = Math.max(0, score - 5);
 
         document.querySelector("#status").textContent =
-          "El monolito me hizo retroceder. Perdí 5 puntos.";
+          "Ouch!";
 
         updateHud();
         break;
@@ -1461,7 +1456,7 @@
         updateHud();
 
         document.querySelector("#status").textContent =
-          "La corriente me hizo retroceder. Perdí 5 puntos.";
+          "La corriente me hizo retroceder.";
       }
 
       player.x = Math.max(
@@ -1527,8 +1522,8 @@
 
             document.querySelector("#status").textContent =
               chapterNumber === 2
-                ? "Recogí un orbe azul. La munición se recupera con el tiempo."
-                : "Encontré una concha. Algunas cosas pequeñas también conservan una historia.";
+                ? "La munición se recupera con el tiempo."
+                : "Algunas cosas pequeñas también conservan una historia.";
           } else {
             score = Math.max(
               0,
@@ -1536,7 +1531,7 @@
             );
 
             document.querySelector("#status").textContent =
-              "Algo en el camino me hizo perder 7 puntos.";
+              "Intentemos de nuevo.";
           }
 
           updateHud();
@@ -1594,13 +1589,13 @@
 
         document.querySelector("#summary").textContent =
           chapterNumber === 2
-            ? `Atravesé el ritmo de las olas con ${score} puntos ` +
-              `y recogí ${shellCount} orbes. Aprendí que soltar ` +
-              `también puede ser una forma de seguir adelante.`
-            : `Llegué al faro con ${score} puntos y ` +
-              `${shellCount} conchas. Pensé que al acercarme ` +
-              `sabría quién debía ser. Solo comprendí que mi ` +
-              `origen puede explicarme de dónde vengo, pero no ` +
+            ? `Tenemos ${score} de energia ` +
+              ` de ${shellCount} orbes que encontramos en el camino. ` +
+              ` Vamos por una forma de seguir adelante.`
+            : `Llegamos con ${score} de energia y ` +
+              `${shellCount} orbes. ` +
+              `¿Sabre quién debo ser? Quiza` +
+              ` el origen puede explicarme de dónde vengo, pero no ` +
               `puede decidir por mí hacia dónde caminar.`;
 
         document
