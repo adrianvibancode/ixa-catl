@@ -401,11 +401,10 @@
 
           <h2>¡Enhorabuena!</h2>
 
-          <p id="summary"></p>
+          <p ></p>
 
-          <blockquote>
-            “Esa vez hable y nadie respondió quién era, aun asi podía seguir caminando sin conocer todavía la respuesta.”
-          </blockquote>
+          <blockquote id="summary">
+            </blockquote>
 
           <button class="btn" id="chapter2">
             Seguir adelante
@@ -555,15 +554,27 @@
     let obstacles = [];
     const projectiles = [];
     const maxAmmo = 10;
+    const monolithClearShotCount = 100;
     let ammo = maxAmmo;
+    let shotsFired = 0;
     let ammoReloadTimer = 0;
     let ammoHudTimer = 0;
     let fireCooldown = 0;
 
     /*
-      Seis diálogos íntimos en primera persona.
+      Siete diálogos íntimos en primera persona.
     */
     const chapter1Dialogues = [
+      {
+        x: 1,
+        title: "Las manos que me hicieron un lugar",
+        text:
+          "Hoy celebro el inicio de mi camino hacia la madurez. " +
+          "En mi pueblo decimos que sobrevivir a la noche es llegar a casa " +
+          "con menos piedritas en el costal; así caminamos más cómodos. " +
+          "Acompáñame al faro mientras te cuento lo que significa crecer " +
+          "y despedirse."
+      },
       {
         x: 700,
         title: "Auka Sum/San (Hola hermano(a))",
@@ -574,12 +585,10 @@
       },
       {
         x: 1650,
-        title: "Las manos que me hicieron un lugar",
+        title: "Aguina (Vive)",
         text:
-          "Hoy celebro mi iniciación a mí madurez, " +
-          "en mi pueblo decimos que sobrevivir a la noche es llegar a casa sin tantas piedritas en nuestro costal porque asi vajanos mas comodos, intento comprender por qué " +
-          "crecer se parece tanto a despedirse." +
-          " "
+          "Esa vez hablé y nadie respondió quién era; aun así, " +
+          "pude seguir caminando sin conocer todavía la respuesta."
       },
       {
         x: 2800,
@@ -772,8 +781,17 @@
 
     const chapter2Dialogues = [
       {
-        x: 700,
+        x: 1,
         title: "Hola de nuevo",
+        text:
+          "En este recorrido tienes municiones para derribar los monolitos. " +
+          "Dispara con F, X o el botón de disparo; las municiones se recargan " +
+          `automáticamente. Al completar ${monolithClearShotCount} disparos, ` +
+          "los monolitos desaparecerán."
+      },
+      {
+        x: 700,
+        title: "",
         text:
           "No sabía preguntarme quién era yo realmente. Me bastaba " +
           "escuchar mi nombre en la voz de quienes me esperaban. " +
@@ -894,6 +912,7 @@
       obstacles = isChapter2
         ? chapter2Obstacles
         : [];
+      shotsFired = 0;
 
       document
         .querySelector(".touch")
@@ -911,8 +930,8 @@
 
       document.querySelector("#finish h2").textContent =
         isChapter2
-          ? "La noche"
-          : "La tarde";
+          ? "La penumbra"
+          : "En el atardecer";
 
       updateHud();
     }
@@ -943,6 +962,13 @@
         bounces: 0,
         age: 0
       });
+
+      shotsFired++;
+      if (shotsFired === monolithClearShotCount) {
+        obstacles = [];
+        document.querySelector("#status").textContent =
+          "¡Los monolitos han desaparecido!";
+      }
 
       updateHud();
     }
@@ -1014,10 +1040,14 @@
       jumpConsumed = false;
       dialogueTimer = 0;
       ammo = maxAmmo;
+      shotsFired = 0;
       ammoReloadTimer = 0;
       ammoHudTimer = 0;
       fireCooldown = 0;
       projectiles.length = 0;
+      obstacles = chapterNumber === 2
+        ? chapter2Obstacles
+        : [];
 
       items.forEach((item) => {
         item.taken = false;
@@ -1507,7 +1537,7 @@
       }
 
       /*
-        Activación de los seis diálogos.
+        Activación de los siete diálogos.
         Cada diálogo aparece en una sola vez.
       */
       for (const dialogue of dialogues) {
