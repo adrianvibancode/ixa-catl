@@ -12,9 +12,32 @@ El fondo ilustrado del capítulo 1 está desactivado temporalmente. El nivel con
 
 ## Premisa
 
-Desde niño, Ixa observa el cielo a veces habla en sueños con un lucero que le habla con la voz de su abuelo. Ixa Cree que seguirlo le permitirá encontrar la isla de sus antepasados y comprender su identidad. La estrella ofrece orientación, pero la interpretación obsesiva de sus señales puede convertir el deseo de Ixa en obediencia.
+Desde niño, Ixa observa el cielo a veces habla  de sus sueños otras como pensamientos a modo de soliloquio. Ixa tiene fascinacion por un objeto celeste parecido a Sirius. Ixa fue rescatado y desconoce su origen, pero la matriarca de su pueblo lo protege y cuida hasta su adolescencia que es la etapa que está por cumplir. Ixa pronto tendrá su iniciación en la tribu. El rito consiste en recorrer la selva por la noche y regresar al otro dia. en su camino se topa con pensamientos y decisiones. Ixa anhela comprender los caminos y su identidad en el tortuoso enigma de la ilegitimidad. La busqueda de las brillantes formas muertas ofrece orientación, pero la interpretación obsesiva de sus señales puede convertir el deseo de Ixa en obediencia.
 
-La voz narrativa cambia a medida que Ixa vive: la sensorialidad del niño da paso a la fragmentación del sobreviviente, a la apertura del amigo, a la lucha a traves de la muerte y, finalmente, a la perspectiva de la transformacion del resucitado. Ixa no llega a ser omnisciente: cada comprensión se obtiene a partir de pérdidas, relaciones y decisiones.
+En los eventos posteriores del prologo, comienza la identificación de la sociedad y sus tratos con el agua, el imperialismo, las estrategias militares de la comunidad y tribus caidas, la alianzas y las guerras, Ixa observa la disolucion de su comunidad y se traslada por mar a otros territorios de culturas mas complejas. Ixa comprende esta dinamica y va añadiendo más funcionalidades.
+
+Ixa experimenta la perdida de su protectora y emprende un viaje donde conoce a Ácatl en la gran ciudad sobre las aguas. Ixa reconoce el valor de la amistad y viaja con su amigo a través de la selva, ya que la conoce y es un mensajero a la ciudad de los signos.
+
+Ixa conoce a YAAX y en el camino los tres forman una amistad y ella los guia con el sabio. 
+
+Ixa aprende del sabio y le enseña las historias de Ixbalanque.
+
+YAAX regresa con Acatl lo manipula y despues acusa a Ixa de acoso. YAAX Asesina al sabio. 
+El sabio era fiel al estado logra mandar el mensaje.
+
+YAAX ya trataba con los hombres de hierro, y los disidentes planeaban derrocamiento politico.
+Acatl confronta a Ixa y lo hiere con una piedra de obsidiana, YAAX y Ácatl lanzan a Ixa a un cenote.
+
+Ixa viaja por los caminos de los 9 circulos, burla en un juego a los señores del mictlan. 
+Resucita y al salir paso 1 año, la ciudad de los signos cayo y fue saqueada, YAAX y acatl estan en la congregación de pueblos afines al imperio de los hombres de hierro. 
+
+Ixa viaja y se enfrenta al ataque de una pantera negra, la guerrera jaguar Yoloxochitl lo logra rescatar y salvar y vence a la pantera, usa su piel como un vestuario diseño parecido al de acatl pero con la pantera negra.  Ella lo guia en su proceso de sanación. 
+
+Ella le enseña el arte de la guerra y le otorga  herramientas. Es muy valiente y decidida. Se infiltra en la ciudad y le da el mensaje a acatl que su amigo sigue vivo.
+
+Ácatl 
+
+La voz narrativa cambia a medida que Ixa vive: la sensorialidad del niño y da paso a la fragmentación del sobreviviente, a la apertura del amigo, a la lucha a traves de la muerte y, finalmente, a la perspectiva de la transformacion del resucitado. Ixa no llega a ser omnisciente: cada comprensión se obtiene a partir de pérdidas, relaciones y decisiones.
 
 ## El título y sus protagonistas
 
