@@ -10,10 +10,13 @@
 
 El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript. La versión jugable contempla:
 
-- **Capítulo 1: `tepueg (1) · k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
-- **Capítulo 2: `goguó (2) · Meyibó y Majibel(Ciclos)`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
+- **Capítulo 1: `tepueg (1) - k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
+- **Capítulo 2: `goguó (2) · Meyibó y majibel`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
+- **Capítulo 3: `goguó (3) · Orión`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
 
 El resto de los actos descritos en este documento pertenece al diseño narrativo y no implica que todos los episodios estén implementados.
+
+El encabezado y el HUD muestran **PRÓLOGO · Más allá del límite de todo lo que conozco** por encima del rótulo de cada capítulo.
 
 El fondo del capítulo 1 puede activarse mediante `fondo-costero-intimo.png`. El capítulo 2 admite una imagen independiente mediante la variable `chapter2BackgroundImagePath` dentro de `index.html`.
 
@@ -358,26 +361,28 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 | 5350 | Hablar y ser escuchado | Ixa reconoce que, en su comunidad, algunas voces pesan más que otras. |
 | 6500 | La parte de mí que mira lejos | Ixa expresa su temor y emoción ante la posibilidad de partir o quedarse. |
 
-- Conchas y puntos provisionales azules: **+10**.
+- Perlas azules: **+10**.
 - Objetos rojos provisionales: **−7**.
 - Cada objeto se contabiliza una sola vez.
+- La energía acumulada se conserva al pasar al capítulo 2.
 - Faro como transición narrativa al capítulo 2.
 
 ### Capítulo 2
 
 - Rótulo actual del HUD: **`goguó (2) · Meyibó y majibel`**.
 - Plataformas elevadas.
-- Orbes azules coleccionables.
-- Orbes rojos que restan puntos.
+- Perlas azules coleccionables.
+- Perlas rojas que restan energía.
 - Monolitos que hacen retroceder a Ixa.
 - Municiones lanzables: el capítulo comienza explicando que se pueden disparar con `F`, `X` o el botón táctil para derribar los monolitos.
-- Los monolitos desaparecen al alcanzar **100 disparos válidos lanzados**; no es necesario que impacten.
-- Capacidad de hasta 10 municiones, con recarga automática 5 segundos después del último disparo.
+- Cada monolito desaparece al recibir **13 impactos**; los demás permanecen. Al destruir cada uno, otorga **10 puntos de energía**.
+- Se comienza con **13 municiones**. Al alcanzar **100 puntos de energía**, la capacidad aumenta a **21**. Las municiones se recargan automáticamente 5 segundos después del último disparo.
+- La energía acumulada en el capítulo 1 se conserva al entrar; también se conserva al pasar al capítulo 3.
 - Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
 
 | X | Título | Contexto |
 |---:|---|---|
-| 1 | Hola de nuevo | Introduce las municiones, los controles de disparo, la recarga y la desaparición de los monolitos tras 100 disparos. |
+| 1 | Hola de nuevo | Introduce las municiones, los controles de disparo, la recarga, que cada monolito desaparece tras 13 impactos y la recompensa por destruirlo. |
 | 700 | *(sin título)* | Ixa reflexiona sobre su identidad y el paso del tiempo a través de los nombres de quienes lo esperan. |
 | 1650 | El alma inamovible | Ixa percibe un amor profundo y recuerda a quien lo vio crear. |
 | 2800 | Ante la adversidad soñar curará las heridas. | Ixa piensa en adaptarse al espíritu del tiempo para enfrentar la adversidad. |
@@ -385,11 +390,27 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 | 5350 | Ese lindo rincón en el cielo | Ixa pregunta quién debe ser y reconoce que su origen no determina su futuro. |
 | 6500 | Intensa gratitud | Ixa agradece la compañía y reflexiona sobre empezar a soltarse. |
 
+### Capítulo 3
+
+- Rótulo actual del HUD: **`goguó (3) · Orión`**.
+- Fondo nocturno de degradado oscuro, estrellas y una representación de la constelación de Orión.
+- Plataformas elevadas y monolitos que se desplazan durante el recorrido.
+- La energía se conserva desde el capítulo 2. Las perlas azules y la derrota de los monolitos suman **10**; las perlas rojas restan **7**. Caer o chocar con un monolito resta **5**.
+- Los disparos se pueden lanzar con `F`, `X` o el botón táctil. Cada monolito desaparece al recibir **13 impactos**; los demás siguen activos. Destruir cada uno otorga **10 puntos de energía**.
+- La capacidad inicia en **13 municiones** y aumenta a **21** al alcanzar **100 puntos de energía**.
+- Si la energía llega a **0**, Ixa muere y el recorrido se reinicia desde el inicio del capítulo 3, restaurando la energía con la que entró a ese capítulo.
+- Al completar el recorrido aparece el final, con opción para repetir este capítulo.
+- Diálogo de inicio:
+
+| X | Título | Contexto |
+|---:|---|---|
+| 1 | Bajo el cielo de Orión | Explica las plataformas y los monolitos móviles, la energía y sus pérdidas o recuperación, los controles de disparo, que cada monolito requiere 13 impactos y otorga 10 puntos al destruirse, y el reinicio al agotarse la energía. |
+
 ### Controles
 
 - `A` / `D` o flechas: caminar.
 - `W`, flecha arriba o barra espaciadora: saltar.
-- `F` o `X`: lanzar munición en el capítulo 2.
+- `F` o `X`: lanzar munición en los capítulos 2 y 3.
 - En dispositivos táctiles aparecen controles en pantalla, incluido el botón para disparar.
 
 ## Archivos del juego

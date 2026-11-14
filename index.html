@@ -309,6 +309,10 @@
       display: block;
     }
 
+    .touch.chapter-three .fire-control {
+      display: block;
+    }
+
     @media (pointer: coarse) {
       .touch {
         display: flex;
@@ -358,7 +362,7 @@
     <header>
       <div>
         <div class="muted">
-          ACTO I · Identidad, comunidad y territorio
+          PRÓLOGO · Más allá del límite de todo lo que conozco
         </div>
 
         <h1>IXA & ÁCATL</h1>
@@ -377,7 +381,7 @@
             Prólogo· 
           </small>
 
-          <h2>Mas alla del límite de todo lo que conozco </h2>
+          <h2>Más allá del límite de todo lo que conozco</h2>
 
           <blockquote>
             Tomaremos las perlas azules y evitaremos las rojas, cuidado con los huecos.
@@ -486,13 +490,13 @@
       <div class="pill">
         Energia:
         <strong id="score">0</strong>
-        · <span id="collectibleLabel">Orbes:</span>
+        · <span id="collectibleLabel">Perlas:</span>
         <strong id="shells">0</strong>/<strong id="total">0</strong>
       </div>
 
       <div class="pill" id="ammoPill" hidden>
         Municiones:
-        <strong id="ammo">10</strong>/10
+        <strong id="ammo">13</strong>/<span id="ammoMax">13</span>
         <span id="ammoReload"></span>
       </div>
     </div>
@@ -552,11 +556,17 @@
     let dialogueTimer = 0;
     let chapterNumber = 1;
     let obstacles = [];
+    let standingPlatform = null;
+    let chapter3MotionTime = 0;
     const projectiles = [];
-    const maxAmmo = 10;
-    const monolithClearShotCount = 100;
+    const ammoUpgradeThreshold = 100;
+    const upgradedAmmoCapacity = 21;
+    let maxAmmo = 13;
+    const monolithHitsToDestroy = 13;
+    const monolithEnergyReward = 10;
+    let chapterStartingEnergy = 0;
+    let ammoCapacityUpgraded = false;
     let ammo = maxAmmo;
-    let shotsFired = 0;
     let ammoReloadTimer = 0;
     let ammoHudTimer = 0;
     let fireCooldown = 0;
@@ -775,7 +785,122 @@
         x,
         y: ground.y - (112 + (index % 3) * 12),
         w: 54 + (index % 2) * 8,
-        h: 112 + (index % 3) * 12
+        h: 112 + (index % 3) * 12,
+        hits: 0
+      };
+    });
+
+    const chapter3WorldWidth = 7600;
+    const chapter3Platforms = [];
+
+    for (let x = 0, index = 0; x < chapter3WorldWidth;) {
+      const width = 560 + (index % 3) * 80;
+      const gap = 90 + (index % 2) * 30;
+      const heights = [450, 425, 455, 430, 440];
+      const y = heights[index % heights.length];
+
+      chapter3Platforms.push({
+        x,
+        y,
+        w: width,
+        h: H - y,
+        kind: "ground"
+      });
+
+      x += width + gap;
+      index++;
+    }
+
+    chapter3Platforms.push({
+      x: chapter3WorldWidth - 520,
+      y: 420,
+      w: 520,
+      h: 120,
+      kind: "ground"
+    });
+
+    const chapter3MovingPlatforms = [];
+
+    for (
+      let x = 320, index = 0;
+      x < chapter3WorldWidth - 300;
+      x += 560, index++
+    ) {
+      const ground = chapter3Platforms.find(
+        (platform) =>
+          platform.kind === "ground" &&
+          x >= platform.x &&
+          x < platform.x + platform.w
+      );
+
+      if (!ground) {
+        continue;
+      }
+
+      const baseY = Math.max(
+        245,
+        ground.y - 145 - (index % 2) * 18
+      );
+      const platform = {
+        x,
+        y: baseY,
+        baseX: x,
+        baseY,
+        w: 170 + (index % 3) * 18,
+        h: 12,
+        kind: "moving",
+        moving: true,
+        amplitudeX: index % 2 === 0 ? 34 : 18,
+        amplitudeY: index % 2 === 0 ? 18 : 28,
+        speed: 0.65 + (index % 3) * 0.12,
+        phase: index * 1.3,
+        deltaX: 0,
+        deltaY: 0
+      };
+
+      chapter3MovingPlatforms.push(platform);
+      chapter3Platforms.push(platform);
+    }
+
+    const chapter3Items = chapter3MovingPlatforms.map(
+      (platform, index) => ({
+        x: platform.baseX + platform.w / 2,
+        initialX: platform.baseX + platform.w / 2,
+        y: platform.baseY - 20,
+        initialY: platform.baseY - 20,
+        platformY: platform.baseY,
+        initialPlatformY: platform.baseY,
+        vy: index % 2 === 0 ? -1.8 : -2.4,
+        initialVy: index % 2 === 0 ? -1.8 : -2.4,
+        type: index % 5 === 3 ? "bad" : "good",
+        taken: false,
+        platform
+      })
+    );
+
+    const chapter3Obstacles = [
+      1080, 2240, 3420, 4600, 6000, 6920
+    ].map((x, index) => {
+      const ground = chapter3Platforms.find(
+        (platform) =>
+          platform.kind === "ground" &&
+          x >= platform.x &&
+          x < platform.x + platform.w
+      );
+      const height = 100 + (index % 3) * 12;
+
+      return {
+        x,
+        y: ground.y - height,
+        baseX: x,
+        baseY: ground.y - height,
+        w: 58 + (index % 2) * 8,
+        h: height,
+        hits: 0,
+        amplitudeX: 38,
+        amplitudeY: 14,
+        speed: 0.7 + (index % 3) * 0.1,
+        phase: index * 1.7
       };
     });
 
@@ -784,10 +909,12 @@
         x: 1,
         title: "Hola de nuevo",
         text:
-          "En este recorrido tienes municiones para derribar los monolitos. " +
-          "Dispara con F, X o el botón de disparo; las municiones se recargan " +
-          `automáticamente. Al completar ${monolithClearShotCount} disparos, ` +
-          "los monolitos desaparecerán."
+          "Comienzas con 13 municiones para derribar los monolitos. " +
+          "Dispara con F, X o el botón de disparo; se recargan automáticamente. " +
+          "Al alcanzar 100 puntos de energía, tu capacidad aumenta a 21. " +
+          `Cada monolito desaparece tras recibir ` +
+          `${monolithHitsToDestroy} impactos; al destruirlo, recuperas ` +
+          `${monolithEnergyReward} puntos de energía.`
       },
       {
         x: 700,
@@ -842,6 +969,27 @@
       seen: false
     }));
 
+    const chapter3Dialogues = [
+      {
+        x: 1,
+        title: "Bajo el cielo de Orión",
+        text:
+          "El cielo de Orión y el suelo cambian a cada paso. " +
+          "Salta sobre las plataformas móviles y esquiva los monolitos " +
+          "que también se desplazan. Conservas la energía del capítulo anterior: " +
+          "las perlas azules te devuelven 10 y las rojas te quitan 7; " +
+          "caer o chocar con un monolito te quita 5. Dispara con F, X o " +
+          `el botón táctil. Cada monolito desaparece tras recibir ` +
+          `${monolithHitsToDestroy} impactos; al destruirlo, recuperas ` +
+          `${monolithEnergyReward} puntos de energía. Al llegar a 100 de energía, ` +
+          "tu capacidad de municiones aumenta a 21. " +
+          "Si tu energía llega a cero, volverás al inicio del capítulo."
+      }
+    ].map((dialogue) => ({
+      ...dialogue,
+      seen: false
+    }));
+
     let platforms = chapter1Platforms;
     let items = chapter1Items;
     let dialogues = chapter1Dialogues;
@@ -853,6 +1001,16 @@
         y: (index * 73 + 29) % 310,
         radius: 0.7 + (index % 3) * 0.45,
         alpha: 0.35 + (index % 5) * 0.12
+      })
+    );
+
+    const chapter3Stars = Array.from(
+      { length: 170 },
+      (_, index) => ({
+        x: (index * 173 + 67) % chapter3WorldWidth,
+        y: (index * 97 + 17) % 340,
+        radius: 0.7 + (index % 4) * 0.35,
+        alpha: 0.38 + (index % 5) * 0.11
       })
     );
 
@@ -878,10 +1036,11 @@
       document.querySelector("#total").textContent =
         items.filter((item) => item.type === "good").length;
       document.querySelector("#collectibleLabel").textContent =
-        chapterNumber === 2 ? "Perlas:" : "Perlas:";
+        "Perlas:";
       document.querySelector("#ammoPill").hidden =
-        chapterNumber !== 2;
+        chapterNumber < 2;
       document.querySelector("#ammo").textContent = ammo;
+      document.querySelector("#ammoMax").textContent = maxAmmo;
       document.querySelector("#ammoReload").textContent =
         ammo < maxAmmo
           ? ` · Recarga en ${Math.ceil(
@@ -890,55 +1049,107 @@
           : "";
     }
 
+    function addEnergy(amount) {
+      score += amount;
+
+      if (!ammoCapacityUpgraded && score >= ammoUpgradeThreshold) {
+        ammoCapacityUpgraded = true;
+        maxAmmo = upgradedAmmoCapacity;
+        ammo = maxAmmo;
+        ammoReloadTimer = 0;
+        ammoHudTimer = 0;
+        return true;
+      }
+
+      return false;
+    }
+
+    function loseEnergy(amount, statusMessage) {
+      score = Math.max(0, score - amount);
+
+      if (chapterNumber === 3 && score === 0) {
+        resetGame(
+          "La energía se agotó. Regresas al inicio del capítulo 3."
+        );
+        return true;
+      }
+
+      updateHud();
+      document.querySelector("#status").textContent =
+        statusMessage;
+      return false;
+    }
+
     function configureChapter(number) {
       chapterNumber = number;
       const isChapter2 = chapterNumber === 2;
+      const isChapter3 = chapterNumber === 3;
 
-      document.title = isChapter2
-        ? "IXA & ÁCATL · Alma, Revelaciones y una Noche de Angustia"
-        : "IXA & ÁCATL · Prólogo";
-      worldWidth = isChapter2
-        ? chapter2WorldWidth
-        : chapter1WorldWidth;
-      platforms = isChapter2
-        ? chapter2Platforms
-        : chapter1Platforms;
-      items = isChapter2
-        ? chapter2Items
-        : chapter1Items;
-      dialogues = isChapter2
-        ? chapter2Dialogues
-        : chapter1Dialogues;
-      obstacles = isChapter2
-        ? chapter2Obstacles
-        : [];
-      shotsFired = 0;
+      document.title = isChapter3
+        ? "IXA & ÁCATL · Bajo el cielo de Orión"
+        : isChapter2
+          ? "IXA & ÁCATL · Alma, Revelaciones y una Noche de Angustia"
+          : "IXA & ÁCATL · Prólogo";
+      worldWidth = isChapter3
+        ? chapter3WorldWidth
+        : isChapter2
+          ? chapter2WorldWidth
+          : chapter1WorldWidth;
+      platforms = isChapter3
+        ? chapter3Platforms
+        : isChapter2
+          ? chapter2Platforms
+          : chapter1Platforms;
+      items = isChapter3
+        ? chapter3Items
+        : isChapter2
+          ? chapter2Items
+          : chapter1Items;
+      dialogues = isChapter3
+        ? chapter3Dialogues
+        : isChapter2
+          ? chapter2Dialogues
+          : chapter1Dialogues;
+      obstacles = isChapter3
+        ? chapter3Obstacles
+        : isChapter2
+          ? chapter2Obstacles
+          : [];
+      obstacles.forEach((obstacle) => {
+        obstacle.hits = 0;
+      });
 
       document
         .querySelector(".touch")
         .classList.toggle("chapter-two", isChapter2);
+      document
+        .querySelector(".touch")
+        .classList.toggle("chapter-three", isChapter3);
 
       document.querySelector("#chapter2").textContent =
-        isChapter2
-          ? "Volver"
-          : "Continuar";
+        "Continuar";
+      document.querySelector("#chapter2").hidden = isChapter3;
+      document.querySelector("#again").textContent =
+        isChapter3
+          ? "Repetir capítulo 3"
+          : "Repetir";
 
       document.querySelector("#finish small").textContent =
-        isChapter2
-          ? "COMPLETADO"
-          : "COMPLETADO";
+        `CAPÍTULO ${chapterNumber} COMPLETADO`;
 
       document.querySelector("#finish h2").textContent =
-        isChapter2
-          ? "La penumbra"
-          : "En el atardecer";
+        isChapter3
+          ? "Bajo el cielo de Orión"
+          : isChapter2
+            ? "La penumbra"
+            : "En el atardecer";
 
       updateHud();
     }
 
     function fireProjectile() {
       if (
-        chapterNumber !== 2 ||
+        chapterNumber < 2 ||
         !started ||
         finished ||
         ammo <= 0 ||
@@ -962,13 +1173,6 @@
         bounces: 0,
         age: 0
       });
-
-      shotsFired++;
-      if (shotsFired === monolithClearShotCount) {
-        obstacles = [];
-        document.querySelector("#status").textContent =
-          "¡Los monolitos han desaparecido!";
-      }
 
       updateHud();
     }
@@ -1006,9 +1210,37 @@
         .classList.remove("show");
     }
 
+    function resetChapter3Motion() {
+      chapter3MotionTime = 0;
+
+      for (const platform of chapter3MovingPlatforms) {
+        platform.x = platform.baseX;
+        platform.y = platform.baseY;
+        platform.deltaX = 0;
+        platform.deltaY = 0;
+      }
+
+      for (const obstacle of chapter3Obstacles) {
+        obstacle.x = obstacle.baseX;
+        obstacle.y = obstacle.baseY;
+        obstacle.hits = 0;
+      }
+
+      for (const item of chapter3Items) {
+        item.x = item.initialX;
+        item.y = item.initialY;
+        item.platformY = item.initialPlatformY;
+        item.vy = item.initialVy;
+      }
+    }
+
     function resetGame(
       message = "El recorrido ha comenzado de nuevo."
     ) {
+      if (chapterNumber === 3) {
+        resetChapter3Motion();
+      }
+
       const spawnPlatform = platforms.find(
         (platform) =>
           platform.kind !== "upper" &&
@@ -1018,7 +1250,7 @@
 
       Object.assign(player, {
         x: 90,
-        y: chapterNumber === 2 && spawnPlatform
+        y: chapterNumber >= 2 && spawnPlatform
           ? spawnPlatform.y - player.h
           : 350,
         vx: 0,
@@ -1028,30 +1260,39 @@
         frame: 0,
         animationTime: 0
       });
+      standingPlatform = null;
 
       Object.keys(keys).forEach((key) => {
         keys[key] = false;
       });
 
       cameraX = 0;
-      score = 0;
+      score = chapterStartingEnergy;
       shellCount = 0;
       finished = false;
       jumpConsumed = false;
       dialogueTimer = 0;
       ammo = maxAmmo;
-      shotsFired = 0;
       ammoReloadTimer = 0;
       ammoHudTimer = 0;
       fireCooldown = 0;
       projectiles.length = 0;
-      obstacles = chapterNumber === 2
-        ? chapter2Obstacles
-        : [];
+      obstacles = chapterNumber === 3
+        ? chapter3Obstacles
+        : chapterNumber === 2
+          ? chapter2Obstacles
+          : [];
+      obstacles.forEach((obstacle) => {
+        obstacle.hits = 0;
+      });
 
       items.forEach((item) => {
         item.taken = false;
-        if (chapterNumber === 2) {
+        if (chapterNumber >= 2) {
+          if (chapterNumber === 3) {
+            item.x = item.initialX;
+            item.platformY = item.initialPlatformY;
+          }
           item.y = item.initialY;
           item.vy = item.initialVy;
         }
@@ -1139,7 +1380,9 @@
         started = true;
 
         resetGame(
-          chapterNumber === 2
+          chapterNumber === 3
+            ? "Volvemos bajo el cielo de Orión."
+            : chapterNumber === 2
             ? "Vamos de nuevo."
             : "Volvemos a recorrer la orilla."
         );
@@ -1152,15 +1395,15 @@
           .querySelector("#finish")
           .classList.add("hide");
 
-        const nextChapter =
-          chapterNumber === 1 ? 2 : 1;
+        const nextChapter = chapterNumber + 1;
 
+        chapterStartingEnergy = score;
         configureChapter(nextChapter);
         started = true;
         resetGame(
           nextChapter === 2
             ? "Volvemos."
-            : "Comenzar otra vez desde el principio."
+            : "Bajo el cielo de Orión."
         );
       });
 
@@ -1219,6 +1462,48 @@
         );
       });
 
+    function updateChapter3Motion(deltaTime) {
+      chapter3MotionTime += deltaTime / 1000;
+
+      for (const platform of chapter3MovingPlatforms) {
+        const previousX = platform.x;
+        const previousY = platform.y;
+        const movementPhase =
+          chapter3MotionTime * platform.speed + platform.phase;
+
+        platform.x =
+          platform.baseX +
+          Math.sin(movementPhase) * platform.amplitudeX;
+        platform.y =
+          platform.baseY +
+          Math.cos(movementPhase) * platform.amplitudeY;
+        platform.deltaX = platform.x - previousX;
+        platform.deltaY = platform.y - previousY;
+      }
+
+      for (const obstacle of chapter3Obstacles) {
+        const movementPhase =
+          chapter3MotionTime * obstacle.speed + obstacle.phase;
+
+        obstacle.x =
+          obstacle.baseX +
+          Math.sin(movementPhase) * obstacle.amplitudeX;
+        obstacle.y =
+          obstacle.baseY +
+          Math.cos(movementPhase) * obstacle.amplitudeY;
+      }
+
+      for (const item of chapter3Items) {
+        if (item.taken) {
+          continue;
+        }
+
+        item.x = item.platform.x + item.platform.w / 2;
+        item.y += item.platform.deltaY;
+        item.platformY = item.platform.y;
+      }
+    }
+
     function updateChapter2Objects(deltaTime) {
       const timeScale = deltaTime / 16.67;
 
@@ -1248,7 +1533,7 @@
         projectile.x += projectile.vx * timeScale;
         projectile.y += projectile.vy * timeScale;
 
-        let obstacleHit = false;
+        let hitObstacle = null;
         for (const obstacle of obstacles) {
           if (
             intersects(
@@ -1261,12 +1546,29 @@
               obstacle
             )
           ) {
-            obstacleHit = true;
+            hitObstacle = obstacle;
             break;
           }
         }
 
-        if (obstacleHit) {
+        if (hitObstacle) {
+          hitObstacle.hits++;
+          if (hitObstacle.hits >= monolithHitsToDestroy) {
+            obstacles = obstacles.filter(
+              (obstacle) => obstacle !== hitObstacle
+            );
+            const ammoUpgraded = addEnergy(monolithEnergyReward);
+            document.querySelector("#status").textContent =
+              `¡Monolito destruido! Recuperas ${monolithEnergyReward} de energía.` +
+              (ammoUpgraded
+                ? " ¡Tu capacidad aumenta a 21 municiones!"
+                : "");
+            updateHud();
+          } else {
+            document.querySelector("#status").textContent =
+              `Impactos al monolito: ${hitObstacle.hits}/${monolithHitsToDestroy}.`;
+          }
+
           projectiles.splice(index, 1);
           continue;
         }
@@ -1329,14 +1631,14 @@
         player.vx = 0;
         player.vy = 0;
         player.grounded = Boolean(safePlatform);
-        score = Math.max(0, score - 5);
-
-        document.querySelector("#status").textContent =
-          "¡Ouch!";
-
-        updateHud();
+        standingPlatform = safePlatform;
+        if (loseEnergy(5, "¡Ouch!")) {
+          return true;
+        }
         break;
       }
+
+      return false;
     }
 
     function update(deltaTime) {
@@ -1344,7 +1646,15 @@
         return;
       }
 
-      if (chapterNumber === 2) {
+      if (chapterNumber === 3) {
+        updateChapter3Motion(deltaTime);
+        if (standingPlatform && standingPlatform.moving) {
+          player.x += standingPlatform.deltaX;
+          player.y += standingPlatform.deltaY;
+        }
+      }
+
+      if (chapterNumber >= 2) {
         fireCooldown = Math.max(
           0,
           fireCooldown - deltaTime
@@ -1405,6 +1715,7 @@
       ) {
         player.vy = -14.3;
         player.grounded = false;
+        standingPlatform = null;
         jumpConsumed = true;
       }
 
@@ -1420,6 +1731,7 @@
       player.y +=
         player.vy * deltaTime / 16.67;
       player.grounded = false;
+      standingPlatform = null;
 
       /*
         Colisiones con las plataformas.
@@ -1434,6 +1746,7 @@
             platform.y - player.h;
           player.vy = 0;
           player.grounded = true;
+          standingPlatform = platform;
         }
       }
 
@@ -1449,14 +1762,10 @@
         player.y = 250;
         player.vx = 0;
         player.vy = 0;
-        score = Math.max(
-          0,
-          score - 5
-        );
-
-        updateHud();
-        document.querySelector("#status").textContent =
-          "Dolor, retroceder.";
+        standingPlatform = null;
+        if (loseEnergy(5, "Dolor, retroceder.")) {
+          return;
+        }
       }
 
       player.x = Math.max(
@@ -1467,8 +1776,11 @@
         )
       );
 
-      if (chapterNumber === 2) {
-        handleObstacleCollisions();
+      if (
+        chapterNumber >= 2 &&
+        handleObstacleCollisions()
+      ) {
+        return;
       }
 
       /*
@@ -1515,30 +1827,30 @@
           item.taken = true;
 
           if (item.type === "good") {
-            score += 10;
+            const ammoUpgraded = addEnergy(10);
             shellCount++;
 
             document.querySelector("#status").textContent =
-              chapterNumber === 2
-                ? "La munición se recargara en 5 segundos."
-                : "Algunas cosas también conservan una historia.";
+              ammoUpgraded
+                ? "¡Llegaste a 100 de energía! Tu capacidad aumenta a 21 municiones."
+                : chapterNumber === 2
+                  ? "La munición se recargara en 5 segundos."
+                  : "Algunas cosas también conservan una historia.";
           } else {
-            score = Math.max(
-              0,
-              score - 7
-            );
-
-            document.querySelector("#status").textContent =
-              "Inténtalo de nuevo.";
+            if (loseEnergy(7, "Inténtalo de nuevo.")) {
+              return;
+            }
           }
 
-          updateHud();
+          if (item.type === "good") {
+            updateHud();
+          }
         }
       }
 
       /*
-        Activación de los siete diálogos.
-        Cada diálogo aparece en una sola vez.
+        Activación de diálogos por posición.
+        Cada diálogo aparece una sola vez por recorrido.
       */
       for (const dialogue of dialogues) {
         if (
@@ -1585,12 +1897,15 @@
         hideDialogue();
 
         document.querySelector("#summary").textContent =
-          chapterNumber === 2
-            ? `Tenemos ${score} de energia ` +
-              ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
-              `Mjan Mjan (Muy bien).`
-            : `Llegamos con ${score} de energia y ` +
-              `${shellCount} perlas. `;
+          chapterNumber === 3
+            ? `Llegaste bajo el cielo de Orión con ${score} de energía y ` +
+              `${shellCount} perlas reunidas.`
+            : chapterNumber === 2
+              ? `Tenemos ${score} de energia ` +
+                ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
+                `Mjan Mjan (Muy bien).`
+              : `Llegamos con ${score} de energia y ` +
+                `${shellCount} perlas. `;
 
         document
           .querySelector("#finish")
@@ -1599,6 +1914,46 @@
     }
 
     function drawBackground() {
+      if (chapterNumber === 3) {
+        const nightGradient =
+          ctx.createLinearGradient(0, 0, 0, H);
+
+        nightGradient.addColorStop(0, "#02030b");
+        nightGradient.addColorStop(0.52, "#070b1a");
+        nightGradient.addColorStop(1, "#11152a");
+
+        ctx.fillStyle = nightGradient;
+        ctx.fillRect(0, 0, W, H);
+
+        for (const star of chapter3Stars) {
+          const screenX = star.x - cameraX * 0.14;
+
+          if (screenX < 0 || screenX > W) {
+            continue;
+          }
+
+          ctx.globalAlpha =
+            star.alpha *
+            (0.76 +
+              Math.sin(performance.now() / 640 + star.x) *
+                0.24);
+          ctx.fillStyle = "#dce8ff";
+          ctx.beginPath();
+          ctx.arc(
+            screenX,
+            star.y,
+            star.radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
+        drawOrionConstellation();
+        return;
+      }
+
       if (chapterNumber === 2) {
         if (
           chapter2BackgroundImage.complete &&
@@ -1735,6 +2090,67 @@
       }
     }
 
+    function drawOrionConstellation() {
+      const originX = 805;
+      const originY = 76;
+      const stars = [
+        { x: 30, y: 0 },
+        { x: -50, y: 38 },
+        { x: 90, y: 38 },
+        { x: -36, y: 90 },
+        { x: 12, y: 100 },
+        { x: 60, y: 90 },
+        { x: -65, y: 165 },
+        { x: 86, y: 165 },
+        { x: -83, y: 220 },
+        { x: 103, y: 220 },
+        { x: 16, y: 142 }
+      ];
+      const connections = [
+        [0, 1], [0, 2], [1, 3], [2, 5],
+        [3, 4], [4, 5], [3, 6], [5, 7],
+        [6, 8], [7, 9], [4, 10]
+      ];
+
+      ctx.save();
+      ctx.strokeStyle = "#9cbcff77";
+      ctx.lineWidth = 1;
+      for (const [start, end] of connections) {
+        ctx.beginPath();
+        ctx.moveTo(
+          originX + stars[start].x,
+          originY + stars[start].y
+        );
+        ctx.lineTo(
+          originX + stars[end].x,
+          originY + stars[end].y
+        );
+        ctx.stroke();
+      }
+
+      for (let index = 0; index < stars.length; index++) {
+        const star = stars[index];
+        const radius = index === 4 ? 3.2 : 2.4;
+
+        ctx.beginPath();
+        ctx.arc(
+          originX + star.x,
+          originY + star.y,
+          radius,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = index === 0
+          ? "#ffc6a3"
+          : "#e6eeff";
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
     function drawPlatforms() {
       for (const platform of platforms) {
         const screenX =
@@ -1788,6 +2204,51 @@
               platform.h
             );
             ctx.fillStyle = "#6889a8";
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              6
+            );
+          }
+        } else if (chapterNumber === 3) {
+          if (platform.kind === "moving") {
+            ctx.shadowColor = "#bea0ff";
+            ctx.shadowBlur = 14;
+            ctx.fillStyle = "#aa93e8";
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              5
+            );
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#211d38";
+            ctx.fillRect(
+              screenX + 8,
+              platform.y + 5,
+              platform.w - 16,
+              platform.h - 5
+            );
+          } else {
+            const darkRock =
+              ctx.createLinearGradient(
+                0,
+                platform.y,
+                0,
+                platform.y + platform.h
+              );
+
+            darkRock.addColorStop(0, "#252641");
+            darkRock.addColorStop(1, "#0b1021");
+            ctx.fillStyle = darkRock;
+            ctx.fillRect(
+              screenX,
+              platform.y,
+              platform.w,
+              platform.h
+            );
+            ctx.fillStyle = "#505477";
             ctx.fillRect(
               screenX,
               platform.y,
@@ -1924,7 +2385,7 @@
       }
     }
 
-    function drawChapter2Obstacles() {
+    function drawMonoliths() {
       for (const obstacle of obstacles) {
         const screenX = obstacle.x - cameraX;
 
@@ -1943,9 +2404,18 @@
             obstacle.y + obstacle.h
           );
 
-        stoneGradient.addColorStop(0, "#323248");
-        stoneGradient.addColorStop(0.5, "#171b30");
-        stoneGradient.addColorStop(1, "#45405b");
+        stoneGradient.addColorStop(
+          0,
+          chapterNumber === 3 ? "#28314f" : "#323248"
+        );
+        stoneGradient.addColorStop(
+          0.5,
+          chapterNumber === 3 ? "#0c1128" : "#171b30"
+        );
+        stoneGradient.addColorStop(
+          1,
+          chapterNumber === 3 ? "#34304f" : "#45405b"
+        );
 
         ctx.save();
         ctx.beginPath();
@@ -1958,7 +2428,9 @@
         ctx.closePath();
         ctx.fillStyle = stoneGradient;
         ctx.fill();
-        ctx.strokeStyle = "#9382a8";
+        ctx.strokeStyle = chapterNumber === 3
+          ? "#8998d5"
+          : "#9382a8";
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -1977,8 +2449,10 @@
           0,
           Math.PI * 2
         );
-        ctx.fillStyle = "#ff557b";
-        ctx.shadowColor = "#ff557b";
+        ctx.fillStyle = chapterNumber === 3
+          ? "#a98bff"
+          : "#ff557b";
+        ctx.shadowColor = ctx.fillStyle;
         ctx.shadowBlur = 16;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -2138,43 +2612,42 @@
     }
 
     function drawHud() {
-      if (chapterNumber === 2) {
-        ctx.fillStyle = "#080d25d9";
-        ctx.fillRect(14, 14, 530, 62);
-        ctx.strokeStyle = "#93cfff66";
-        ctx.strokeRect(14, 14, 530, 62);
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "700 14px system-ui";
-        ctx.fillText(
-          "goguó (2) · Meyibó y majibel ",
-          28,
-          38
-        );
-        ctx.font = "12px system-ui";
-        ctx.fillStyle = "#a9eaff";
-        ctx.fillText(
-          "F / X o la tecla de disparo para lanzar · Perlas: " + shellCount + " · Energia: " + score,
-          28,
-          60
-        );
-        return;
-      }
-
-      ctx.fillStyle = "#07162bd0";
-      ctx.fillRect(14, 14, 395, 46);
+      ctx.fillStyle = chapterNumber === 3
+        ? "#030714dc"
+        : "#07162bdc";
+      ctx.fillRect(14, 14, 700, 72);
+      ctx.strokeStyle = chapterNumber === 3
+        ? "#9ba9ff77"
+        : "#93cfff66";
+      ctx.strokeRect(14, 14, 700, 72);
+      ctx.fillStyle = "#c5d5ff";
+      ctx.font = "700 11px system-ui";
+      ctx.fillText(
+        "PRÓLOGO · MÁS ALLÁ DEL LÍMITE DE TODO LO QUE CONOZCO",
+        28,
+        30
+      );
       ctx.fillStyle = "#ffffff";
       ctx.font = "700 14px system-ui";
       ctx.fillText(
-        "tepueg (1) - k-aha-l (agua)",
-        29,
-        43
+        chapterNumber === 3
+          ? "goguó (3) · Orión"
+          : chapterNumber === 2
+            ? "goguó (2) · Meyibó y majibel"
+            : "tepueg (1) - k-aha-l (agua)",
+        28,
+        50
       );
-      ctx.fillStyle = "#d8f3ff";
+      ctx.fillStyle = chapterNumber === 3
+        ? "#c4caff"
+        : "#a9eaff";
       ctx.font = "12px system-ui";
       ctx.fillText(
-        "Perlas: " + shellCount + " · Energia: " + score,
-        29,
-        56
+        chapterNumber >= 2
+          ? `F / X o botón táctil para disparar · Perlas: ${shellCount} · Energía: ${score}`
+          : `Perlas: ${shellCount} · Energía: ${score}`,
+        28,
+        72
       );
     }
 
@@ -2190,9 +2663,9 @@
       drawBackground();
       drawPlatforms();
       drawItems();
-      if (chapterNumber === 2) {
+      if (chapterNumber >= 2) {
         drawProjectiles();
-        drawChapter2Obstacles();
+        drawMonoliths();
       } else {
         drawLighthouse();
       }
