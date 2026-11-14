@@ -10,10 +10,10 @@
 
 El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript. La versión jugable contempla:
 
-- **Capítulo 1: `tepueg (1) - k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
-- **Capítulo 2: `goguó (2) · Meyibó y majibel`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
-- **Capítulo 3: `goguó (3) · Orión`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
-- **Capítulo 4: `magacubugua (4) · andemajuong galamata`**, con una cueva, plataformas móviles, estalagmitas y monolitos que persiguen a Ixa.
+- **Capítulo 1: `Tepueg (1) · K-aha-l (Agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
+- **Capítulo 2: `Goguó (2) · Meyibó & Majibel (Ciclos)`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
+- **Capítulo 3: `Kombió (3) · Mishí (Orion)`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
+- **Capítulo 4: `Magacubugua (4) · Andemajuong Galamata (Ha llovido en la noche)`**, con una cueva, plataformas móviles, estalagmitas y monolitos que persiguen a Ixa.
 
 El resto de los actos descritos en este documento pertenece al diseño narrativo y no implica que todos los episodios estén implementados.
 
@@ -350,7 +350,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 
 ### Capítulo 1
 
-- Rótulo actual del HUD: **`tepueg (1) - k-aha-l (agua)`**.
+- Rótulo actual del HUD: **`Tepueg (1) · K-aha-l (Agua)`**.
 - Trayecto extendido hasta el faro.
 - Siete diálogos interiores de Ixa, activados al alcanzar su posición `X` y una vez por recorrido:
 
@@ -372,7 +372,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 
 ### Capítulo 2
 
-- Rótulo actual del HUD: **`goguó (2) · Meyibó y majibel`**.
+- Rótulo actual del HUD: **`Goguó (2) · Meyibó & Majibel (Ciclos)`**.
 - Plataformas elevadas.
 - Perlas azules coleccionables.
 - Perlas rojas que restan energía.
@@ -396,7 +396,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 
 ### Capítulo 3
 
-- Rótulo actual del HUD: **`goguó (3) · Orión`**.
+- Rótulo actual del HUD: **`Kombió (3) · Mishí (Orion)`**.
 - Fondo nocturno de degradado oscuro, estrellas y una representación de la constelación de Orión.
 - Plataformas elevadas y monolitos que se desplazan durante el recorrido.
 - La energía se conserva desde el capítulo 2. Las perlas azules y la derrota de los monolitos suman **10**; las perlas rojas restan **7**. Caer o chocar con un monolito resta **5**.
@@ -418,7 +418,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 
 ### Capítulo 4
 
-- Rótulo: **`magacubugua (4) · andemajuong galamata (Ha llovido en la noche)`**.
+- Rótulo actual del HUD: **`Magacubugua (4) · Andemajuong Galamata (Ha llovido en la noche)`**.
 - Fondo de cueva, piso plano y continuo, y plataformas móviles.
 - No hay perlas azules. Hay estalagmitas y estalactitas; ambas y los monolitos restan **5 puntos de energía**. Los monolitos persiguen a Ixa, se desplazan un poco más rápido y atraviesan las formaciones sin detenerse.
 - Las municiones comienzan en **13** y aumentan a **21** al alcanzar **100 puntos de energía**. Cada monolito desaparece tras **21 impactos** y devuelve **10 puntos de energía**.
