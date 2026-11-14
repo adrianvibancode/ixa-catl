@@ -420,9 +420,9 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 
 - Rótulo: **`magacubugua (4) · andemajuong galamata (Ha llovido en la noche)`**.
 - Fondo de cueva, piso plano y continuo, y plataformas móviles.
-- No hay perlas azules. Hay estalagmitas y estalactitas; ambas y los monolitos restan **5 puntos de energía**. Los monolitos persiguen a Ixa y se desplazan un poco más rápido.
+- No hay perlas azules. Hay estalagmitas y estalactitas; ambas y los monolitos restan **5 puntos de energía**. Los monolitos persiguen a Ixa, se desplazan un poco más rápido y atraviesan las formaciones sin detenerse.
 - Las municiones comienzan en **13** y aumentan a **21** al alcanzar **100 puntos de energía**. Cada monolito desaparece tras **21 impactos** y devuelve **10 puntos de energía**.
-- La recarga automática completa tarda **5 segundos** y cuesta **1 punto de energía** por recarga.
+- Cuando falta munición, la recarga automática completa el cargador tras **5 segundos** y cuesta **1 punto de energía por recarga**, independientemente de cuántas balas falten.
 - Al recibir daño, el estado inferior muestra una frase de duda o tristeza acompañada de una respuesta que anima a avanzar con cuidado y buscar apoyo.
 - La energía se conserva al llegar desde el capítulo 3; al elegir el capítulo directamente comienza con **55 puntos de energía**. Si llega a **0**, el recorrido se reinicia desde el comienzo del capítulo.
 - Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
