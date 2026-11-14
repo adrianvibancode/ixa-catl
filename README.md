@@ -13,10 +13,13 @@ El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript.
 - **Capítulo 1: `tepueg (1) - k-aha-l (agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
 - **Capítulo 2: `goguó (2) · Meyibó y majibel`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
 - **Capítulo 3: `goguó (3) · Orión`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
+- **Capítulo 4: `magacubugua (4) · andemajuong galamata`**, con una cueva, plataformas móviles, estalagmitas y monolitos que persiguen a Ixa.
 
 El resto de los actos descritos en este documento pertenece al diseño narrativo y no implica que todos los episodios estén implementados.
 
 El encabezado y el HUD muestran **PRÓLOGO · Más allá del límite de todo lo que conozco** por encima del rótulo de cada capítulo.
+
+La introducción ofrece botones para iniciar cualquiera de los cuatro capítulos. Elegir uno directamente reinicia sus contadores; los capítulos 3 y 4 comienzan con **55 puntos de energía**. Al avanzar en orden se conserva la energía acumulada.
 
 El fondo del capítulo 1 puede activarse mediante `fondo-costero-intimo.png`. El capítulo 2 admite una imagen independiente mediante la variable `chapter2BackgroundImagePath` dentro de `index.html`.
 
@@ -365,7 +368,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 - Objetos rojos provisionales: **−7**.
 - Cada objeto se contabiliza una sola vez.
 - La energía acumulada se conserva al pasar al capítulo 2.
-- Faro como transición narrativa al capítulo 2.
+- El faro marca el final del recorrido y la transición narrativa al capítulo 2.
 
 ### Capítulo 2
 
@@ -378,6 +381,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 - Cada monolito desaparece al recibir **13 impactos**; los demás permanecen. Al destruir cada uno, otorga **10 puntos de energía**.
 - Se comienza con **13 municiones**. Al alcanzar **100 puntos de energía**, la capacidad aumenta a **21**. Las municiones se recargan automáticamente 5 segundos después del último disparo.
 - La energía acumulada en el capítulo 1 se conserva al entrar; también se conserva al pasar al capítulo 3.
+- El pozo marca el final del recorrido.
 - Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
 
 | X | Título | Contexto |
@@ -399,7 +403,7 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 - Los disparos se pueden lanzar con `F`, `X` o el botón táctil. Cada monolito desaparece al recibir **13 impactos**; los demás siguen activos. Destruir cada uno otorga **10 puntos de energía**.
 - La capacidad inicia en **13 municiones** y aumenta a **21** al alcanzar **100 puntos de energía**.
 - Si la energía llega a **0**, Ixa muere y el recorrido se reinicia desde el inicio del capítulo 3, restaurando la energía con la que entró a ese capítulo.
-- Al completar el recorrido aparece el final, con opción para repetir este capítulo.
+- La entrada de la cueva marca el final del recorrido. Al completarlo aparece el final, con opción para repetir este capítulo.
 - Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
 
 | X | Título | Contexto |
@@ -412,11 +416,31 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 | 5750 | Elegir cómo responder | Explora la asertividad, la pausa y el momento de tener conversaciones incómodas. |
 | 6900 | Atender mis heridas sin perder el rumbo | Reconoce heridas y traumas sin reducirse a ellos, y propone entrenar a diario la consciencia y la atención. |
 
+### Capítulo 4
+
+- Rótulo: **`magacubugua (4) · andemajuong galamata (Ha llovido en la noche)`**.
+- Fondo de cueva y plataformas móviles.
+- No hay perlas azules. Las estalagmitas y los monolitos restan **5 puntos de energía**; los monolitos se desplazan hacia Ixa.
+- Las municiones comienzan en **13** y aumentan a **21** al alcanzar **100 puntos de energía**. Cada monolito desaparece tras **13 impactos** y devuelve **10 puntos de energía**.
+- Al recibir daño, el estado inferior muestra una frase de duda o tristeza acompañada de una respuesta que anima a avanzar con cuidado y buscar apoyo.
+- La energía se conserva al llegar desde el capítulo 3; al elegir el capítulo directamente comienza con **55 puntos de energía**. Si llega a **0**, el recorrido se reinicia desde el comienzo del capítulo.
+- Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
+
+| X | Título | Contexto |
+|---:|---|---|
+| 1 | Lo que temo nombrar | Ixa reconoce el temor de entrar en la cueva y se permite avanzar despacio y escuchar lo que siente. |
+| 1100 | La tristeza que guardo | Nombra una tristeza silenciosa y recuerda que merece compañía y descanso. |
+| 2200 | El miedo a perderme | Observa el temor a perder nombres, voces y lugares, sin dejar que decida cada paso. |
+| 3300 | Mi cuerpo también recuerda | Reconoce la memoria corporal del miedo y elige un paso que la cuide. |
+| 4400 | Lo que necesito decir | Se permite hablar de su tristeza y pedir compañía. |
+| 5500 | No soy solo mis pérdidas | Acepta que sus pérdidas forman parte de su historia, pero no la definen por completo. |
+| 6600 | Un paso en la oscuridad | Avanza con cuidado sin exigirse dejar de sentir miedo. |
+
 ### Controles
 
 - `A` / `D` o flechas: caminar.
 - `W`, flecha arriba o barra espaciadora: saltar.
-- `F` o `X`: lanzar munición en los capítulos 2 y 3.
+- `F` o `X`: lanzar munición en los capítulos 2, 3 y 4.
 - En dispositivos táctiles aparecen controles en pantalla, incluido el botón para disparar.
 
 ## Archivos del juego

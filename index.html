@@ -151,6 +151,61 @@
       outline-offset: 3px;
     }
 
+    .chapter-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .chapter-option {
+      display: flex;
+      min-width: 0;
+      min-height: 132px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 14px;
+      border: 1px solid #ffffff30;
+      border-radius: 14px;
+      background: #19304a;
+      color: #e5edf5;
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    .chapter-option:hover {
+      transform: translateY(-2px);
+      border-color: #70dcff;
+      background: #203d5c;
+    }
+
+    .chapter-option:focus-visible {
+      outline: 3px solid #70dcff;
+      outline-offset: 3px;
+    }
+
+    .chapter-option .chapter-index {
+      color: #9ddff0;
+      font-size: 0.68rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+    }
+
+    .chapter-option strong {
+      color: #ffd067;
+      font-size: 0.92rem;
+    }
+
+    .chapter-option .chapter-description {
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
     .btn.secondary {
       background: #d9e8f4;
     }
@@ -313,6 +368,10 @@
       display: block;
     }
 
+    .touch.chapter-four .fire-control {
+      display: block;
+    }
+
     @media (pointer: coarse) {
       .touch {
         display: flex;
@@ -330,6 +389,17 @@
 
       .card {
         padding: 17px;
+      }
+
+      .chapter-options {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .chapter-option {
+        min-height: 0;
+        gap: 5px;
+        padding: 11px 13px;
       }
 
       .dialogue {
@@ -377,33 +447,83 @@
       <!-- INTRODUCCIÓN -->
       <div class="modal" id="intro">
         <div class="card">
-          <small>
-            Prólogo· 
-          </small>
+          <small>PRÓLOGO · MÁS ALLÁ DE LA COSTA</small>
 
-          <h2>Más allá de la costa</h2>
+          <h2>Elige un capítulo</h2>
 
           <blockquote>
-            Tomaremos las perlas azules y evitaremos las rojas, cuidado con los huecos.
-             
+            Las perlas azules conservan energía; evita las rojas y los huecos.
+            Acompaña a Ixa hasta el faro, el pozo y, más allá, la cueva.
           </blockquote>
 
           <p>
-            El objetivo es llegar al faro.
+            Puedes comenzar por cualquier capítulo. Cada elección reinicia
+            los contadores; al avanzar en orden, conservas la energía.
           </p>
 
-          <button class="btn" id="start">
-            Iniciar
-          </button>
+          <div
+            class="chapter-options"
+            role="group"
+            aria-label="Seleccionar capítulo"
+          >
+            <button
+              class="chapter-option"
+              id="start"
+              type="button"
+              data-chapter-select="1"
+            >
+              <span class="chapter-index">CAPÍTULO 1</span>
+              <strong>Más allá de la costa</strong>
+              <span class="chapter-description">
+                Reúne perlas y acompaña a Ixa hasta el faro.
+              </span>
+            </button>
+
+            <button
+              class="chapter-option"
+              type="button"
+              data-chapter-select="2"
+            >
+              <span class="chapter-index">CAPÍTULO 2</span>
+              <strong>Meyibó y majibel</strong>
+              <span class="chapter-description">
+                Enfrenta los monolitos y encuentra el pozo.
+              </span>
+            </button>
+
+            <button
+              class="chapter-option"
+              type="button"
+              data-chapter-select="3"
+            >
+              <span class="chapter-index">CAPÍTULO 3</span>
+              <strong>Bajo el cielo de Orión</strong>
+              <span class="chapter-description">
+                Conserva tu energía y busca la entrada de la cueva.
+              </span>
+            </button>
+
+            <button
+              class="chapter-option"
+              type="button"
+              data-chapter-select="4"
+            >
+              <span class="chapter-index">CAPÍTULO 4</span>
+              <strong>Ha llovido en la noche</strong>
+              <span class="chapter-description">
+                Hora de entrar en la cueva.
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- FINAL DEL CAPÍTULO -->
       <div class="modal hide" id="finish">
         <div class="card">
-          <small>Finalizado.</small>
+          <small>Finalizado</small>
 
-          <h2>¡Enhorabuena!</h2>
+          <h2>Hui ami ibaha (¡Muy Bien!)</h2>
 
           <p ></p>
 
@@ -558,12 +678,23 @@
     let obstacles = [];
     let standingPlatform = null;
     let chapter3MotionTime = 0;
+    let chapter4MotionTime = 0;
+    let chapter4DamageCooldown = 0;
     const projectiles = [];
     const ammoUpgradeThreshold = 100;
     const upgradedAmmoCapacity = 21;
     let maxAmmo = 13;
     const monolithHitsToDestroy = 13;
     const monolithEnergyReward = 10;
+    const chapter3StartingEnergy = 55;
+    const chapter4StartingEnergy = 55;
+    const chapter4DamageMessages = [
+      "La duda susurra que no podré. Respiro y doy el siguiente paso.",
+      "El miedo minimiza mi esfuerzo; puedo avanzar a mi propio ritmo.",
+      "Una voz interior cuestiona mi valor. No todo pensamiento dice la verdad.",
+      "La tristeza pesa hoy; puedo respirar y buscar compañía.",
+      "La duda dice que no hay salida; miro alrededor y elijo un paso."
+    ];
     let chapterStartingEnergy = 0;
     let ammoCapacityUpgraded = false;
     let ammo = maxAmmo;
@@ -577,7 +708,7 @@
     const chapter1Dialogues = [
       {
         x: 1,
-        title: "Las manos que me hicieron un lugar",
+        title: "Auka Sum/San (Hola hermano(a))",
         text:
           "Hoy celebro el inicio de mi camino hacia la madurez. " +
           "En mi pueblo decimos que sobrevivir a la noche es llegar a casa " +
@@ -587,7 +718,7 @@
       },
       {
         x: 700,
-        title: "Auka Sum/San (Hola hermano(a))",
+        title: "Las manos que me hicieron un lugar",
         text:
           " Sabes... cuando era más pequeño creía que mi nombre me pertenecia. " +
           "Ahora entiendo que también vive en la voz de Naiyá, " +
@@ -904,6 +1035,123 @@
       };
     });
 
+    const chapter4WorldWidth = 7600;
+    const chapter4Platforms = [];
+
+    for (let x = 0, index = 0; x < chapter4WorldWidth;) {
+      const width = 560 + (index % 3) * 80;
+      const gap = 120 + (index % 2) * 30;
+      const heights = [446, 425, 455, 430, 440];
+      const y = heights[index % heights.length];
+
+      chapter4Platforms.push({
+        x,
+        y,
+        w: width,
+        h: H - y,
+        kind: "ground"
+      });
+
+      x += width + gap;
+      index++;
+    }
+
+    chapter4Platforms.push({
+      x: chapter4WorldWidth - 520,
+      y: 420,
+      w: 520,
+      h: 120,
+      kind: "ground"
+    });
+
+    const chapter4GroundPlatforms = chapter4Platforms.filter(
+      (platform) => platform.kind === "ground"
+    );
+    const chapter4MovingPlatforms = chapter4GroundPlatforms
+      .slice(1, -1)
+      .map((ground, index) => {
+        const width = 170 + (index % 3) * 18;
+        const baseX =
+          ground.x + ground.w / 2 - width / 2;
+        const baseY = Math.max(
+          245,
+          ground.y - 150 - (index % 2) * 18
+        );
+
+        return {
+          x: baseX,
+          y: baseY,
+          baseX,
+          baseY,
+          w: width,
+          h: 12,
+          kind: "moving",
+          moving: true,
+          amplitudeX: index % 2 === 0 ? 34 : 18,
+          amplitudeY: index % 2 === 0 ? 18 : 28,
+          speed: 0.65 + (index % 3) * 0.12,
+          phase: index * 1.3,
+          deltaX: 0,
+          deltaY: 0
+        };
+      });
+
+    chapter4Platforms.push(...chapter4MovingPlatforms);
+
+    const chapter4Stalagmites = chapter4GroundPlatforms
+      .filter(
+        (_, index) =>
+          index > 0 &&
+          index < chapter4GroundPlatforms.length - 1 &&
+          index % 2 === 0
+      )
+      .map((ground, index) => {
+        const w = 54 + (index % 2) * 14;
+        const h = 68 + (index % 3) * 14;
+        const x = ground.x + (ground.w - w) / 2;
+
+        return {
+          x,
+          y: ground.y - h,
+          w,
+          h,
+          baseY: ground.y
+        };
+      });
+
+    const chapter4Obstacles = chapter4GroundPlatforms
+      .filter(
+        (_, index) =>
+          index > 0 &&
+          index < chapter4GroundPlatforms.length - 1 &&
+          index % 2 === 1
+      )
+      .map((ground, index) => {
+        const w = 60 + (index % 2) * 8;
+        const h = 112 + (index % 3) * 12;
+        const minX = ground.x + 24;
+        const maxX = ground.x + ground.w - w - 24;
+        const x = Math.min(
+          maxX,
+          Math.max(minX, ground.x + ground.w * 0.58)
+        );
+
+        return {
+          x,
+          y: ground.y - h,
+          initialX: x,
+          initialY: ground.y - h,
+          minX,
+          maxX,
+          w,
+          h,
+          hits: 0,
+          speed: 0.9 + (index % 3) * 0.12
+        };
+      });
+
+    const chapter4Items = [];
+
     const chapter2Dialogues = [
       {
         x: 1,
@@ -1040,6 +1288,70 @@
       seen: false
     }));
 
+    const chapter4Dialogues = [
+      {
+        x: 1,
+        title: "Lo que temo nombrar",
+        text:
+          "Las plataformas se mueven bajo mis pies. En esta cueva no hay " +
+          "perlas azules: las estalagmitas y los monolitos pueden herirme, " +
+          "y ellos avanzan hacia mí. Entro con temor; aun así, puedo avanzar " +
+          "despacio y escuchar lo que siento."
+      },
+      {
+        x: 1100,
+        title: "La tristeza que guardo",
+        text:
+          "Hay tristezas que no hacen ruido; se quedan conmigo mientras " +
+          "sigo caminando. No tengo que fingir que estoy bien para merecer " +
+          "compañía. Puedo nombrar lo que pesa y descansar un momento."
+      },
+      {
+        x: 2200,
+        title: "El miedo a perderme",
+        text:
+          "A veces no temo a la oscuridad, sino a lo que podría quitarme: " +
+          "los nombres, las voces, los lugares que me sostenían. No sé cuánto " +
+          "podré conservar. Dejo que el miedo exista sin permitir que decida " +
+          "cada uno de mis pasos."
+      },
+      {
+        x: 3300,
+        title: "Mi cuerpo también recuerda",
+        text:
+          "Cuando el peligro se acerca, mi cuerpo recuerda antes que mis " +
+          "pensamientos. No estoy fallando por sentir miedo. Puedo reconocerlo, " +
+          "mirar dónde estoy y elegir el paso que me cuida."
+      },
+      {
+        x: 4400,
+        title: "Lo que necesito decir",
+        text:
+          "A veces callo para no inquietar a los demás, y la soledad crece. " +
+          "Quiero aprender a decir que estoy triste, que tengo miedo o que " +
+          "necesito compañía. Pedir que alguien se quede también es valentía."
+      },
+      {
+        x: 5500,
+        title: "No soy solo mis pérdidas",
+        text:
+          "Lo que perdí forma parte de mí, pero no cuenta toda mi historia. " +
+          "Puedo extrañar sin quedarme inmóvil; puedo seguir y llevar conmigo " +
+          "lo que aprendí de quienes amé."
+      },
+      {
+        x: 6600,
+        title: "Un paso en la oscuridad",
+        text:
+          "La cueva no se abre de golpe; yo tampoco. Respiro, escucho mis " +
+          "pasos y avanzo sin exigirme no tener miedo. A veces la salida no " +
+          "es una respuesta, sino el siguiente paso, dado con cuidado."
+      }
+    ].map((dialogue) => ({
+      ...dialogue,
+      seen: false
+    }));
+
     let platforms = chapter1Platforms;
     let items = chapter1Items;
     let dialogues = chapter1Dialogues;
@@ -1061,6 +1373,15 @@
         y: (index * 97 + 17) % 340,
         radius: 0.7 + (index % 4) * 0.35,
         alpha: 0.38 + (index % 5) * 0.11
+      })
+    );
+
+    const chapter4CeilingSpikes = Array.from(
+      { length: 48 },
+      (_, index) => ({
+        x: 30 + index * 165,
+        w: 42 + (index % 4) * 18,
+        h: 48 + (index % 5) * 18
       })
     );
 
@@ -1115,11 +1436,22 @@
     }
 
     function loseEnergy(amount, statusMessage) {
+      if (chapterNumber === 4) {
+        if (chapter4DamageCooldown > 0) {
+          return false;
+        }
+
+        chapter4DamageCooldown = 900;
+        statusMessage = chapter4DamageMessages[
+          Math.floor(Math.random() * chapter4DamageMessages.length)
+        ];
+      }
+
       score = Math.max(0, score - amount);
 
-      if (chapterNumber === 3 && score === 0) {
+      if ((chapterNumber === 3 || chapterNumber === 4) && score === 0) {
         resetGame(
-          "La energía se agotó. Regresas al inicio del capítulo 3."
+          `La energía se agotó. Regresas al inicio del capítulo ${chapterNumber}.`
         );
         return true;
       }
@@ -1134,37 +1466,50 @@
       chapterNumber = number;
       const isChapter2 = chapterNumber === 2;
       const isChapter3 = chapterNumber === 3;
+      const isChapter4 = chapterNumber === 4;
 
-      document.title = isChapter3
-        ? "IXA & ÁCATL · Bajo el cielo de Orión"
-        : isChapter2
-          ? "IXA & ÁCATL · Alma, Revelaciones y una Noche de Angustia"
-          : "IXA & ÁCATL · Prólogo";
-      worldWidth = isChapter3
-        ? chapter3WorldWidth
-        : isChapter2
-          ? chapter2WorldWidth
-          : chapter1WorldWidth;
-      platforms = isChapter3
-        ? chapter3Platforms
-        : isChapter2
-          ? chapter2Platforms
-          : chapter1Platforms;
-      items = isChapter3
-        ? chapter3Items
-        : isChapter2
-          ? chapter2Items
-          : chapter1Items;
-      dialogues = isChapter3
-        ? chapter3Dialogues
-        : isChapter2
-          ? chapter2Dialogues
-          : chapter1Dialogues;
-      obstacles = isChapter3
-        ? chapter3Obstacles
-        : isChapter2
-          ? chapter2Obstacles
-          : [];
+      document.title = isChapter4
+        ? "IXA & ÁCATL · Magacubugua (4)"
+        : isChapter3
+          ? "IXA & ÁCATL · Bajo el cielo de Orión"
+          : isChapter2
+            ? "IXA & ÁCATL · Alma, Revelaciones y una Noche de Angustia"
+            : "IXA & ÁCATL · Prólogo";
+      worldWidth = isChapter4
+        ? chapter4WorldWidth
+        : isChapter3
+          ? chapter3WorldWidth
+          : isChapter2
+            ? chapter2WorldWidth
+            : chapter1WorldWidth;
+      platforms = isChapter4
+        ? chapter4Platforms
+        : isChapter3
+          ? chapter3Platforms
+          : isChapter2
+            ? chapter2Platforms
+            : chapter1Platforms;
+      items = isChapter4
+        ? chapter4Items
+        : isChapter3
+          ? chapter3Items
+          : isChapter2
+            ? chapter2Items
+            : chapter1Items;
+      dialogues = isChapter4
+        ? chapter4Dialogues
+        : isChapter3
+          ? chapter3Dialogues
+          : isChapter2
+            ? chapter2Dialogues
+            : chapter1Dialogues;
+      obstacles = isChapter4
+        ? chapter4Obstacles
+        : isChapter3
+          ? chapter3Obstacles
+          : isChapter2
+            ? chapter2Obstacles
+            : [];
       obstacles.forEach((obstacle) => {
         obstacle.hits = 0;
       });
@@ -1175,24 +1520,31 @@
       document
         .querySelector(".touch")
         .classList.toggle("chapter-three", isChapter3);
+      document
+        .querySelector(".touch")
+        .classList.toggle("chapter-four", isChapter4);
 
       document.querySelector("#chapter2").textContent =
-        "Continuar";
-      document.querySelector("#chapter2").hidden = isChapter3;
-      document.querySelector("#again").textContent =
         isChapter3
-          ? "Repetir capítulo 3"
+          ? "Entrar en la cueva"
+          : "Continuar";
+      document.querySelector("#chapter2").hidden = isChapter4;
+      document.querySelector("#again").textContent =
+        isChapter3 || isChapter4
+          ? `Repetir capítulo ${chapterNumber}`
           : "Repetir";
 
       document.querySelector("#finish small").textContent =
         `CAPÍTULO ${chapterNumber} COMPLETADO`;
 
       document.querySelector("#finish h2").textContent =
-        isChapter3
-          ? "Bajo el cielo de Orión"
-          : isChapter2
-            ? "La penumbra"
-            : "En el atardecer";
+        isChapter4
+          ? "La cueva"
+          : isChapter3
+            ? "La entrada de la cueva"
+            : isChapter2
+              ? "El pozo"
+              : "El faro";
 
       updateHud();
     }
@@ -1284,11 +1636,30 @@
       }
     }
 
+    function resetChapter4Motion() {
+      chapter4MotionTime = 0;
+
+      for (const platform of chapter4MovingPlatforms) {
+        platform.x = platform.baseX;
+        platform.y = platform.baseY;
+        platform.deltaX = 0;
+        platform.deltaY = 0;
+      }
+
+      for (const obstacle of chapter4Obstacles) {
+        obstacle.x = obstacle.initialX;
+        obstacle.y = obstacle.initialY;
+        obstacle.hits = 0;
+      }
+    }
+
     function resetGame(
       message = "El recorrido ha comenzado de nuevo."
     ) {
       if (chapterNumber === 3) {
         resetChapter3Motion();
+      } else if (chapterNumber === 4) {
+        resetChapter4Motion();
       }
 
       const spawnPlatform = platforms.find(
@@ -1322,16 +1693,19 @@
       finished = false;
       jumpConsumed = false;
       dialogueTimer = 0;
+      chapter4DamageCooldown = 0;
       ammo = maxAmmo;
       ammoReloadTimer = 0;
       ammoHudTimer = 0;
       fireCooldown = 0;
       projectiles.length = 0;
-      obstacles = chapterNumber === 3
-        ? chapter3Obstacles
-        : chapterNumber === 2
-          ? chapter2Obstacles
-          : [];
+      obstacles = chapterNumber === 4
+        ? chapter4Obstacles
+        : chapterNumber === 3
+          ? chapter3Obstacles
+          : chapterNumber === 2
+            ? chapter2Obstacles
+            : [];
       obstacles.forEach((obstacle) => {
         obstacle.hits = 0;
       });
@@ -1359,6 +1733,34 @@
       document.querySelector("#status").textContent =
         message;
       updateHud();
+    }
+
+    function startChapterFromMenu(number) {
+      if (![1, 2, 3, 4].includes(number)) {
+        throw new RangeError(`Capítulo no válido: ${number}`);
+      }
+
+      chapterStartingEnergy = number === 4
+        ? chapter4StartingEnergy
+        : number === 3
+          ? chapter3StartingEnergy
+          : 0;
+      maxAmmo = 13;
+      ammoCapacityUpgraded = false;
+      configureChapter(number);
+      started = true;
+      document
+        .querySelector("#intro")
+        .classList.add("hide");
+      resetGame(
+        number === 1
+          ? "Comienza el prólogo."
+          : number === 2
+            ? "Comienza el capítulo 2."
+            : number === 3
+              ? "Comienza el capítulo 3 bajo el cielo de Orión."
+              : "Comienza el capítulo 4 en la cueva."
+      );
     }
 
     function handleKeyDown(event) {
@@ -1405,16 +1807,13 @@
     );
 
     document
-      .querySelector("#start")
-      .addEventListener("click", () => {
-        document
-          .querySelector("#intro")
-          .classList.add("hide");
-
-        started = true;
-
-        document.querySelector("#status").textContent =
-          "Mientras me adentro mas, escucho lo que todavía no sé decir.";
+      .querySelectorAll("[data-chapter-select]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          startChapterFromMenu(
+            Number(button.dataset.chapterSelect)
+          );
+        });
       });
 
     document
@@ -1430,11 +1829,13 @@
         started = true;
 
         resetGame(
-          chapterNumber === 3
+        chapterNumber === 4
+          ? "Volvemos a entrar en la cueva."
+          : chapterNumber === 3
             ? "Volvemos bajo el cielo de Orión."
             : chapterNumber === 2
-            ? "Vamos de nuevo."
-            : "Volvemos a recorrer la orilla."
+              ? "Vamos de nuevo."
+              : "Volvemos a recorrer la orilla."
         );
       });
 
@@ -1551,6 +1952,41 @@
         item.x = item.platform.x + item.platform.w / 2;
         item.y += item.platform.deltaY;
         item.platformY = item.platform.y;
+      }
+    }
+
+    function updateChapter4Motion(deltaTime) {
+      const timeScale = deltaTime / 16.67;
+      chapter4MotionTime += deltaTime / 1000;
+
+      for (const platform of chapter4MovingPlatforms) {
+        const previousX = platform.x;
+        const previousY = platform.y;
+        const movementPhase =
+          chapter4MotionTime * platform.speed + platform.phase;
+
+        platform.x =
+          platform.baseX +
+          Math.sin(movementPhase) * platform.amplitudeX;
+        platform.y =
+          platform.baseY +
+          Math.cos(movementPhase) * platform.amplitudeY;
+        platform.deltaX = platform.x - previousX;
+        platform.deltaY = platform.y - previousY;
+      }
+
+      for (const obstacle of chapter4Obstacles) {
+        const targetX = Math.max(
+          obstacle.minX,
+          Math.min(obstacle.maxX, player.x)
+        );
+        const distanceToPlayer = targetX - obstacle.x;
+        const movement = Math.min(
+          Math.abs(distanceToPlayer),
+          obstacle.speed * timeScale
+        );
+
+        obstacle.x += Math.sign(distanceToPlayer) * movement;
       }
     }
 
@@ -1691,12 +2127,49 @@
       return false;
     }
 
+    function handleStalagmiteCollisions() {
+      for (const stalagmite of chapter4Stalagmites) {
+        if (!intersects(player, stalagmite)) {
+          continue;
+        }
+
+        const approachedFromLeft =
+          player.x + player.w / 2 <
+          stalagmite.x + stalagmite.w / 2;
+        player.x = approachedFromLeft
+          ? stalagmite.x - player.w - 8
+          : stalagmite.x + stalagmite.w + 8;
+        player.x = Math.max(
+          0,
+          Math.min(worldWidth - player.w, player.x)
+        );
+        player.vx = 0;
+        player.vy = -5;
+        player.grounded = false;
+        standingPlatform = null;
+
+        return loseEnergy(5, "La cueva me obliga a detenerme.");
+      }
+
+      return false;
+    }
+
     function update(deltaTime) {
       if (!started || finished) {
         return;
       }
 
-      if (chapterNumber === 3) {
+      if (chapterNumber === 4) {
+        chapter4DamageCooldown = Math.max(
+          0,
+          chapter4DamageCooldown - deltaTime
+        );
+        updateChapter4Motion(deltaTime);
+        if (standingPlatform && standingPlatform.moving) {
+          player.x += standingPlatform.deltaX;
+          player.y += standingPlatform.deltaY;
+        }
+      } else if (chapterNumber === 3) {
         updateChapter3Motion(deltaTime);
         if (standingPlatform && standingPlatform.moving) {
           player.x += standingPlatform.deltaX;
@@ -1827,6 +2300,13 @@
       );
 
       if (
+        chapterNumber === 4 &&
+        handleStalagmiteCollisions()
+      ) {
+        return;
+      }
+
+      if (
         chapterNumber >= 2 &&
         handleObstacleCollisions()
       ) {
@@ -1947,15 +2427,17 @@
         hideDialogue();
 
         document.querySelector("#summary").textContent =
-          chapterNumber === 3
-            ? `Llegaste bajo el cielo de Orión con ${score} de energía y ` +
-              `${shellCount} perlas reunidas.`
-            : chapterNumber === 2
-              ? `Tenemos ${score} de energia ` +
-                ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
-                `Mjan Mjan (Muy bien).`
-              : `Llegamos con ${score} de energia y ` +
-                `${shellCount} perlas. `;
+          chapterNumber === 4
+            ? `Atravesaste la cueva con ${score} de energía.`
+            : chapterNumber === 3
+              ? `Llegaste bajo el cielo de Orión con ${score} de energía y ` +
+                `${shellCount} perlas reunidas. Encontraste la entrada de la cueva.`
+              : chapterNumber === 2
+                ? `Tenemos ${score} de energia ` +
+                  ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
+                  `Alcanzamos el pozo. Mjan Mjan (Muy bien).`
+                : `Llegamos con ${score} de energia y ` +
+                  `${shellCount} perlas. El faro nos espera.`;
 
         document
           .querySelector("#finish")
@@ -1964,6 +2446,67 @@
     }
 
     function drawBackground() {
+      if (chapterNumber === 4) {
+        const caveGradient =
+          ctx.createLinearGradient(0, 0, 0, H);
+
+        caveGradient.addColorStop(0, "#05070d");
+        caveGradient.addColorStop(0.52, "#141522");
+        caveGradient.addColorStop(1, "#29212a");
+        ctx.fillStyle = caveGradient;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.fillStyle = "#0b0d17";
+        ctx.beginPath();
+        ctx.moveTo(0, 150);
+        ctx.lineTo(115, 185);
+        ctx.lineTo(210, 135);
+        ctx.lineTo(340, 178);
+        ctx.lineTo(480, 128);
+        ctx.lineTo(620, 170);
+        ctx.lineTo(790, 122);
+        ctx.lineTo(W, 165);
+        ctx.lineTo(W, 0);
+        ctx.lineTo(0, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        for (const spike of chapter4CeilingSpikes) {
+          const screenX = spike.x - cameraX * 0.18;
+
+          if (screenX + spike.w < 0 || screenX > W) {
+            continue;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(screenX, 0);
+          ctx.lineTo(screenX + spike.w * 0.52, spike.h);
+          ctx.lineTo(screenX + spike.w, 0);
+          ctx.closePath();
+          ctx.fillStyle = "#151724";
+          ctx.fill();
+          ctx.strokeStyle = "#4a465277";
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = "#8c7d9655";
+        for (let index = 0; index < 7; index++) {
+          const glowX =
+            (index * 173 + 98 - cameraX * 0.08) % (W + 80);
+          ctx.beginPath();
+          ctx.arc(
+            glowX,
+            175 + (index % 3) * 62,
+            2 + (index % 2),
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+
+        return;
+      }
+
       if (chapterNumber === 3) {
         const nightGradient =
           ctx.createLinearGradient(0, 0, 0, H);
@@ -2261,11 +2804,13 @@
               6
             );
           }
-        } else if (chapterNumber === 3) {
+        } else if (chapterNumber === 3 || chapterNumber === 4) {
+          const isCave = chapterNumber === 4;
+
           if (platform.kind === "moving") {
-            ctx.shadowColor = "#bea0ff";
+            ctx.shadowColor = isCave ? "#83c7bd" : "#bea0ff";
             ctx.shadowBlur = 14;
-            ctx.fillStyle = "#aa93e8";
+            ctx.fillStyle = isCave ? "#86a79a" : "#aa93e8";
             ctx.fillRect(
               screenX,
               platform.y,
@@ -2273,7 +2818,7 @@
               5
             );
             ctx.shadowBlur = 0;
-            ctx.fillStyle = "#211d38";
+            ctx.fillStyle = isCave ? "#252c2a" : "#211d38";
             ctx.fillRect(
               screenX + 8,
               platform.y + 5,
@@ -2289,8 +2834,14 @@
                 platform.y + platform.h
               );
 
-            darkRock.addColorStop(0, "#252641");
-            darkRock.addColorStop(1, "#0b1021");
+            darkRock.addColorStop(
+              0,
+              isCave ? "#403940" : "#252641"
+            );
+            darkRock.addColorStop(
+              1,
+              isCave ? "#18171e" : "#0b1021"
+            );
             ctx.fillStyle = darkRock;
             ctx.fillRect(
               screenX,
@@ -2298,7 +2849,7 @@
               platform.w,
               platform.h
             );
-            ctx.fillStyle = "#505477";
+            ctx.fillStyle = isCave ? "#71645f" : "#505477";
             ctx.fillRect(
               screenX,
               platform.y,
@@ -2404,6 +2955,57 @@
       }
     }
 
+    function drawStalagmites() {
+      for (const stalagmite of chapter4Stalagmites) {
+        const screenX = stalagmite.x - cameraX;
+
+        if (
+          screenX + stalagmite.w < 0 ||
+          screenX > W
+        ) {
+          continue;
+        }
+
+        const spikeGradient =
+          ctx.createLinearGradient(
+            screenX,
+            stalagmite.y,
+            screenX + stalagmite.w,
+            stalagmite.baseY
+          );
+        spikeGradient.addColorStop(0, "#b8a595");
+        spikeGradient.addColorStop(0.45, "#68585a");
+        spikeGradient.addColorStop(1, "#302b36");
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(screenX, stalagmite.baseY);
+        ctx.lineTo(
+          screenX + stalagmite.w * 0.44,
+          stalagmite.y + stalagmite.h * 0.24
+        );
+        ctx.lineTo(
+          screenX + stalagmite.w * 0.55,
+          stalagmite.y
+        );
+        ctx.lineTo(
+          screenX + stalagmite.w * 0.68,
+          stalagmite.y + stalagmite.h * 0.3
+        );
+        ctx.lineTo(
+          screenX + stalagmite.w,
+          stalagmite.baseY
+        );
+        ctx.closePath();
+        ctx.fillStyle = spikeGradient;
+        ctx.fill();
+        ctx.strokeStyle = "#d1b6a477";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
     function drawProjectiles() {
       for (const projectile of projectiles) {
         const screenX =
@@ -2456,15 +3058,27 @@
 
         stoneGradient.addColorStop(
           0,
-          chapterNumber === 3 ? "#28314f" : "#323248"
+          chapterNumber === 4
+            ? "#3d3b3e"
+            : chapterNumber === 3
+              ? "#28314f"
+              : "#323248"
         );
         stoneGradient.addColorStop(
           0.5,
-          chapterNumber === 3 ? "#0c1128" : "#171b30"
+          chapterNumber === 4
+            ? "#15171b"
+            : chapterNumber === 3
+              ? "#0c1128"
+              : "#171b30"
         );
         stoneGradient.addColorStop(
           1,
-          chapterNumber === 3 ? "#34304f" : "#45405b"
+          chapterNumber === 4
+            ? "#52484a"
+            : chapterNumber === 3
+              ? "#34304f"
+              : "#45405b"
         );
 
         ctx.save();
@@ -2478,9 +3092,11 @@
         ctx.closePath();
         ctx.fillStyle = stoneGradient;
         ctx.fill();
-        ctx.strokeStyle = chapterNumber === 3
-          ? "#8998d5"
-          : "#9382a8";
+        ctx.strokeStyle = chapterNumber === 4
+          ? "#9a8078"
+          : chapterNumber === 3
+            ? "#8998d5"
+            : "#9382a8";
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -2499,9 +3115,11 @@
           0,
           Math.PI * 2
         );
-        ctx.fillStyle = chapterNumber === 3
-          ? "#a98bff"
-          : "#ff557b";
+        ctx.fillStyle = chapterNumber === 4
+          ? "#e17b5b"
+          : chapterNumber === 3
+            ? "#a98bff"
+            : "#ff557b";
         ctx.shadowColor = ctx.fillStyle;
         ctx.shadowBlur = 16;
         ctx.fill();
@@ -2661,12 +3279,203 @@
       ctx.fill();
     }
 
+    function drawWell() {
+      const screenX =
+        worldWidth - 250 - cameraX;
+      const groundY = 420;
+
+      ctx.save();
+
+      ctx.fillStyle = "#050b14a0";
+      ctx.beginPath();
+      ctx.ellipse(
+        screenX,
+        groundY,
+        74,
+        14,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      const stoneGradient =
+        ctx.createLinearGradient(
+          screenX - 56,
+          350,
+          screenX + 56,
+          groundY
+        );
+      stoneGradient.addColorStop(0, "#c8b99a");
+      stoneGradient.addColorStop(0.5, "#756b5e");
+      stoneGradient.addColorStop(1, "#3e4650");
+
+      ctx.beginPath();
+      ctx.moveTo(screenX - 56, 354);
+      ctx.lineTo(screenX + 56, 354);
+      ctx.lineTo(screenX + 42, groundY);
+      ctx.lineTo(screenX - 42, groundY);
+      ctx.closePath();
+      ctx.fillStyle = stoneGradient;
+      ctx.fill();
+      ctx.strokeStyle = "#d8c8a477";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.strokeStyle = "#202936";
+      ctx.lineWidth = 3;
+      for (const rowY of [374, 397]) {
+        ctx.beginPath();
+        ctx.moveTo(screenX - 49, rowY);
+        ctx.lineTo(screenX + 49, rowY);
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.ellipse(
+        screenX,
+        354,
+        56,
+        14,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fillStyle = "#d4c6a9";
+      ctx.fill();
+      ctx.strokeStyle = "#eee1c2";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(
+        screenX,
+        355,
+        40,
+        8,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fillStyle = "#102235";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(
+        screenX - 8,
+        354,
+        19,
+        2,
+        -0.15,
+        0,
+        Math.PI * 2
+      );
+      ctx.fillStyle = "#80d9e8";
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawCaveEntrance() {
+      const screenX =
+        worldWidth - 245 - cameraX;
+      const groundY = 420;
+      const caveGradient =
+        ctx.createLinearGradient(
+          screenX - 100,
+          265,
+          screenX + 100,
+          groundY
+        );
+      caveGradient.addColorStop(0, "#807b91");
+      caveGradient.addColorStop(0.55, "#39384d");
+      caveGradient.addColorStop(1, "#171a2a");
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(screenX - 104, groundY);
+      ctx.lineTo(screenX - 92, 333);
+      ctx.quadraticCurveTo(
+        screenX - 74,
+        269,
+        screenX,
+        253
+      );
+      ctx.quadraticCurveTo(
+        screenX + 74,
+        269,
+        screenX + 92,
+        333
+      );
+      ctx.lineTo(screenX + 104, groundY);
+      ctx.closePath();
+      ctx.fillStyle = caveGradient;
+      ctx.fill();
+      ctx.strokeStyle = "#a9a0c477";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(screenX - 59, groundY);
+      ctx.lineTo(screenX - 55, 342);
+      ctx.quadraticCurveTo(
+        screenX - 46,
+        293,
+        screenX,
+        286
+      );
+      ctx.quadraticCurveTo(
+        screenX + 46,
+        293,
+        screenX + 55,
+        342
+      );
+      ctx.lineTo(screenX + 59, groundY);
+      ctx.closePath();
+      ctx.fillStyle = "#030610";
+      ctx.fill();
+
+      ctx.fillStyle = "#8c82bd";
+      ctx.beginPath();
+      ctx.ellipse(
+        screenX - 68,
+        331,
+        10,
+        4,
+        -0.4,
+        0,
+        Math.PI * 2
+      );
+      ctx.ellipse(
+        screenX + 70,
+        329,
+        8,
+        4,
+        0.35,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawChapterLandmark() {
+      if (chapterNumber === 1) {
+        drawLighthouse();
+      } else if (chapterNumber === 2) {
+        drawWell();
+      } else if (chapterNumber === 3) {
+        drawCaveEntrance();
+      }
+    }
+
     function drawHud() {
-      ctx.fillStyle = chapterNumber === 3
+      ctx.fillStyle = chapterNumber >= 3
         ? "#030714dc"
         : "#07162bdc";
       ctx.fillRect(14, 14, 700, 72);
-      ctx.strokeStyle = chapterNumber === 3
+      ctx.strokeStyle = chapterNumber >= 3
         ? "#9ba9ff77"
         : "#93cfff66";
       ctx.strokeRect(14, 14, 700, 72);
@@ -2680,22 +3489,26 @@
       ctx.fillStyle = "#ffffff";
       ctx.font = "700 14px system-ui";
       ctx.fillText(
-        chapterNumber === 3
-          ? "Kombió (3) · Mishí (Orion) "
-          : chapterNumber === 2
-            ? "Goguó (2) · Meyibó & Majibel (Ciclos)"
-            : "Tepueg (1) · K-aha-l (Agua)",
+        chapterNumber === 4
+          ? "Magacubugua (4) · Andemajuong Galamata"
+          : chapterNumber === 3
+            ? "Kombió (3) · Mishí (Orion) "
+            : chapterNumber === 2
+              ? "Goguó (2) · Meyibó & Majibel (Ciclos)"
+              : "Tepueg (1) · K-aha-l (Agua)",
         28,
         50
       );
-      ctx.fillStyle = chapterNumber === 3
+      ctx.fillStyle = chapterNumber >= 3
         ? "#c4caff"
         : "#a9eaff";
       ctx.font = "12px system-ui";
       ctx.fillText(
-        chapterNumber >= 2
-          ? `F / X o botón táctil para disparar · Perlas: ${shellCount} · Energía: ${score}`
-          : `Perlas: ${shellCount} · Energía: ${score}`,
+        chapterNumber === 4
+          ? `F / X o botón táctil para disparar · Energía: ${score}`
+          : chapterNumber >= 2
+            ? `F / X o botón táctil para disparar · Perlas: ${shellCount} · Energía: ${score}`
+            : `Perlas: ${shellCount} · Energía: ${score}`,
         28,
         72
       );
@@ -2713,12 +3526,14 @@
       drawBackground();
       drawPlatforms();
       drawItems();
+      if (chapterNumber === 4) {
+        drawStalagmites();
+      }
       if (chapterNumber >= 2) {
         drawProjectiles();
         drawMonoliths();
-      } else {
-        drawLighthouse();
       }
+      drawChapterLandmark();
       drawPlayer();
       drawHud();
 
