@@ -685,6 +685,7 @@
     const upgradedAmmoCapacity = 21;
     let maxAmmo = 13;
     const monolithHitsToDestroy = 13;
+    const chapter4MonolithHitsToDestroy = 21;
     const monolithEnergyReward = 10;
     const chapter3StartingEnergy = 55;
     const chapter4StartingEnergy = 55;
@@ -1036,47 +1037,23 @@
     });
 
     const chapter4WorldWidth = 7600;
-    const chapter4Platforms = [];
-
-    for (let x = 0, index = 0; x < chapter4WorldWidth;) {
-      const width = 560 + (index % 3) * 80;
-      const gap = 120 + (index % 2) * 30;
-      const heights = [446, 425, 455, 430, 440];
-      const y = heights[index % heights.length];
-
-      chapter4Platforms.push({
-        x,
-        y,
-        w: width,
-        h: H - y,
+    const chapter4GroundY = 446;
+    const chapter4GroundPlatforms = [
+      {
+        x: 0,
+        y: chapter4GroundY,
+        w: chapter4WorldWidth,
+        h: H - chapter4GroundY,
         kind: "ground"
-      });
-
-      x += width + gap;
-      index++;
-    }
-
-    chapter4Platforms.push({
-      x: chapter4WorldWidth - 520,
-      y: 420,
-      w: 520,
-      h: 120,
-      kind: "ground"
-    });
-
-    const chapter4GroundPlatforms = chapter4Platforms.filter(
-      (platform) => platform.kind === "ground"
-    );
-    const chapter4MovingPlatforms = chapter4GroundPlatforms
-      .slice(1, -1)
-      .map((ground, index) => {
+      }
+    ];
+    const chapter4Platforms = [...chapter4GroundPlatforms];
+    const chapter4MovingPlatforms = Array.from(
+      { length: 9 },
+      (_, index) => {
         const width = 170 + (index % 3) * 18;
-        const baseX =
-          ground.x + ground.w / 2 - width / 2;
-        const baseY = Math.max(
-          245,
-          ground.y - 150 - (index % 2) * 18
-        );
+        const baseX = 500 + index * 790;
+        const baseY = 285 + (index % 3) * 28;
 
         return {
           x: baseX,
@@ -1094,59 +1071,58 @@
           deltaX: 0,
           deltaY: 0
         };
-      });
+      }
+    );
 
     chapter4Platforms.push(...chapter4MovingPlatforms);
 
-    const chapter4Stalagmites = chapter4GroundPlatforms
-      .filter(
-        (_, index) =>
-          index > 0 &&
-          index < chapter4GroundPlatforms.length - 1 &&
-          index % 2 === 0
-      )
-      .map((ground, index) => {
-        const w = 54 + (index % 2) * 14;
-        const h = 68 + (index % 3) * 14;
-        const x = ground.x + (ground.w - w) / 2;
+    const chapter4Stalagmites = Array.from(
+      { length: 16 },
+      (_, index) => {
+        const w = 54 + (index % 3) * 10;
+        const h = 72 + (index % 4) * 12;
+        const x = 240 + index * 460;
 
         return {
           x,
-          y: ground.y - h,
+          y: chapter4GroundY - h,
           w,
           h,
-          baseY: ground.y
+          baseY: chapter4GroundY
         };
-      });
+      }
+    );
 
-    const chapter4Obstacles = chapter4GroundPlatforms
-      .filter(
-        (_, index) =>
-          index > 0 &&
-          index < chapter4GroundPlatforms.length - 1 &&
-          index % 2 === 1
-      )
-      .map((ground, index) => {
+    const chapter4Stalactites = Array.from(
+      { length: 16 },
+      (_, index) => ({
+        x: 400 + index * 455,
+        y: 0,
+        w: 52 + (index % 3) * 12,
+        h: 236 + (index % 4) * 12
+      })
+    );
+
+    const chapter4Obstacles = Array.from(
+      { length: 6 },
+      (_, index) => {
         const w = 60 + (index % 2) * 8;
         const h = 112 + (index % 3) * 12;
-        const minX = ground.x + 24;
-        const maxX = ground.x + ground.w - w - 24;
-        const x = Math.min(
-          maxX,
-          Math.max(minX, ground.x + ground.w * 0.58)
-        );
+        const minX = 24;
+        const maxX = chapter4WorldWidth - w - 24;
+        const x = 1050 + index * 1100;
 
         return {
           x,
-          y: ground.y - h,
+          y: chapter4GroundY - h,
           initialX: x,
-          initialY: ground.y - h,
+          initialY: chapter4GroundY - h,
           minX,
           maxX,
           w,
           h,
           hits: 0,
-          speed: 0.9 + (index % 3) * 0.12
+          speed: 1.1 + (index % 3) * 0.12
         };
       });
 
@@ -1293,59 +1269,67 @@
         x: 1,
         title: "Lo que temo nombrar",
         text:
-          "Las plataformas se mueven bajo mis pies. En esta cueva no hay " +
-          "perlas azules: las estalagmitas y los monolitos pueden herirme, " +
-          "y ellos avanzan hacia mí. Entro con temor; aun así, puedo avanzar " +
-          "despacio y escuchar lo que siento."
+          "El suelo de la cueva es continuo, aunque las plataformas se " +
+          "muevan sobre mí. No hay perlas azules: estalagmitas, estalactitas " +
+          "y monolitos pueden herirme; ellos me persiguen y requieren " +
+          `${chapter4MonolithHitsToDestroy} impactos. ` +
+          "Tienes 13 municiones; al llegar a 100 de energía tendrás 21. " +
+          "Cada recarga completa cuesta 1 de energía. Puedo entrar con " +
+          "temor y avanzar despacio."
       },
       {
         x: 1100,
         title: "La tristeza que guardo",
         text:
-          "Hay tristezas que no hacen ruido; se quedan conmigo mientras " +
-          "sigo caminando. No tengo que fingir que estoy bien para merecer " +
-          "compañía. Puedo nombrar lo que pesa y descansar un momento."
+          "Hay tristezas que no hacen ruido y me acompañan mientras camino. " +
+          "No es de a huevo sentirme bien por responsabilidad: puedo cumplir " +
+          "con lo que me toca sin fingir que no me duele. También puedo " +
+          "nombrar lo que pesa y pedir compañía."
       },
       {
         x: 2200,
         title: "El miedo a perderme",
         text:
-          "A veces no temo a la oscuridad, sino a lo que podría quitarme: " +
-          "los nombres, las voces, los lugares que me sostenían. No sé cuánto " +
-          "podré conservar. Dejo que el miedo exista sin permitir que decida " +
-          "cada uno de mis pasos."
+          "A veces temo perder los nombres, las voces y los lugares que me " +
+          "sostenían. Amar en mayor o menor medida no vuelve menos real lo " +
+          "vivido, pero tampoco obliga a alguien a llenar mis vacíos. Dejo " +
+          "que el miedo exista sin que decida cada paso."
       },
       {
         x: 3300,
         title: "Mi cuerpo también recuerda",
         text:
           "Cuando el peligro se acerca, mi cuerpo recuerda antes que mis " +
-          "pensamientos. No estoy fallando por sentir miedo. Puedo reconocerlo, " +
-          "mirar dónde estoy y elegir el paso que me cuida."
+          "pensamientos. Aún tengo una herida de abandono difícil de tratar. " +
+          "No estoy fallando por sentir miedo: puedo reconocerlo, mirar dónde " +
+          "estoy y elegir el paso que me cuida."
       },
       {
         x: 4400,
         title: "Lo que necesito decir",
         text:
-          "A veces callo para no inquietar a los demás, y la soledad crece. " +
-          "Quiero aprender a decir que estoy triste, que tengo miedo o que " +
-          "necesito compañía. Pedir que alguien se quede también es valentía."
+          "A veces demando cariño, amor o sexo para satisfacer un vacío " +
+          "interno y alimentar mi necesidad de reconocimiento. Mi deseo es " +
+          "real, pero nadie está obligado a resolverlo por mí. Puedo pedir " +
+          "cercanía con honestidad y respetar los límites del otro."
       },
       {
         x: 5500,
         title: "No soy solo mis pérdidas",
         text:
-          "Lo que perdí forma parte de mí, pero no cuenta toda mi historia. " +
-          "Puedo extrañar sin quedarme inmóvil; puedo seguir y llevar conmigo " +
-          "lo que aprendí de quienes amé."
+          "A veces alimento mis carencias para sentirme mejor, como si fuera " +
+          "una droga: el alivio dura poco y la herida sigue ahí. Lo que perdí " +
+          "forma parte de mí, pero no cuenta toda mi historia. Puedo buscar " +
+          "apoyo y aprender otras formas de cuidarme."
       },
       {
         x: 6600,
         title: "Un paso en la oscuridad",
         text:
-          "La cueva no se abre de golpe; yo tampoco. Respiro, escucho mis " +
-          "pasos y avanzo sin exigirme no tener miedo. A veces la salida no " +
-          "es una respuesta, sino el siguiente paso, dado con cuidado."
+          "A veces vivo desde la carencia, la queja y la falta. Me cuesta " +
+          "cuidar mi amor propio, actuar con coherencia e integridad, asumir " +
+          "responsabilidades, respetar acuerdos y al prójimo, y hacerme cargo " +
+          "de mí. Reconocerlo no es condenarme: es empezar a reparar, paso a paso."
       }
     ].map((dialogue) => ({
       ...dialogue,
@@ -1416,7 +1400,7 @@
         ammo < maxAmmo
           ? ` · Recarga en ${Math.ceil(
               Math.max(0, 5000 - ammoReloadTimer) / 1000
-            )} s`
+            )} s${chapterNumber === 4 ? " · cuesta 1 energía" : ""}`
           : "";
     }
 
@@ -2039,7 +2023,12 @@
 
         if (hitObstacle) {
           hitObstacle.hits++;
-          if (hitObstacle.hits >= monolithHitsToDestroy) {
+          const hitsToDestroy =
+            chapterNumber === 4
+              ? chapter4MonolithHitsToDestroy
+              : monolithHitsToDestroy;
+
+          if (hitObstacle.hits >= hitsToDestroy) {
             obstacles = obstacles.filter(
               (obstacle) => obstacle !== hitObstacle
             );
@@ -2052,7 +2041,7 @@
             updateHud();
           } else {
             document.querySelector("#status").textContent =
-              `Impactos al monolito: ${hitObstacle.hits}/${monolithHitsToDestroy}.`;
+              `Impactos al monolito: ${hitObstacle.hits}/${hitsToDestroy}.`;
           }
 
           projectiles.splice(index, 1);
@@ -2154,6 +2143,23 @@
       return false;
     }
 
+    function handleStalactiteCollisions() {
+      for (const stalactite of chapter4Stalactites) {
+        if (!intersects(player, stalactite)) {
+          continue;
+        }
+
+        player.y = stalactite.y + stalactite.h + 4;
+        player.vy = Math.max(2, player.vy);
+        player.grounded = false;
+        standingPlatform = null;
+
+        return loseEnergy(5, "La cueva me obliga a detenerme.");
+      }
+
+      return false;
+    }
+
     function update(deltaTime) {
       if (!started || finished) {
         return;
@@ -2186,6 +2192,17 @@
           ammoReloadTimer += deltaTime;
           ammoHudTimer += deltaTime;
           if (ammoReloadTimer >= 5000) {
+            if (chapterNumber === 4) {
+              score = Math.max(0, score - 1);
+              if (score === 0) {
+                resetGame(
+                  "La energía se agotó al recargar. Regresas al inicio del capítulo 4."
+                );
+                return;
+              }
+              document.querySelector("#status").textContent =
+                "La recarga completa cuesta 1 punto de energía.";
+            }
             ammo = maxAmmo;
             ammoReloadTimer = 0;
             ammoHudTimer = 0;
@@ -2301,7 +2318,8 @@
 
       if (
         chapterNumber === 4 &&
-        handleStalagmiteCollisions()
+        (handleStalagmiteCollisions() ||
+          handleStalactiteCollisions())
       ) {
         return;
       }
@@ -2955,6 +2973,57 @@
       }
     }
 
+    function drawStalactites() {
+      for (const stalactite of chapter4Stalactites) {
+        const screenX = stalactite.x - cameraX;
+
+        if (
+          screenX + stalactite.w < 0 ||
+          screenX > W
+        ) {
+          continue;
+        }
+
+        const spikeGradient =
+          ctx.createLinearGradient(
+            screenX,
+            stalactite.y,
+            screenX + stalactite.w,
+            stalactite.y + stalactite.h
+          );
+        spikeGradient.addColorStop(0, "#b8a595");
+        spikeGradient.addColorStop(0.45, "#68585a");
+        spikeGradient.addColorStop(1, "#302b36");
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(screenX, stalactite.y);
+        ctx.lineTo(
+          screenX + stalactite.w * 0.32,
+          stalactite.y + stalactite.h * 0.28
+        );
+        ctx.lineTo(
+          screenX + stalactite.w * 0.47,
+          stalactite.y + stalactite.h
+        );
+        ctx.lineTo(
+          screenX + stalactite.w * 0.65,
+          stalactite.y + stalactite.h * 0.26
+        );
+        ctx.lineTo(
+          screenX + stalactite.w,
+          stalactite.y
+        );
+        ctx.closePath();
+        ctx.fillStyle = spikeGradient;
+        ctx.fill();
+        ctx.strokeStyle = "#d1b6a477";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
     function drawStalagmites() {
       for (const stalagmite of chapter4Stalagmites) {
         const screenX = stalagmite.x - cameraX;
@@ -3527,6 +3596,7 @@
       drawPlatforms();
       drawItems();
       if (chapterNumber === 4) {
+        drawStalactites();
         drawStalagmites();
       }
       if (chapterNumber >= 2) {

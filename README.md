@@ -419,22 +419,23 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 ### Capítulo 4
 
 - Rótulo: **`magacubugua (4) · andemajuong galamata (Ha llovido en la noche)`**.
-- Fondo de cueva y plataformas móviles.
-- No hay perlas azules. Las estalagmitas y los monolitos restan **5 puntos de energía**; los monolitos se desplazan hacia Ixa.
-- Las municiones comienzan en **13** y aumentan a **21** al alcanzar **100 puntos de energía**. Cada monolito desaparece tras **13 impactos** y devuelve **10 puntos de energía**.
+- Fondo de cueva, piso plano y continuo, y plataformas móviles.
+- No hay perlas azules. Hay estalagmitas y estalactitas; ambas y los monolitos restan **5 puntos de energía**. Los monolitos persiguen a Ixa y se desplazan un poco más rápido.
+- Las municiones comienzan en **13** y aumentan a **21** al alcanzar **100 puntos de energía**. Cada monolito desaparece tras **21 impactos** y devuelve **10 puntos de energía**.
+- La recarga automática completa tarda **5 segundos** y cuesta **1 punto de energía** por recarga.
 - Al recibir daño, el estado inferior muestra una frase de duda o tristeza acompañada de una respuesta que anima a avanzar con cuidado y buscar apoyo.
 - La energía se conserva al llegar desde el capítulo 3; al elegir el capítulo directamente comienza con **55 puntos de energía**. Si llega a **0**, el recorrido se reinicia desde el comienzo del capítulo.
 - Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
 
 | X | Título | Contexto |
 |---:|---|---|
-| 1 | Lo que temo nombrar | Ixa reconoce el temor de entrar en la cueva y se permite avanzar despacio y escuchar lo que siente. |
-| 1100 | La tristeza que guardo | Nombra una tristeza silenciosa y recuerda que merece compañía y descanso. |
-| 2200 | El miedo a perderme | Observa el temor a perder nombres, voces y lugares, sin dejar que decida cada paso. |
-| 3300 | Mi cuerpo también recuerda | Reconoce la memoria corporal del miedo y elige un paso que la cuide. |
-| 4400 | Lo que necesito decir | Se permite hablar de su tristeza y pedir compañía. |
-| 5500 | No soy solo mis pérdidas | Acepta que sus pérdidas forman parte de su historia, pero no la definen por completo. |
-| 6600 | Un paso en la oscuridad | Avanza con cuidado sin exigirse dejar de sentir miedo. |
+| 1 | Lo que temo nombrar | Presenta el piso continuo, las plataformas, los peligros de la cueva y el costo de recargar. |
+| 1100 | La tristeza que guardo | Ixa no se obliga a sentirse bien por responsabilidad y se permite nombrar su tristeza. |
+| 2200 | El miedo a perderme | Piensa en amar en distinta medida y en el temor a perder los vínculos que lo sostienen. |
+| 3300 | Mi cuerpo también recuerda | Reconoce la herida de abandono y escucha las señales de su cuerpo. |
+| 4400 | Lo que necesito decir | Admite que a veces busca cariño, amor, sexo y reconocimiento para llenar un vacío, sin trasladar esa responsabilidad a otra persona. |
+| 5500 | No soy solo mis pérdidas | Observa cómo alimentar sus carencias puede dar alivio momentáneo, como una droga, sin sanar la herida. |
+| 6600 | Un paso en la oscuridad | Reconoce carencias de amor propio, coherencia, responsabilidad y respeto, y elige empezar a hacerse cargo y reparar. |
 
 ### Controles
 
