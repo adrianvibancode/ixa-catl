@@ -974,16 +974,66 @@
         x: 1,
         title: "Bajo el cielo de Orión",
         text:
-          "El cielo de Orión y el suelo cambian a cada paso. " +
-          "Salta sobre las plataformas móviles y esquiva los monolitos " +
-          "que también se desplazan. Conservas la energía del capítulo anterior: " +
-          "las perlas azules te devuelven 10 y las rojas te quitan 7; " +
-          "caer o chocar con un monolito te quita 5. Dispara con F, X o " +
-          `el botón táctil. Cada monolito desaparece tras recibir ` +
-          `${monolithHitsToDestroy} impactos; al destruirlo, recuperas ` +
-          `${monolithEnergyReward} puntos de energía. Al llegar a 100 de energía, ` +
-          "tu capacidad de municiones aumenta a 21. " +
-          "Si tu energía llega a cero, volverás al inicio del capítulo."
+          "Salta entre plataformas y esquiva monolitos móviles. Conservas tu " +
+          "energía: perlas azules +10, rojas −7; caídas o choques −5. " +
+          "Tienes 13 municiones; con 100 de energía, tendrás 21. Dispara con " +
+          "F/X o el botón táctil. Cada monolito requiere " +
+          `${monolithHitsToDestroy} impactos y devuelve ${monolithEnergyReward}. ` +
+          "Si llegas a cero, vuelves al inicio."
+      },
+      {
+        x: 1150,
+        title: "Dar forma a lo que necesito",
+        text:
+          "Antes intentaba adivinar quién debía ser. Ahora pregunto qué " +
+          "necesito y qué quiero cuidar. Imagino mi ikigai como una estructura " +
+          "flexible: una brújula que reúne lo que me importa, lo que puedo " +
+          "ofrecer y lo que aporta bienestar. Puedo construirla poco a poco."
+      },
+      {
+        x: 2300,
+        title: "Dos fuerzas que aprenden a convivir",
+        text:
+          "En mí conviven la decisión de actuar y la capacidad de recibir, " +
+          "escuchar y descansar. Llamo a esas fuerzas energía masculina y " +
+          "femenina, pero no son moldes ni pertenecen a un solo género. " +
+          "Quiero integrarlas: firmeza sin dureza, cuidado sin olvidarme de mí."
+      },
+      {
+        x: 3450,
+        title: "La sensibilidad también me guía",
+        text:
+          "Mi sensibilidad nota silencios, cansancio y necesidades que " +
+          "pasan inadvertidos. Puedo convertirla en comprensión y creatividad " +
+          "sin cargar con todo lo que percibo. Poner límites permite que me " +
+          "guíe sin consumirme."
+      },
+      {
+        x: 4600,
+        title: "Cuidar el lugar que compartimos",
+        text:
+          "Quiero contribuir al bienestar y la seguridad de mi comunidad, " +
+          "no desde el control ni el miedo, sino desde la confianza y el " +
+          "cuidado mutuo. No puedo hacerlo todo solo: un lugar seguro se " +
+          "construye entre quienes lo habitan."
+      },
+      {
+        x: 5750,
+        title: "Elegir cómo responder",
+        text:
+          "Cuando algo me duele, hago una pausa antes de responder. " +
+          "Nombro lo que siento y pido con claridad lo que necesito: eso " +
+          "también es ser asertivo. Hay conversaciones incómodas que no " +
+          "debo evadir; puedo elegir el momento y hablar con respeto."
+      },
+      {
+        x: 6900,
+        title: "Atender mis heridas sin perder el rumbo",
+        text:
+          "Reconozco mis heridas y traumas sin negarlos ni dejar que " +
+          "definan toda mi vida. Lo ocurrido importa, y pedir apoyo también " +
+          "es fuerza. Cada día entreno mi consciencia y atención: respiro, " +
+          "observo mis pasos y vuelvo al presente."
       }
     ].map((dialogue) => ({
       ...dialogue,
@@ -2631,10 +2681,10 @@
       ctx.font = "700 14px system-ui";
       ctx.fillText(
         chapterNumber === 3
-          ? "goguó (3) · Orión"
+          ? "Kombió (3) · Mishí (Orion) "
           : chapterNumber === 2
-            ? "goguó (2) · Meyibó y majibel"
-            : "tepueg (1) - k-aha-l (agua)",
+            ? "Goguó (2) · Meyibó & Majibel (Ciclos)"
+            : "Tepueg (1) · K-aha-l (Agua)",
         28,
         50
       );

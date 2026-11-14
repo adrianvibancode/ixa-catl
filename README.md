@@ -400,11 +400,17 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 - La capacidad inicia en **13 municiones** y aumenta a **21** al alcanzar **100 puntos de energía**.
 - Si la energía llega a **0**, Ixa muere y el recorrido se reinicia desde el inicio del capítulo 3, restaurando la energía con la que entró a ese capítulo.
 - Al completar el recorrido aparece el final, con opción para repetir este capítulo.
-- Diálogo de inicio:
+- Siete diálogos interiores, activados al alcanzar su posición `X` y una vez por recorrido:
 
 | X | Título | Contexto |
 |---:|---|---|
-| 1 | Bajo el cielo de Orión | Explica las plataformas y los monolitos móviles, la energía y sus pérdidas o recuperación, los controles de disparo, que cada monolito requiere 13 impactos y otorga 10 puntos al destruirse, y el reinicio al agotarse la energía. |
+| 1 | Bajo el cielo de Orión | Presenta las plataformas y los monolitos móviles, el sistema de energía, las perlas y las reglas de munición. |
+| 1150 | Dar forma a lo que necesito | Ixa reconoce sus necesidades y piensa en el ikigai como una estructura flexible para orientar sus decisiones. |
+| 2300 | Dos fuerzas que aprenden a convivir | Reflexiona sobre integrar sus energías masculina y femenina sin quedar limitado por estereotipos. |
+| 3450 | La sensibilidad también me guía | Convierte su sensibilidad en una herramienta de comprensión, cuidando sus propios límites. |
+| 4600 | Cuidar el lugar que compartimos | Vincula el bienestar y la seguridad de la comunidad con la confianza y el cuidado colectivo. |
+| 5750 | Elegir cómo responder | Explora la asertividad, la pausa y el momento de tener conversaciones incómodas. |
+| 6900 | Atender mis heridas sin perder el rumbo | Reconoce heridas y traumas sin reducirse a ellos, y propone entrenar a diario la consciencia y la atención. |
 
 ### Controles
 
