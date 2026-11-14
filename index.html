@@ -778,13 +778,12 @@
     const chapter1Dialogues = [
       {
         x: 1,
-        title: "Auka Sum/San (Hola hermano(a))",
+        title: "Auka Sum/San (Hola)",
         text:
           "Hoy celebro el inicio de mi camino hacia la madurez. " +
           "En mi pueblo decimos que sobrevivir a la noche es llegar a casa " +
           "con menos piedritas en el costal; así caminamos más cómodos. " +
-          "Acompáñame al faro mientras te cuento lo que significa crecer " +
-          "y despedirse."
+          "Acompáñame al faro en el camino te voy contando. "
       },
       {
         x: 700,
@@ -874,8 +873,13 @@
     /*
       Objetos provisionales.
 
+conchas
+perlas
+pithayas
+
+
       Azul:
-      suma 10 puntos y cuenta como concha.
+      suma 10 puntos y cuenta como perla.
 
       Rojo:
       resta 7 puntos.
@@ -1200,7 +1204,7 @@
     const chapter2Dialogues = [
       {
         x: 1,
-        title: "Hola de nuevo",
+        title: "",
         text:
           "Comienzas con 13 municiones para derribar los monolitos. " +
           "Dispara con F, X o el botón de disparo; se recargan automáticamente. " +
@@ -1211,7 +1215,7 @@
       },
       {
         x: 700,
-        title: "",
+        title: "Auke",
         text:
           "No sabía preguntarme quién era yo realmente. Me bastaba " +
           "escuchar mi nombre en la voz de quienes me esperaban. " +
@@ -1583,7 +1587,7 @@
       document.title = isChapter4
         ? "IXA & ÁCATL · magacubugua (4)"
         : isChapter5
-          ? "IXA & ÁCATL · Naganna Tejueg Ignimel (Una Mano)"
+          ? "IXA & ÁCATL · Naganna Tejueg Ignimel - Una Mano"
           : isChapter3
           ? "IXA & ÁCATL · kombió (3)"
           : isChapter2
@@ -1679,7 +1683,7 @@
 
       document.querySelector("#finish h2").textContent =
         isChapter5
-          ? "Naganna Tejueg Ignimel (Una Mano)"
+          ? "Naganna Tejueg Ignimel - Una Mano"
           : isChapter4
           ? "La cueva"
           : isChapter3
@@ -1796,15 +1800,16 @@
     function beginChapter5Conversation() {
       chapter5ConversationStarted = true;
       showChapter5Dialogue(
-        "Naiyá",
-        "Naganna Tejueg Ignimel (Una Mano)",
-        "¡Lo lograste, Ixa! Terminaste el camino de la cueva y estoy " +
-          "orgullosa de ti.\n\n" +
-          "Quiero recordar contigo lo que vimos: los primeros capítulos " +
-          "muestran la vida cotidiana de Iyen, nuestra relación con el agua, " +
-          "la reciprocidad y también la desigualdad interna. Había estrategias " +
-          "para defendernos y contactos con comunidades vecinas. La disputa " +
-          "por los manantiales y las rutas traía apropiación de recursos, " +
+        "Naiyá:",
+        "Naganna Tejueg Ignimel",
+        "Auka, Ixa — Buenos días Ixa."
+        +
+          "Ixa: Yacupá - Ya llegué " \n\n" +
+          "Muyu muá? - ¿Como estas? " +
+          "Ixa: Mjan mjan - Bien" +
+          "Debes saber hijo que la reciprocidad, la desigualdad interna, requiere de estrategias " +
+          "para defendernos y cooperar con comunidades vecinas. La disputa " +
+          "por los manantiales y las rutas trae apropiación de recursos, " +  
           "tributo, autoridad y expansión política.\n\n" +
           "¿Qué parte de esa historia quieres llevar contigo?",
         chapter5MemoryBranches.map((branch, index) => ({
@@ -1823,7 +1828,7 @@
 
       showChapter5Dialogue(
         "Naiyá",
-        "Lo que permanece",
+        "",
         `Ixa: «${memory.answer}»\n\n` +
           `Naiyá: ${memory.response}\n\n` +
           "¿Qué quisieras hacer con lo que ahora sabes?",
@@ -1860,7 +1865,7 @@
       document.querySelector("#finish small").textContent =
         "FINAL DEL PRÓLOGO";
       document.querySelector("#finish h2").textContent =
-        "Naganna Tejueg Ignimel (Una Mano)";
+        "Naganna Tejueg Ignimel - Una Mano";
       document.querySelector("#summary").textContent =
         `${memory.closing}\n\n${action.response}`;
       document.querySelector("#chapter2").hidden = true;
@@ -2012,12 +2017,12 @@
         .classList.add("hide");
       resetGame(
         number === 1
-          ? "Comienza el prólogo."
+          ? "Esta atardeciendo..."
           : number === 2
-            ? "Comienza el capítulo 2."
+            ? "La penumbra llega..."
             : number === 3
-              ? "Comienza el capítulo 3 bajo el cielo de Orión."
-              : "Comienza el capítulo 4 en la cueva."
+              ? "Debajo del manto nocturno"
+              : "En la cueva"
       );
     }
 
