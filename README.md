@@ -14,10 +14,11 @@ El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript.
 - **Capítulo 2: `Goguó (2) · Meyibó & Majibel (Ciclos)`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
 - **Capítulo 3: `Kombió (3) · Mishí (Orion)`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
 - **Capítulo 4: `Magacubugua (4) · Andemajuong Galamata (Ha llovido en la noche)`**, con una cueva, plataformas móviles, estalagmitas y monolitos que persiguen a Ixa.
+- **Capítulo 5: `Naganna Tejueg Ignimel (Una Mano)`**, epílogo que se activa al completar el capítulo 4; no aparece en el menú inicial.
 
 El resto de los actos descritos en este documento pertenece al diseño narrativo y no implica que todos los episodios estén implementados.
 
-El encabezado y el HUD muestran **PRÓLOGO · Más allá del límite de todo lo que conozco** por encima del rótulo de cada capítulo.
+El encabezado y el HUD muestran **PRÓLOGO · Más allá de la costa** por encima del rótulo de cada capítulo.
 
 La introducción ofrece botones para iniciar cualquiera de los cuatro capítulos. Elegir uno directamente reinicia sus contadores; los capítulos 3 y 4 comienzan con **55 puntos de energía**. Al avanzar en orden se conserva la energía acumulada.
 
@@ -436,6 +437,15 @@ La isla ancestral puede explicar de dónde viene Ixa, pero no quién debe ser. *
 | 4400 | Lo que necesito decir | Admite que a veces busca cariño, amor, sexo y reconocimiento para llenar un vacío, sin trasladar esa responsabilidad a otra persona. |
 | 5500 | No soy solo mis pérdidas | Observa cómo alimentar sus carencias puede dar alivio momentáneo, como una droga, sin sanar la herida. |
 | 6600 | Un paso en la oscuridad | Reconoce carencias de amor propio, coherencia, responsabilidad y respeto, y elige empezar a hacerse cargo y reparar. |
+
+### Capítulo 5: epílogo del prólogo
+
+- Rótulo: **`Naganna Tejueg Ignimel (Una Mano)`**.
+- Se inicia automáticamente al terminar el capítulo 4 y no se puede elegir desde el menú.
+- No tiene plataformas: Ixa puede acercarse a Naiyá en una escena al amanecer. Al llegar junto a ella comienza la conversación con el cuadro de diálogo habitual.
+- Naiyá felicita a Ixa y recuerda la vida cotidiana de Iyen, el agua, la reciprocidad, la desigualdad interna, las estrategias defensivas y los contactos con comunidades vecinas. También hablan de cómo la disputa por los manantiales y las rutas trajo apropiación de recursos, tributo, autoridad y expansión política.
+- Ixa elige entre varias respuestas. Las respuestas de Naiyá cambian según lo que Ixa decide recordar y lo que quiere hacer con esa memoria.
+- Al cerrar la conversación aparece el final del prólogo, con la opción de volver al menú.
 
 ### Controles
 

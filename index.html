@@ -249,6 +249,10 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    .dialogue.has-choices {
+      pointer-events: auto;
+    }
+
     .dialogue-header {
       display: flex;
       align-items: center;
@@ -293,6 +297,37 @@
       font-size: clamp(0.88rem, 1.55vw, 1rem);
       line-height: 1.46;
       text-wrap: pretty;
+      white-space: pre-line;
+    }
+
+    .dialogue-choices {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dialogue-choices[hidden] {
+      display: none;
+    }
+
+    .dialogue-choice {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #8ee7fa66;
+      border-radius: 9px;
+      background: #173652;
+      color: #ffffff;
+      font: inherit;
+      line-height: 1.35;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .dialogue-choice:hover,
+    .dialogue-choice:focus-visible {
+      border-color: #ffd067;
+      background: #214766;
+      outline: none;
     }
 
     /*
@@ -372,6 +407,18 @@
       display: block;
     }
 
+    .game.chapter-five .touch > span:last-child {
+      display: none;
+    }
+
+    .game.chapter-five + .bar > .pill:not(#status) {
+      display: none;
+    }
+
+    .app.chapter-five #restart {
+      display: none;
+    }
+
     @media (pointer: coarse) {
       .touch {
         display: flex;
@@ -422,6 +469,16 @@
         min-height: 20px;
         padding: 2px 8px;
         font-size: 0.67rem;
+      }
+
+      .dialogue-choices {
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .dialogue-choice {
+        padding: 8px 10px;
+        font-size: 0.8rem;
       }
     }
   </style>
@@ -552,8 +609,9 @@
       <div
         class="dialogue"
         id="dialogue"
-        role="status"
+        role="region"
         aria-live="polite"
+        aria-hidden="true"
       >
         <div class="dialogue-header">
           <span class="dialogue-name">IXA</span>
@@ -563,6 +621,13 @@
         <span class="dialogue-title" id="dialogueTitle"></span>
 
         <div class="dialogue-text" id="dialogueText"></div>
+        <div
+          class="dialogue-choices"
+          id="dialogueChoices"
+          role="group"
+          aria-label="Respuestas de Ixa"
+          hidden
+        ></div>
       </div>
 
       <!-- CONTROLES PARA CELULAR -->
@@ -636,6 +701,7 @@
     */
     const backgroundImage = new Image();
     const spriteImage = new Image();
+    const chapter5NaiyaImage = new Image();
     const platformImage = new Image();
     const chapter2BackgroundImage = new Image();
     // Asigna aquí la ruta opcional de una imagen para el capítulo 2.
@@ -643,6 +709,7 @@
 
     backgroundImage.src = "fondo-costero-intimo.png";
     spriteImage.src = "ixa-sprites-v4.png";
+    chapter5NaiyaImage.src = "naiya-sprites-v1-frente.png";
     platformImage.src = "plataforma-costera.png";
 
     if (chapter2BackgroundImagePath) {
@@ -680,6 +747,8 @@
     let chapter3MotionTime = 0;
     let chapter4MotionTime = 0;
     let chapter4DamageCooldown = 0;
+    let chapter5ConversationStarted = false;
+    let chapter5SelectedMemory = null;
     const projectiles = [];
     const ammoUpgradeThreshold = 100;
     const upgradedAmmoCapacity = 21;
@@ -1336,6 +1405,64 @@
       seen: false
     }));
 
+    const chapter5GroundY = H - 62;
+    const chapter5Naiya = {
+      x: 700,
+      height: 96
+    };
+    const chapter5MemoryBranches = [
+      {
+        answer: "Quiero recordar la vida cotidiana y la reciprocidad.",
+        response:
+          "Sí, Ixa. El agua, el trabajo y los cuidados sostenían los días. " +
+          "Y también debemos preguntarnos si esa reciprocidad llegaba a " +
+          "todos por igual.",
+        closing:
+          "La vida cotidiana también es historia: no solo el conflicto, " +
+          "también lo que compartimos y aquello que nos faltó."
+      },
+      {
+        answer: "Me cuesta aceptar la desigualdad, el tributo y la autoridad.",
+        response:
+          "Nombrar lo injusto no borra el cariño por nuestra gente. La " +
+          "defensa y la autoridad podían proteger, pero también repartir " +
+          "las cargas y los recursos de manera desigual.",
+        closing:
+          "No tienes que resolver hoy todo lo que heredamos. Basta empezar " +
+          "por no ocultar el daño y actuar con responsabilidad."
+      },
+      {
+        answer: "Quiero entender los contactos y las rutas entre comunidades.",
+        response:
+          "Las rutas traían encuentros, intercambio y alianzas, pero también " +
+          "disputas. Ninguna comunidad vivía aislada; cada encuentro podía " +
+          "cambiar lo que venía después.",
+        closing:
+          "Preguntar por esos caminos mantiene abierta la memoria de los " +
+          "pueblos y de todo lo que construyeron al encontrarse."
+      }
+    ];
+    const chapter5ActionBranches = [
+      {
+        answer: "Compartirlo sin convertirlo en una sola verdad.",
+        response:
+          "Eso también es cuidar la memoria: contarla con humildad y dejar " +
+          "espacio para otras voces."
+      },
+      {
+        answer: "Preguntar quién tenía voz y quién pagaba el costo.",
+        response:
+          "Sí. Recordar también es preguntar cómo se repartían el agua, la " +
+          "autoridad y el tributo, y qué acuerdos podemos hacer más justos."
+      },
+      {
+        answer: "Seguir escuchando a quienes vivieron esos encuentros.",
+        response:
+          "Escuchar no nos da todas las respuestas, pero nos ayuda a no " +
+          "repetir las mismas certezas."
+      }
+    ];
+
     let platforms = chapter1Platforms;
     let items = chapter1Items;
     let dialogues = chapter1Dialogues;
@@ -1393,7 +1520,7 @@
       document.querySelector("#collectibleLabel").textContent =
         "Perlas:";
       document.querySelector("#ammoPill").hidden =
-        chapterNumber < 2;
+        chapterNumber < 2 || chapterNumber > 4;
       document.querySelector("#ammo").textContent = ammo;
       document.querySelector("#ammoMax").textContent = maxAmmo;
       document.querySelector("#ammoReload").textContent =
@@ -1451,45 +1578,58 @@
       const isChapter2 = chapterNumber === 2;
       const isChapter3 = chapterNumber === 3;
       const isChapter4 = chapterNumber === 4;
+      const isChapter5 = chapterNumber === 5;
 
       document.title = isChapter4
         ? "IXA & ÁCATL · magacubugua (4)"
-        : isChapter3
+        : isChapter5
+          ? "IXA & ÁCATL · Naganna Tejueg Ignimel (Una Mano)"
+          : isChapter3
           ? "IXA & ÁCATL · kombió (3)"
           : isChapter2
             ? "IXA & ÁCATL · goguó (2)"
             : "IXA & ÁCATL · tepuegua (1)";
       worldWidth = isChapter4
         ? chapter4WorldWidth
-        : isChapter3
+        : isChapter5
+          ? W
+          : isChapter3
           ? chapter3WorldWidth
           : isChapter2
             ? chapter2WorldWidth
             : chapter1WorldWidth;
       platforms = isChapter4
         ? chapter4Platforms
-        : isChapter3
+        : isChapter5
+          ? []
+          : isChapter3
           ? chapter3Platforms
           : isChapter2
             ? chapter2Platforms
             : chapter1Platforms;
       items = isChapter4
         ? chapter4Items
-        : isChapter3
+        : isChapter5
+          ? []
+          : isChapter3
           ? chapter3Items
           : isChapter2
             ? chapter2Items
             : chapter1Items;
       dialogues = isChapter4
         ? chapter4Dialogues
-        : isChapter3
+        : isChapter5
+          ? []
+          : isChapter3
           ? chapter3Dialogues
           : isChapter2
             ? chapter2Dialogues
             : chapter1Dialogues;
       obstacles = isChapter4
         ? chapter4Obstacles
-        : isChapter3
+        : isChapter5
+          ? []
+          : isChapter3
           ? chapter3Obstacles
           : isChapter2
             ? chapter2Obstacles
@@ -1507,22 +1647,40 @@
       document
         .querySelector(".touch")
         .classList.toggle("chapter-four", isChapter4);
+      document
+        .querySelector(".touch")
+        .classList.toggle("chapter-five", isChapter5);
+      document.querySelector(".app").classList.toggle(
+        "chapter-five",
+        isChapter5
+      );
+      document.querySelector(".game").classList.toggle(
+        "chapter-five",
+        isChapter5
+      );
 
       document.querySelector("#chapter2").textContent =
         isChapter3
           ? "Entrar en la cueva"
           : "Continuar";
-      document.querySelector("#chapter2").hidden = isChapter4;
+      document.querySelector("#chapter2").hidden =
+        isChapter4 || isChapter5;
       document.querySelector("#again").textContent =
-        isChapter3 || isChapter4
+        isChapter5
+          ? "Volver al inicio"
+          : isChapter3 || isChapter4
           ? `Repetir capítulo ${chapterNumber}`
           : "Repetir";
 
       document.querySelector("#finish small").textContent =
-        `CAPÍTULO ${chapterNumber} COMPLETADO`;
+        isChapter5
+          ? "FINAL DEL PRÓLOGO"
+          : `CAPÍTULO ${chapterNumber} COMPLETADO`;
 
       document.querySelector("#finish h2").textContent =
-        isChapter4
+        isChapter5
+          ? "Naganna Tejueg Ignimel (Una Mano)"
+          : isChapter4
           ? "La cueva"
           : isChapter3
             ? "La entrada de la cueva"
@@ -1536,6 +1694,7 @@
     function fireProjectile() {
       if (
         chapterNumber < 2 ||
+        chapterNumber > 4 ||
         !started ||
         finished ||
         ammo <= 0 ||
@@ -1569,13 +1728,19 @@
     function showDialogue(dialogue) {
       const dialogueBox = document.querySelector("#dialogue");
 
+      document.querySelector(".dialogue-name").textContent =
+        dialogue.speaker || "IXA";
       document.querySelector("#dialogueTitle").textContent =
         dialogue.title;
 
       document.querySelector("#dialogueText").textContent =
         dialogue.text;
 
+      document.querySelector("#dialogueChoices").replaceChildren();
+      document.querySelector("#dialogueChoices").hidden = true;
+      dialogueBox.classList.remove("has-choices");
       dialogueBox.classList.add("show");
+      dialogueBox.setAttribute("aria-hidden", "false");
 
       /*
         Duración adaptada a la longitud del texto.
@@ -1591,9 +1756,118 @@
     }
 
     function hideDialogue() {
-      document
-        .querySelector("#dialogue")
-        .classList.remove("show");
+      const dialogueBox = document.querySelector("#dialogue");
+      const choices = document.querySelector("#dialogueChoices");
+
+      dialogueBox.classList.remove("show", "has-choices");
+      dialogueBox.setAttribute("aria-hidden", "true");
+      choices.replaceChildren();
+      choices.hidden = true;
+    }
+
+    function showChapter5Dialogue(speaker, title, text, choices) {
+      hideDialogue();
+
+      const dialogueBox = document.querySelector("#dialogue");
+      const choiceContainer =
+        document.querySelector("#dialogueChoices");
+
+      document.querySelector(".dialogue-name").textContent = speaker;
+      document.querySelector("#dialogueTitle").textContent = title;
+      document.querySelector("#dialogueText").textContent = text;
+
+      for (const choice of choices) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "dialogue-choice";
+        button.textContent = choice.label;
+        button.addEventListener("click", choice.onSelect);
+        choiceContainer.appendChild(button);
+      }
+
+      choiceContainer.hidden = choices.length === 0;
+      dialogueBox.classList.add("show", "has-choices");
+      dialogueBox.setAttribute("aria-hidden", "false");
+      if (choices.length > 0) {
+        choiceContainer.firstElementChild.focus();
+      }
+    }
+
+    function beginChapter5Conversation() {
+      chapter5ConversationStarted = true;
+      showChapter5Dialogue(
+        "Naiyá",
+        "Naganna Tejueg Ignimel (Una Mano)",
+        "¡Lo lograste, Ixa! Terminaste el camino de la cueva y estoy " +
+          "orgullosa de ti.\n\n" +
+          "Quiero recordar contigo lo que vimos: los primeros capítulos " +
+          "muestran la vida cotidiana de Iyen, nuestra relación con el agua, " +
+          "la reciprocidad y también la desigualdad interna. Había estrategias " +
+          "para defendernos y contactos con comunidades vecinas. La disputa " +
+          "por los manantiales y las rutas traía apropiación de recursos, " +
+          "tributo, autoridad y expansión política.\n\n" +
+          "¿Qué parte de esa historia quieres llevar contigo?",
+        chapter5MemoryBranches.map((branch, index) => ({
+          label: branch.answer,
+          onSelect: () => chooseChapter5Memory(index)
+        }))
+      );
+    }
+
+    function chooseChapter5Memory(index) {
+      const memory = chapter5MemoryBranches[index];
+      if (!memory) {
+        throw new RangeError(`Respuesta de Ixa no válida: ${index}`);
+      }
+      chapter5SelectedMemory = memory;
+
+      showChapter5Dialogue(
+        "Naiyá",
+        "Lo que permanece",
+        `Ixa: «${memory.answer}»\n\n` +
+          `Naiyá: ${memory.response}\n\n` +
+          "¿Qué quisieras hacer con lo que ahora sabes?",
+        chapter5ActionBranches.map((branch, branchIndex) => ({
+          label: branch.answer,
+          onSelect: () => chooseChapter5Action(branchIndex)
+        }))
+      );
+    }
+
+    function chooseChapter5Action(index) {
+      const action = chapter5ActionBranches[index];
+      if (!action || !chapter5SelectedMemory) {
+        throw new RangeError(`Respuesta final de Ixa no válida: ${index}`);
+      }
+
+      showChapter5Dialogue(
+        "Naiyá",
+        "Lo que llevas contigo",
+        `Ixa: «${action.answer}»\n\n` +
+          `Naiyá: ${action.response}\n\n` +
+          chapter5SelectedMemory.closing,
+        [{
+          label: "Terminar el prólogo",
+          onSelect: () => finishChapter5(chapter5SelectedMemory, action)
+        }]
+      );
+    }
+
+    function finishChapter5(memory, action) {
+      started = false;
+      finished = true;
+      hideDialogue();
+      document.querySelector("#finish small").textContent =
+        "FINAL DEL PRÓLOGO";
+      document.querySelector("#finish h2").textContent =
+        "Naganna Tejueg Ignimel (Una Mano)";
+      document.querySelector("#summary").textContent =
+        `${memory.closing}\n\n${action.response}`;
+      document.querySelector("#chapter2").hidden = true;
+      document.querySelector("#again").textContent =
+        "Volver al inicio";
+      document.querySelector("#finish")
+        .classList.remove("hide");
     }
 
     function resetChapter3Motion() {
@@ -1747,6 +2021,55 @@
       );
     }
 
+    function startChapter5() {
+      chapterStartingEnergy = score;
+      configureChapter(5);
+      started = true;
+      finished = false;
+      chapter5ConversationStarted = false;
+      chapter5SelectedMemory = null;
+      dialogueTimer = 0;
+      cameraX = 0;
+      shellCount = 0;
+      standingPlatform = null;
+      jumpConsumed = false;
+      projectiles.length = 0;
+
+      Object.keys(keys).forEach((key) => {
+        keys[key] = false;
+      });
+
+      Object.assign(player, {
+        x: 140,
+        y: chapter5GroundY - player.h,
+        vx: 0,
+        vy: 0,
+        grounded: true,
+        facing: 1,
+        frame: 0,
+        animationTime: 0
+      });
+
+      document.querySelector("#intro").classList.add("hide");
+      document.querySelector("#finish").classList.add("hide");
+      document.querySelector("#status").textContent =
+        "A/D o flechas para acercarte a Naiyá.";
+      hideDialogue();
+      updateHud();
+    }
+
+    function returnToMenu() {
+      chapterStartingEnergy = 0;
+      maxAmmo = 13;
+      ammoCapacityUpgraded = false;
+      configureChapter(1);
+      started = false;
+      finished = false;
+      resetGame("Elige un capítulo para volver a empezar.");
+      document.querySelector("#finish").classList.add("hide");
+      document.querySelector("#intro").classList.remove("hide");
+    }
+
     function handleKeyDown(event) {
       const key = event.key.toLowerCase();
 
@@ -1810,6 +2133,11 @@
     document
       .querySelector("#again")
       .addEventListener("click", () => {
+        if (chapterNumber === 5) {
+          returnToMenu();
+          return;
+        }
+
         started = true;
 
         resetGame(
@@ -2160,8 +2488,46 @@
       return false;
     }
 
+    function updateChapter5(deltaTime) {
+      if (chapter5ConversationStarted) {
+        return;
+      }
+
+      const direction =
+        Number(Boolean(keys.arrowright || keys.d)) -
+        Number(Boolean(keys.arrowleft || keys.a));
+
+      if (direction !== 0) {
+        player.x = Math.max(
+          0,
+          Math.min(
+            W - player.w,
+            player.x + direction * 4.2 * deltaTime / 16.67
+          )
+        );
+        player.facing = direction;
+        player.animationTime += deltaTime;
+        player.frame =
+          Math.floor(player.animationTime / 115) % 6;
+      } else {
+        player.frame = 0;
+        player.animationTime = 0;
+      }
+
+      if (
+        player.x + player.w >= chapter5Naiya.x - 100
+      ) {
+        beginChapter5Conversation();
+      }
+    }
+
     function update(deltaTime) {
       if (!started || finished) {
+        return;
+      }
+
+      if (chapterNumber === 5) {
+        updateChapter5(deltaTime);
         return;
       }
 
@@ -2441,6 +2807,11 @@
       if (
         player.x > worldWidth - 260
       ) {
+        if (chapterNumber === 4) {
+          startChapter5();
+          return;
+        }
+
         finished = true;
         hideDialogue();
 
@@ -2464,6 +2835,60 @@
     }
 
     function drawBackground() {
+      if (chapterNumber === 5) {
+        const dawnGradient =
+          ctx.createLinearGradient(0, 0, 0, H);
+        dawnGradient.addColorStop(0, "#293f59");
+        dawnGradient.addColorStop(0.55, "#e29c76");
+        dawnGradient.addColorStop(1, "#f2cb91");
+        ctx.fillStyle = dawnGradient;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.fillStyle = "#ffe3a3";
+        ctx.beginPath();
+        ctx.arc(700, 316, 42, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#655266";
+        ctx.beginPath();
+        ctx.moveTo(0, 365);
+        ctx.lineTo(130, 324);
+        ctx.lineTo(265, 360);
+        ctx.lineTo(420, 312);
+        ctx.lineTo(570, 360);
+        ctx.lineTo(760, 326);
+        ctx.lineTo(W, 358);
+        ctx.lineTo(W, 424);
+        ctx.lineTo(0, 424);
+        ctx.closePath();
+        ctx.fill();
+
+        const waterGradient =
+          ctx.createLinearGradient(0, 350, 0, chapter5GroundY);
+        waterGradient.addColorStop(0, "#507782");
+        waterGradient.addColorStop(1, "#263e48");
+        ctx.fillStyle = waterGradient;
+        ctx.fillRect(0, 350, W, chapter5GroundY - 350);
+
+        ctx.strokeStyle = "#d5b89655";
+        ctx.lineWidth = 2;
+        for (let index = 0; index < 6; index++) {
+          const waveY = 368 + index * 15;
+          ctx.beginPath();
+          ctx.moveTo(80 + index * 31, waveY);
+          ctx.lineTo(275 + index * 22, waveY);
+          ctx.stroke();
+        }
+
+        const shoreGradient =
+          ctx.createLinearGradient(0, chapter5GroundY, 0, H);
+        shoreGradient.addColorStop(0, "#93735d");
+        shoreGradient.addColorStop(1, "#493d3b");
+        ctx.fillStyle = shoreGradient;
+        ctx.fillRect(0, chapter5GroundY, W, H - chapter5GroundY);
+        return;
+      }
+
       if (chapterNumber === 4) {
         const caveGradient =
           ctx.createLinearGradient(0, 0, 0, H);
@@ -3539,7 +3964,37 @@
       }
     }
 
+    function drawNaiya() {
+      if (
+        !chapter5NaiyaImage.complete ||
+        !chapter5NaiyaImage.naturalWidth
+      ) {
+        return;
+      }
+
+      const height = chapter5Naiya.height;
+      const width =
+        height *
+        chapter5NaiyaImage.naturalWidth /
+        chapter5NaiyaImage.naturalHeight;
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        chapter5NaiyaImage,
+        chapter5Naiya.x - cameraX,
+        chapter5GroundY - height,
+        width,
+        height
+      );
+      ctx.restore();
+    }
+
     function drawHud() {
+      if (chapterNumber === 5) {
+        return;
+      }
+
       ctx.fillStyle = chapterNumber >= 3
         ? "#030714dc"
         : "#07162bdc";
@@ -3599,12 +4054,15 @@
         drawStalactites();
         drawStalagmites();
       }
-      if (chapterNumber >= 2) {
+      if (chapterNumber >= 2 && chapterNumber <= 4) {
         drawProjectiles();
         drawMonoliths();
       }
       drawChapterLandmark();
       drawPlayer();
+      if (chapterNumber === 5) {
+        drawNaiya();
+      }
       drawHud();
 
       requestAnimationFrame(gameLoop);
