@@ -759,11 +759,11 @@
     const chapter3StartingEnergy = 55;
     const chapter4StartingEnergy = 55;
     const chapter4DamageMessages = [
-      "La duda susurra que no podré. Respiro y doy el siguiente paso.",
-      "El miedo minimiza mi esfuerzo; puedo avanzar a mi propio ritmo.",
-      "Una voz interior cuestiona mi valor. No todo pensamiento dice la verdad.",
-      "La tristeza pesa hoy; puedo respirar y buscar compañía.",
-      "La duda dice que no hay salida; miro alrededor y elijo un paso."
+      "Me duele, no se si pueda lograrlo.",
+      "El miedo minimiza mi esfuerzo y me nubla.",
+      "Una voz interior cuestiona mi valor.",
+      "La tristeza pesa.",
+      "La duda dice que no hay salida."
     ];
     let chapterStartingEnergy = 0;
     let ammoCapacityUpgraded = false;
@@ -829,9 +829,9 @@
         x: 6500,
         title: "La parte de mí que mira lejos",
         text:
-          "Sabes me gusta la vista, las luces tenues a lo lejos de mi pueblo, pero una parte de mí mira el horizonte con mucha emoción y temor. " +
+          "Sabes me gusta la vista desde aqui, las luces tenues a lo lejos de mi pueblo, pero una parte de mí mira el horizonte con mucha emoción y temor. " +
           "Me asusta partir y convertirme en alguien que ya no reconozcan, " +
-          "pero también me asusta quedarme solamente por miedo. ¿Es un dilema interesante verdad?"
+          "pero también me asusta quedarme solamente por miedo. ¿Es un dilema interesante verdad? a mira ya llegamos me quieres acompañar"
       }
     ].map((dialogue) => ({
       ...dialogue,
@@ -1215,7 +1215,7 @@ pithayas
       },
       {
         x: 700,
-        title: "Auke",
+        title: "Auke - Buenos dias",
         text:
           "No sabía preguntarme quién era yo realmente. Me bastaba " +
           "escuchar mi nombre en la voz de quienes me esperaban. " +
@@ -1283,7 +1283,7 @@ pithayas
         title: "Dar forma a lo que necesito",
         text:
           "Antes intentaba adivinar quién debía ser. Ahora pregunto qué " +
-          "necesito y qué quiero cuidar. Imagino mi ikigai como una estructura " +
+          "necesito y qué quiero cuidar. Me imagino una estructura " +
           "flexible: una brújula que reúne lo que me importa, lo que puedo " +
           "ofrecer y lo que aporta bienestar. Puedo construirla poco a poco."
       },
@@ -1355,7 +1355,7 @@ pithayas
         title: "La tristeza que guardo",
         text:
           "Hay tristezas que no hacen ruido y me acompañan mientras camino. " +
-          "No es de a huevo sentirme bien por responsabilidad: puedo cumplir " +
+          "No es obligatorio sentirme bien por responsabilidad: puedo cumplir" +
           "con lo que me toca sin fingir que no me duele. También puedo " +
           "nombrar lo que pesa y pedir compañía."
       },
@@ -1381,10 +1381,9 @@ pithayas
         x: 4400,
         title: "Lo que necesito decir",
         text:
-          "A veces demando cariño, amor o sexo para satisfacer un vacío " +
+          "A veces demando atención para satisfacer un vacío " +
           "interno y alimentar mi necesidad de reconocimiento. Mi deseo es " +
-          "real, pero nadie está obligado a resolverlo por mí. Puedo pedir " +
-          "cercanía con honestidad y respetar los límites del otro."
+          "real, pero nadie está obligado a resolverlo por mí." 
       },
       {
         x: 5500,
@@ -1402,7 +1401,7 @@ pithayas
           "A veces vivo desde la carencia, la queja y la falta. Me cuesta " +
           "cuidar mi amor propio, actuar con coherencia e integridad, asumir " +
           "responsabilidades, respetar acuerdos y al prójimo, y hacerme cargo " +
-          "de mí. Reconocerlo no es condenarme: es empezar a reparar, paso a paso."
+          "de mí."
       }
     ].map((dialogue) => ({
       ...dialogue,
@@ -1585,14 +1584,14 @@ pithayas
       const isChapter5 = chapterNumber === 5;
 
       document.title = isChapter4
-        ? "IXA & ÁCATL · magacubugua (4)"
+        ? "IXA & ÁCATL · magacubugua"
         : isChapter5
-          ? "IXA & ÁCATL · Naganna Tejueg Ignimel - Una Mano"
+          ? "IXA & ÁCATL · maganna tejueg ignimel"
           : isChapter3
-          ? "IXA & ÁCATL · kombió (3)"
+          ? "IXA & ÁCATL · kombió"
           : isChapter2
-            ? "IXA & ÁCATL · goguó (2)"
-            : "IXA & ÁCATL · tepuegua (1)";
+            ? "IXA & ÁCATL · goguó"
+            : "IXA & ÁCATL · tepuegua";
       worldWidth = isChapter4
         ? chapter4WorldWidth
         : isChapter5
@@ -1800,14 +1799,13 @@ pithayas
     function beginChapter5Conversation() {
       chapter5ConversationStarted = true;
       showChapter5Dialogue(
-        "Naiyá:",
-        "Naganna Tejueg Ignimel",
-        "Auka, Ixa — Buenos días Ixa."
+        "Naiyá: Naganna Tejueg Ignimel \n\n",
+        "Auka, Ixa — Buenos días Ixa. \n\n"
         +
           "Ixa: Yacupá - Ya llegué \n\n" +
-          "Muyu muá? - ¿Como estas? " +
-          "Ixa: Mjan mjan - Bien" +
-          "Debes saber hijo que la reciprocidad, la desigualdad interna, requiere de estrategias " +
+          "Naiyá: Muyu muá? - ¿Como estas? \n\n" +
+          "Ixa: Mjan mjan - Bien \n\n" +
+          "Naiyá: Debes saber hijo que la reciprocidad, la desigualdad interna, requiere de estrategias " +
           "para defendernos y cooperar con comunidades vecinas. La disputa " +
           "por los manantiales y las rutas trae apropiación de recursos, " +  
           "tributo, autoridad y expansión política.\n\n" +
