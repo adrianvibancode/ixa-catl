@@ -772,6 +772,43 @@
     let ammoHudTimer = 0;
     let fireCooldown = 0;
 
+
+const chapterMusic = new Audio();
+chapterMusic.loop = true;
+chapterMusic.volume = 0.35; // volumen entre 0 y 1
+
+const musicByChapter = {
+  1: "audio/capitulo-1.mp3",
+  2: "audio/capitulo-2.mp3",
+  3: "audio/capitulo-3.mp3",
+  4: "audio/capitulo-4.mp3",
+  5: "audio/capitulo-5.mp3"
+};
+
+function playChapterMusic(chapter) {
+  const path = musicByChapter[chapter];
+
+  if (!path) {
+    chapterMusic.pause();
+    return;
+  }
+
+  const nextSource = new URL(path, document.baseURI).href;
+
+  if (chapterMusic.src !== nextSource) {
+    chapterMusic.pause();
+    chapterMusic.src = nextSource;
+    chapterMusic.currentTime = 0;
+  }
+
+  chapterMusic.play().catch((error) => {
+    console.warn("No se pudo iniciar la música:", error);
+  });
+}
+
+
+
+
     /*
       Siete diálogos íntimos en primera persona.
     */
