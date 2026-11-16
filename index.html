@@ -8,7 +8,7 @@
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
   >
 
-  <title>IXA & ÁCATL · El gran viaje</title>
+  <title>IXA & ÁCATL · EL ENIGMA DE LA ILEGITIMIDAD</title>
 
   <style>
     * {
@@ -509,7 +509,7 @@
           <h2>Elige un capítulo</h2>
 
           <blockquote>
-            Las perlas azules conservan energía; evita las rojas y los huecos.
+            Las pithayas azules conservan energía; evita las rojas y los huecos.
             Acompaña a Ixa hasta el faro, el pozo y, más allá, la cueva.
           </blockquote>
 
@@ -532,7 +532,7 @@
               <span class="chapter-index">CAPÍTULO 1</span>
               <strong>Más allá de la costa</strong>
               <span class="chapter-description">
-                Reúne perlas y acompaña a Ixa hasta el faro.
+                Reúne pithayas y acompaña a Ixa hasta el faro.
               </span>
             </button>
 
@@ -675,7 +675,7 @@
       <div class="pill">
         Energia:
         <strong id="score">0</strong>
-        · <span id="collectibleLabel">Perlas:</span>
+        · <span id="collectibleLabel">Pithayas:</span>
         <strong id="shells">0</strong>/<strong id="total">0</strong>
       </div>
 
@@ -1309,7 +1309,7 @@ pithayas
         title: "Bajo el cielo de Orión",
         text:
           "Salta entre plataformas y esquiva monolitos móviles. Conservas tu " +
-          "energía: perlas azules +10, rojas −7; caídas o choques −5. " +
+          "energía: pithayas  azules +10, rojas −7; caídas o choques −5. " +
           "Tienes 13 municiones; con 100 de energía, tendrás 21. Dispara con " +
           "F/X o el botón táctil. Cada monolito requiere " +
           `${monolithHitsToDestroy} impactos y devuelve ${monolithEnergyReward}. ` +
@@ -1380,7 +1380,7 @@ pithayas
         title: "Lo que temo nombrar",
         text:
           "El suelo de la cueva es continuo, aunque las plataformas se " +
-          "muevan sobre mí. No hay perlas azules: estalagmitas, estalactitas " +
+          "muevan sobre mí. No hay pithayas: estalagmitas, estalactitas " +
           "y monolitos pueden herirme; ellos me persiguen y requieren " +
           `${chapter4MonolithHitsToDestroy} impactos. ` +
           "Tienes 13 municiones; al llegar a 100 de energía tendrás 21. " +
@@ -1558,7 +1558,7 @@ pithayas
       document.querySelector("#total").textContent =
         items.filter((item) => item.type === "good").length;
       document.querySelector("#collectibleLabel").textContent =
-        "Perlas:";
+        "Pithayas:";
       document.querySelector("#ammoPill").hidden =
         chapterNumber < 2 || chapterNumber > 4;
       document.querySelector("#ammo").textContent = ammo;
@@ -2862,13 +2862,13 @@ pithayas
             ? `Atravesaste la cueva con ${score} de energía.`
             : chapterNumber === 3
               ? `Llegaste bajo el cielo de Orión con ${score} de energía y ` +
-                `${shellCount} perlas reunidas. Encontraste la entrada de la cueva.`
+                `${shellCount} pithayas reunidas. Encontraste la entrada de la cueva.`
               : chapterNumber === 2
                 ? `Tenemos ${score} de energia ` +
                   ` y guardamos ${shellCount} perlitas que encontramos en el camino. ` +
                   `Alcanzamos el pozo. Mjan Mjan (Muy bien).`
                 : `Llegamos con ${score} de energia y ` +
-                  `${shellCount} perlas. El faro nos espera.`;
+                  `${shellCount} pithayas. El faro nos espera.`;
 
         document
           .querySelector("#finish")
@@ -4073,8 +4073,8 @@ pithayas
         chapterNumber === 4
           ? `F / X o botón táctil para disparar · Energía: ${score}`
           : chapterNumber >= 2
-            ? `F / X o botón táctil para disparar · Perlas: ${shellCount} · Energía: ${score}`
-            : `Perlas: ${shellCount} · Energía: ${score}`,
+            ? `F / X o botón táctil para disparar · Pithayas: ${shellCount} · Energía: ${score}`
+            : `Pithayas: ${shellCount} · Energía: ${score}`,
         28,
         72
       );
