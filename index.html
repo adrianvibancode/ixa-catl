@@ -778,11 +778,7 @@ chapterMusic.loop = true;
 chapterMusic.volume = 0.35; // volumen entre 0 y 1
 
 const musicByChapter = {
-  1: "audio/capitulo-1.mp3",
-  2: "audio/capitulo-2.mp3",
-  3: "audio/capitulo-3.mp3",
-  4: "audio/capitulo-4.mp3",
-  5: "audio/capitulo-5.mp3"
+  1: "audios/capitulo-1.ogg"
 };
 
 function playChapterMusic(chapter) {
@@ -1615,6 +1611,7 @@ pithayas
 
     function configureChapter(number) {
       chapterNumber = number;
+      playChapterMusic(chapterNumber);
       const isChapter2 = chapterNumber === 2;
       const isChapter3 = chapterNumber === 3;
       const isChapter4 = chapterNumber === 4;
