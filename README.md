@@ -1,6 +1,6 @@
 # IXA & ÁCATL
 
-**IXA & ÁCATL** es una aventura narrativa de plataformas, histórica y mitológica, contada principalmente en primera persona por Ixa. La historia comienza en una comunidad marítima ficticia del extremo sur de la península de California y sigue la búsqueda de origen, pertenencia y libertad de Ixa, así como la relación que construye con Ácatl.
+**IXA & ÁCATL** es una aventura narrativa de plataformas, histórica y mitológica, contada principalmente en primera persona por Ixa. La historia comienza en una comunidad del extremo sur de la península de California y sigue la búsqueda de origen, pertenencia y libertad de Ixa, así como la relación que construye con Ácatl.
 
 > **Aviso de spoilers:** este documento resume el argumento planeado hasta el epílogo, incluida la muerte de Ixa, su tránsito por el Mictlán y el desenlace de su relación con Ácatl.
 
@@ -10,7 +10,7 @@
 
 El repositorio contiene un prototipo web desarrollado en HTML, CSS y JavaScript. La versión jugable contempla:
 
-- **Capítulo 1: `Tepueg (1) · K-aha-l (Agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de conchas, objetos que modifican la puntuación y transición mediante el faro.
+- **Capítulo 1: `Tepueg (1) · K-aha-l (Agua)`**, con recorrido costero, fragmentos narrativos en primera persona, recolección de pithayas, objetos que modifican la puntuación y transición mediante el faro.
 - **Capítulo 2: `Goguó (2) · Meyibó & Majibel (Ciclos)`**, con plataformas elevadas, objetos coleccionables, monolitos y municiones.
 - **Capítulo 3: `Kombió (3) · Mishí (Orion)`**, con degradado nocturno, la constelación de Orión y plataformas y monolitos móviles.
 - **Capítulo 4: `Magacubugua (4) · Andemajuong Galamata (Ha llovido en la noche)`**, con una cueva, plataformas móviles, estalagmitas y monolitos que persiguen a Ixa.
@@ -50,7 +50,7 @@ Un ataque provoca la dispersión de Iyen. Ixa y Naiyá escapan por mar. La destr
 
 ### Naiyá y la primera gran pérdida
 
-Ixa y Naiyá cruzan el golfo y llegan a la región de los esteros de Sinaloa. Allí conocen otras formas de hospitalidad, intercambio, autoridad y organización. Durante una inundación provocada por un caudillo, Ixa decide abrir un paso para rescatar a varias familias. Naiyá sostiene la salida y muere para permitir que las personas atrapadas escapen.
+Ixa y Naiyá cruzan el golfo y llegan a la región de los esteros. Allí conocen otras formas de hospitalidad, intercambio, autoridad y organización. Durante una inundación provocada por un caudillo, Ixa decide abrir un paso para rescatar a varias familias. Naiyá sostiene la salida y muere para permitir que las personas atrapadas escapen.
 
 La decisión de Ixa es moralmente defendible, pero produce una pérdida irreparable. La culpa no demuestra que Ixa haya actuado mal; muestra que una decisión justa también puede dejar dolor. Después del funeral, Ixa continúa solo.
 
@@ -86,7 +86,7 @@ Al regresar, descubre que ha transcurrido un año. La ciudad de los signos fue s
 
 ### Xochiyáotl y la segunda vida
 
-Durante el viaje, Ixa es atacado por una pantera negra. La guerrera jaguar **Xochiyáotl** lo rescata, vence al animal y utiliza la piel como parte de un atuendo ritual y militar. Xochiyáotl pertenece a un linaje ficticio asociado con relatos de Tollan y con una tradición guerrera jaguar; no se presenta como habitante literal del antiguo Estado tolteca.
+Durante el viaje, Ixa es atacado por una pantera negra. La guerrera jaguar **Xochiyáotl** lo rescata, vence al animal y utiliza la piel como parte de un atuendo ritual y militar. Xochiyáotl pertenece a un linaje  asociado con relatos de Tollan y con una tradición guerrera jaguar; no se presenta como habitante literal del antiguo Estado tolteca.
 
 Xochiyáotl acompaña a Ixa durante la recuperación, le enseña estrategia, combate, infiltración y responsabilidad colectiva. La relación se convierte en amistad, confianza y liderazgo compartido. Xochiyáotl se infiltra en la ciudad y comunica a Ácatl que Ixa sigue vivo.
 
